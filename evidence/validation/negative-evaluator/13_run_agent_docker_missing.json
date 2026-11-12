@@ -1,0 +1,30 @@
+{
+  "run_id": "negdocker",
+  "agent_status": "INFRA_ERROR",
+  "agent_exit_code": 30,
+  "reason": "docker unavailable (/nonexistent)",
+  "mini_exit_code": null,
+  "mini_exit_status": null,
+  "limit_hit": null,
+  "base_sha": null,
+  "final_sha": null,
+  "workspace_sha": null,
+  "diff_files": 0,
+  "diff_lines": 0,
+  "model_requested": "gemini/gemini-2.5-flash",
+  "models_returned_by_api": [],
+  "cost_usd": null,
+  "api_calls": null,
+  "cost_limit_usd": 0.5,
+  "step_limit": 30,
+  "wall_seconds": 0,
+  "started_at": "2026-11-12T12:25:51+02:00",
+  "ended_at": "2026-11-12T12:25:51+0200",
+  "image": "lc0-env:1",
+  "paths": {
+    "run_dir": "/tmp/lc0-neg/work/runs/negdocker",
+    "trajectory": null,
+    "log": "/tmp/lc0-neg/work/runs/negdocker/agent_stdout.log",
+    "diff": "/tmp/lc0-neg/work/runs/negdocker/final.diff"
+  }
+}

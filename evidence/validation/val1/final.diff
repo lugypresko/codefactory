@@ -1,0 +1,129 @@
+diff --git a/cart/cart.py b/cart/cart.py
+index 5e0bd9d..bd19be3 100644
+--- a/cart/cart.py
++++ b/cart/cart.py
+@@ -3,6 +3,7 @@
+ 
+ class Cart:
+     def __init__(self):
++        self._discount = 0
+         self._items = {}  # sku -> {"price": float, "qty": int}
+ 
+     def add_item(self, sku: str, price: float, qty: int = 1) -> None:
+@@ -21,5 +22,25 @@ class Cart:
+     def subtotal(self) -> float:
+         return round(sum(i["price"] * i["qty"] for i in self._items.values()), 2)
+ 
++    def remove_item(self, sku: str, qty: int = 1) -> None:
++        if qty <= 0:
++            raise ValueError("qty must be positive")
++        if sku not in self._items:
++            raise KeyError(f"SKU {sku} not found in cart")
++        if qty > self._items[sku]["qty"]:
++            raise ValueError(f"Cannot remove {qty} of {sku}. Only {self._items[sku]["qty"]} in cart.")
++        self._items[sku]["qty"] -= qty
++        if self._items[sku]["qty"] == 0:
++            del self._items[sku]
++
++    def apply_discount(self, code: str) -> None:
++        code = code.upper()
++        if code == "SAVE10":
++            self._discount = 0.10
++        elif code == "SAVE25":
++            self._discount = 0.25
++        else:
++            raise ValueError(f"Unknown discount code: {code}")
+     def total(self) -> float:
+-        return self.subtotal()
++        discounted_total = self.subtotal() * (1 - self._discount)
++        return round(discounted_total, 2)
+diff --git a/tests/test_cart.py b/tests/test_cart.py
+index 9e7343a..1ae4265 100644
+--- a/tests/test_cart.py
++++ b/tests/test_cart.py
+@@ -32,3 +32,85 @@ def test_invalid_qty():
+ def test_invalid_price():
+     with pytest.raises(ValueError):
+         Cart().add_item("x", -1.0)
++
++def test_remove_item():
++    c = Cart()
++    c.add_item("apple", 1.0, 5)
++    c.remove_item("apple", 2)
++    assert c.item_count() == 3
++    assert c.subtotal() == 3.0
++    c.remove_item("apple", 3)
++    assert c.item_count() == 0
++    assert c.subtotal() == 0.0
++
++def test_remove_unknown_sku():
++    c = Cart()
++    c.add_item("apple", 1.0, 1)
++    with pytest.raises(KeyError):
++        c.remove_item("pear")
++
++def test_remove_too_many_items():
++    c = Cart()
++    c.add_item("apple", 1.0, 5)
++    with pytest.raises(ValueError):
++        c.remove_item("apple", 6)
++    assert c.item_count() == 5 # Cart should be unchanged
++
++def test_remove_invalid_qty():
++    c = Cart()
++    c.add_item("apple", 1.0, 1)
++    with pytest.raises(ValueError):
++        c.remove_item("apple", 0)
++    with pytest.raises(ValueError):
++        c.remove_item("apple", -1)
++
++def test_apply_discount_save10():
++    c = Cart()
++    c.add_item("apple", 10.0, 1)
++    c.apply_discount("SAVE10")
++    assert c.subtotal() == 10.0
++    assert c.total() == 9.0
++
++def test_apply_discount_save25():
++    c = Cart()
++    c.add_item("apple", 10.0, 1)
++    c.apply_discount("SAVE25")
++    assert c.subtotal() == 10.0
++    assert c.total() == 7.5
++
++def test_apply_discount_case_insensitivity():
++    c = Cart()
++    c.add_item("apple", 10.0, 1)
++    c.apply_discount("save10")
++    assert c.total() == 9.0
++
++def test_apply_new_discount_replaces_old():
++    c = Cart()
++    c.add_item("apple", 100.0, 1)
++    c.apply_discount("SAVE10")
++    assert c.total() == 90.0
++    c.apply_discount("SAVE25")
++    assert c.total() == 75.0
++
++def test_apply_unknown_discount_code():
++    c = Cart()
++    c.add_item("apple", 10.0, 1)
++    c.apply_discount("SAVE10")
++    with pytest.raises(ValueError):
++        c.apply_discount("UNKNOWN")
++    assert c.total() == 9.0 # Discount should remain unchanged
++
++def test_discount_rounding_half_up():
++    c = Cart()
++    c.add_item("item", 22.995, 1)
++    c.apply_discount("SAVE10") # 10% off of 22.995 is 2.2995, so 20.6955
++    # Rounded half up to 2 decimals should be 20.70
++    assert c.total() == 20.70
++
++def test_discount_rounding_no_half_up():
++    c = Cart()
++    c.add_item("item", 22.994, 1)
++    c.apply_discount("SAVE10") # 10% off of 22.994 is 2.2994, so 20.6946
++    # Rounded half up to 2 decimals should be 20.69
++    assert c.total() == 20.69
++

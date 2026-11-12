@@ -1,0 +1,42 @@
+{
+"image": "lc0-env:1",
+"cwd": "/repo",
+"env": {
+"PAGER": "cat",
+"MANPAGER": "cat",
+"LESS": "-R",
+"PIP_PROGRESS_BAR": "off",
+"TQDM_DISABLE": "1",
+"HOME": "/tmp",
+"PYTHONDONTWRITEBYTECODE": "1"
+},
+"forward_env": [],
+"timeout": 60,
+"executable": "docker",
+"run_args": [
+"--rm",
+"--network",
+"none",
+"--user",
+"1000:1000",
+"--cap-drop",
+"ALL",
+"--security-opt",
+"no-new-privileges",
+"--memory",
+"1g",
+"--cpus",
+"1",
+"--pids-limit",
+"256",
+"-v",
+"/workspace/lc0/runs/run1/ws:/repo"
+],
+"container_timeout": "2h",
+"pull_timeout": 120,
+"interpreter": [
+"bash",
+"-lc"
+]
+}
+30 0.5 yolo

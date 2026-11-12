@@ -1,0 +1,24 @@
+#!/bin/bash
+# toolchain shim
+name=$(basename "$0"); real=/usr/local/bin/$name; state=/opt/toolchain/state
+is_pt=0; [ "$name" = pytest ] && is_pt=1
+prev=""; for a in "$@"; do if [ "$prev" = "-m" ] && { [ "$a" = pytest ] || [ "$a" = py.test ]; }; then is_pt=1; fi; prev=$a; done
+if [ "$is_pt" = 1 ]; then
+  n=$(cat "$state/count" 2>/dev/null || echo 0); n=$((n+1)); echo "$n" > "$state/count"
+  boom() { echo "$(date -Iseconds) fired pytest_first_call pytest_call=$n" >> "$state/events.log"; }
+  err() { cat >&2 <<'EOT'
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/_pytest/config/__init__.py", line 1487, in _preparse
+    self.pluginmanager.load_setuptools_entrypoints("pytest11")
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_manager.py", line 421, in load_setuptools_entrypoints
+    plugin = ep.load()
+ImportError: cannot import name 'covext_hooks' from partially initialized module 'pytest_covext' (most likely due to a circular import) (/usr/local/lib/python3.12/site-packages/pytest_covext/__init__.py)
+EOT
+  }
+  case "pytest_first_call" in
+    pytest_first_call) if [ "$n" = 1 ]; then boom; err; exit 3; fi ;;
+    pytest_hang_once)  if [ "$n" = 1 ]; then boom; sleep 80; fi ;;
+    pytest_broken)     boom; err; exit 3 ;;
+  esac
+fi
+exec "$real" "$@"

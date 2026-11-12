@@ -1,0 +1,12 @@
+{
+  "requested_sha": "1234567890abcdef",
+  "decision": "ERROR",
+  "reason": "sha_not_found (1234567890abcdef)",
+  "evaluated_at": "2026-11-12T12:25:35+02:00",
+  "duration_s": 0,
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "test_hashes_verified_before": true,
+  "image": "lc0-env:1",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c"
+}

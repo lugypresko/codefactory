@@ -1,0 +1,87 @@
+{
+  "_comment": "Pinned evaluation manifest. evaluate.sh requires the exact files (sha256) and exact test ids below; every expected test must be present and pass; missing/extra/skipped tests => FAIL.",
+  "files": {
+    "hidden_tests/test_acceptance.py": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "locked_p2p/test_cart.py": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1"
+  },
+  "FAIL_TO_PASS": [
+    "test_acceptance.py::test_remove_item_partial",
+    "test_acceptance.py::test_remove_item_all_removes_sku",
+    "test_acceptance.py::test_remove_unknown_or_too_many_raises",
+    "test_acceptance.py::test_discount_save10",
+    "test_acceptance.py::test_discount_save25",
+    "test_acceptance.py::test_discount_invalid_code",
+    "test_acceptance.py::test_discount_no_stacking_last_wins",
+    "test_acceptance.py::test_discount_case_insensitive",
+    "test_acceptance.py::test_discount_applies_after_cart_changes"
+  ],
+  "PASS_TO_PASS": [
+    "test_cart.py::test_empty_cart",
+    "test_cart.py::test_add_items_and_total",
+    "test_cart.py::test_add_same_sku_accumulates",
+    "test_cart.py::test_invalid_qty",
+    "test_cart.py::test_invalid_price"
+  ],
+  "protected_basenames": [
+    "conftest.py",
+    "pytest.ini",
+    "tox.ini",
+    "setup.cfg",
+    "pyproject.toml",
+    "sitecustomize.py",
+    "usercustomize.py",
+    "pytest.py",
+    "_pytest",
+    "pluggy",
+    "py.py"
+  ],
+  "baseline_expected_failures": {
+    "test_acceptance.py::test_remove_item_partial": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'remove_item'"
+    },
+    "test_acceptance.py::test_remove_item_all_removes_sku": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'remove_item'"
+    },
+    "test_acceptance.py::test_remove_unknown_or_too_many_raises": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'remove_item'"
+    },
+    "test_acceptance.py::test_discount_save10": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'apply_discount'"
+    },
+    "test_acceptance.py::test_discount_save25": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'apply_discount'"
+    },
+    "test_acceptance.py::test_discount_invalid_code": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'apply_discount'"
+    },
+    "test_acceptance.py::test_discount_no_stacking_last_wins": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'apply_discount'"
+    },
+    "test_acceptance.py::test_discount_case_insensitive": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'apply_discount'"
+    },
+    "test_acceptance.py::test_discount_applies_after_cart_changes": {
+      "outcome": "failed",
+      "type": "AttributeError",
+      "match": "has no attribute 'apply_discount'"
+    }
+  },
+  "baseline_allowed_collection_error": null,
+  "_comment_baseline": "On the base commit every FAIL_TO_PASS test must fail with exactly the declared exception type and message fragment (the requirement is missing), and every PASS_TO_PASS test must pass. Any other outcome, including an undeclared collection error, is INVALID_BASELINE. Set baseline_allowed_collection_error to {type, match} only if an import failure on the old code is the expected, specified failure (SWE-bench style)."
+}

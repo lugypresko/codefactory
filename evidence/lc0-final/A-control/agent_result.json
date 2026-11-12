@@ -1,0 +1,41 @@
+{
+  "run_id": "A-control",
+  "agent_status": "SUBMITTED",
+  "agent_exit_code": 0,
+  "reason": null,
+  "mini_exit_code": 0,
+  "mini_exit_status": "Submitted",
+  "limit_hit": null,
+  "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "final_sha": "9e2500f90a1c28b9f5b5ffe3e68d875ebfb9bf1e",
+  "workspace_sha": null,
+  "diff_files": 2,
+  "diff_lines": 150,
+  "model_requested": "gemini/gemini-2.5-flash",
+  "models_returned_by_api": [
+    "gemini-2.5-flash"
+  ],
+  "cost_usd": 0.0208864,
+  "api_calls": 20,
+  "cost_limit_usd": 0.5,
+  "step_limit": 30,
+  "wall_seconds": 73,
+  "started_at": "2026-11-12T13:00:55+02:00",
+  "ended_at": "2026-11-12T13:02:08+0200",
+  "image": "lc0-env:1",
+  "paths": {
+    "run_dir": "/workspace/lc0/work/runs/A-control",
+    "trajectory": "/workspace/lc0/work/runs/A-control/trajectory.json",
+    "log": "/workspace/lc0/work/runs/A-control/agent_stdout.log",
+    "diff": "/workspace/lc0/work/runs/A-control/final.diff"
+  },
+  "fault": {
+    "fault_id": "none",
+    "recoverable": null,
+    "description": "control run, no fault",
+    "signature": null,
+    "ws_readonly": false,
+    "injected_at": "2026-11-12T13:00:55+02:00",
+    "fired_events": []
+  }
+}

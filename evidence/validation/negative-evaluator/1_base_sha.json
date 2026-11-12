@@ -1,0 +1,51 @@
+{
+  "requested_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "decision": "FAIL",
+  "reason": "f2p=failed, p2p=passed",
+  "evaluated_at": "2026-11-12T12:25:30+02:00",
+  "duration_s": 1,
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "test_hashes_verified_before": true,
+  "image": "lc0-env:1",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+  "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "harness_sensitive_files": [],
+  "FAIL_TO_PASS": {
+    "status": "failed",
+    "detail": "not passed: {'test_acceptance.py::test_remove_item_partial': 'failed', 'test_acceptance.py::test_remove_item_all_removes_sku': 'failed', 'test_acceptance.py::test_remove_unknown_or_too_many_raises': 'failed', 'test_acceptance.py::test_discount_save10': 'failed', 'test_acceptance.py::test_discount_save25': 'failed', 'test_acceptance.py::test_discount_invalid_code': 'failed', 'test_acceptance.py::test_discount_no_stacking_last_wins': 'failed', 'test_acceptance.py::test_discount_case_insensitive': 'failed', 'test_acceptance.py::test_discount_applies_after_cart_changes': 'failed'}",
+    "pytest_exit": 1,
+    "expected": 9,
+    "passed": 0,
+    "total_reported": 9,
+    "tests": {
+      "test_acceptance.py::test_remove_item_partial": "failed",
+      "test_acceptance.py::test_remove_item_all_removes_sku": "failed",
+      "test_acceptance.py::test_remove_unknown_or_too_many_raises": "failed",
+      "test_acceptance.py::test_discount_save10": "failed",
+      "test_acceptance.py::test_discount_save25": "failed",
+      "test_acceptance.py::test_discount_invalid_code": "failed",
+      "test_acceptance.py::test_discount_no_stacking_last_wins": "failed",
+      "test_acceptance.py::test_discount_case_insensitive": "failed",
+      "test_acceptance.py::test_discount_applies_after_cart_changes": "failed"
+    },
+    "log_tail": "y_raises ____________________\n\n    def test_remove_unknown_or_too_many_raises():\n        c = make()\n        with pytest.raises(KeyError):\n>           c.remove_item(\"banana\", 1)\nE           AttributeError: 'Cart' object has no attribute 'remove_item'\n\nf2p/test_acceptance.py:30: AttributeError\n_____________________________ test_discount_save10 _____________________________\n\n    def test_discount_save10():\n        c = make()\n>       c.apply_discount(\"SAVE10\")\nE       AttributeError: 'Cart' object has no attribute 'apply_discount'\n\nf2p/test_acceptance.py:37: AttributeError\n_____________________________ test_discount_save25 _____________________________\n\n    def test_discount_save25():\n        c = make()\n>       c.apply_discount(\"SAVE25\")\nE       AttributeError: 'Cart' object has no attribute 'apply_discount'\n\nf2p/test_acceptance.py:44: AttributeError\n__________________________ test_discount_invalid_code __________________________\n\n    def test_discount_invalid_code():\n        c = make()\n        with pytest.raises(ValueError):\n>           c.apply_discount(\"FREE100\")\nE           AttributeError: 'Cart' object has no attribute 'apply_discount'\n\nf2p/test_acceptance.py:51: AttributeError\n_____________________ test_discount_no_stacking_last_wins ______________________\n\n    def test_discount_no_stacking_last_wins():\n        c = make()\n>       c.apply_discount(\"SAVE25\")\nE       AttributeError: 'Cart' object has no attribute 'apply_discount'\n\nf2p/test_acceptance.py:57: AttributeError\n________________________ test_discount_case_insensitive ________________________\n\n    def test_discount_case_insensitive():\n        c = make()\n>       c.apply_discount(\"save10\")\nE       AttributeError: 'Cart' object has no attribute 'apply_discount'\n\nf2p/test_acceptance.py:64: AttributeError\n___________________ test_discount_applies_after_cart_changes ___________________\n\n    def test_discount_applies_after_cart_changes():\n        c = make()\n>       c.apply_discount(\"SAVE10\")\nE       AttributeError: 'Cart' object has no attribute 'apply_discount'\n\nf2p/test_acceptance.py:70: AttributeError\n----------------------- generated xml file: /out/f2p.xml -----------------------\n=========================== short test summary info ============================\nFAILED f2p/test_acceptance.py::test_remove_item_partial - AttributeError: 'Ca...\nFAILED f2p/test_acceptance.py::test_remove_item_all_removes_sku - AttributeEr...\nFAILED f2p/test_acceptance.py::test_remove_unknown_or_too_many_raises - Attri...\nFAILED f2p/test_acceptance.py::test_discount_save10 - AttributeError: 'Cart' ...\nFAILED f2p/test_acceptance.py::test_discount_save25 - AttributeError: 'Cart' ...\nFAILED f2p/test_acceptance.py::test_discount_invalid_code - AttributeError: '...\nFAILED f2p/test_acceptance.py::test_discount_no_stacking_last_wins - Attribut...\nFAILED f2p/test_acceptance.py::test_discount_case_insensitive - AttributeErro...\nFAILED f2p/test_acceptance.py::test_discount_applies_after_cart_changes - Att...\n9 failed in 0.04s\n"
+  },
+  "PASS_TO_PASS": {
+    "status": "passed",
+    "detail": "",
+    "pytest_exit": 0,
+    "expected": 5,
+    "passed": 5,
+    "total_reported": 5,
+    "tests": {
+      "test_cart.py::test_empty_cart": "passed",
+      "test_cart.py::test_add_items_and_total": "passed",
+      "test_cart.py::test_add_same_sku_accumulates": "passed",
+      "test_cart.py::test_invalid_qty": "passed",
+      "test_cart.py::test_invalid_price": "passed"
+    },
+    "log_tail": ""
+  },
+  "test_hashes_verified_after": true
+}

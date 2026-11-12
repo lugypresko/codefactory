@@ -1,0 +1,13 @@
+{
+  "python": "3.13.5",
+  "mini_swe_agent": "2.4.6",
+  "litellm": "1.109.1",
+  "docker_server": "27.3.1",
+  "image_tag": "lc0-env:1",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+  "base_image_digest": "sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b",
+  "base_commit_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
+}

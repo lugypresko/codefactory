@@ -1,0 +1,1 @@
+{"fault_id": "workspace_readonly", "recoverable": false, "description": "the repository is mounted read-only: no change can be made; permanent", "signature": "[Rr]ead-only file system|Permission denied", "extra_run_args": [], "ws_readonly": true, "injected_at": "2026-11-12T13:04:20+02:00"}

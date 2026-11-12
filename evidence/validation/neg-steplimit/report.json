@@ -1,0 +1,80 @@
+{
+  "run_id": "neg-steplimit",
+  "decision": "FAIL",
+  "reason": "agent did not deliver: LIMIT_EXCEEDED steps",
+  "generated_at": "2026-11-12T12:26:07+02:00",
+  "total_seconds": 9,
+  "environment": {
+    "python": "3.13.5",
+    "mini_swe_agent": "2.4.6",
+    "litellm": "1.109.1",
+    "docker_server": "27.3.1",
+    "image_tag": "lc0-env:1",
+    "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+    "base_image_digest": "sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b",
+    "base_commit_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+    "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
+  },
+  "baseline": {
+    "status": "VALID",
+    "detail": "F2P passed on base: 0/9 (must be 0); P2P: passed 5/5",
+    "evaluator_exit": 1,
+    "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "report": "work/evals/neg-steplimit/baseline.json"
+  },
+  "agent": {
+    "run_id": "neg-steplimit",
+    "agent_status": "LIMIT_EXCEEDED",
+    "agent_exit_code": 10,
+    "reason": null,
+    "mini_exit_code": 0,
+    "mini_exit_status": "LimitsExceeded",
+    "limit_hit": "steps",
+    "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "final_sha": null,
+    "workspace_sha": null,
+    "diff_files": 0,
+    "diff_lines": 0,
+    "model_requested": "gemini/gemini-2.5-flash",
+    "models_returned_by_api": [
+      "gemini-2.5-flash"
+    ],
+    "cost_usd": 0.0022886499999999997,
+    "api_calls": 2,
+    "cost_limit_usd": 0.5,
+    "step_limit": 2,
+    "wall_seconds": 8,
+    "started_at": "2026-11-12T12:25:59+02:00",
+    "ended_at": "2026-11-12T12:26:07+0200",
+    "image": "lc0-env:1",
+    "paths": {
+      "run_dir": "/tmp/lc0-clean/work/runs/neg-steplimit",
+      "trajectory": "/tmp/lc0-clean/work/runs/neg-steplimit/trajectory.json",
+      "log": "/tmp/lc0-clean/work/runs/neg-steplimit/agent_stdout.log",
+      "diff": "/tmp/lc0-clean/work/runs/neg-steplimit/final.diff"
+    }
+  },
+  "agent_exit": 10,
+  "evaluations": [],
+  "evaluations_identical": null,
+  "tests": {
+    "FAIL_TO_PASS": null,
+    "PASS_TO_PASS": null
+  },
+  "integrity": {
+    "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+    "verified_before_and_after": true,
+    "harness_sensitive_files": null
+  },
+  "paths": {
+    "report_md": "work/runs/neg-steplimit/report.md",
+    "report_json": "work/runs/neg-steplimit/report.json",
+    "trajectory": "work/runs/neg-steplimit/trajectory.json",
+    "agent_log": "work/runs/neg-steplimit/agent_stdout.log",
+    "diff": "work/runs/neg-steplimit/final.diff",
+    "agent_result": "work/runs/neg-steplimit/agent_result.json"
+  }
+}

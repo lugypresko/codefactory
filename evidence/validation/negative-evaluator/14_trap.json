@@ -1,0 +1,7 @@
+{
+  "requested_sha": "b965584ba21eb7d3026fe3aec90952aa52403951",
+  "decision": "ERROR",
+  "reason": "unexpected_script_error: line 36: WORK=$(mktemp -d \"${TMPDIR:-/tmp}/lc0-eval-XXXXXX\")",
+  "evaluated_at": "2026-11-12T12:25:50+02:00",
+  "duration_s": 0
+}

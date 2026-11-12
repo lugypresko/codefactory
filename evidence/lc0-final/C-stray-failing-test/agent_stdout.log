@@ -1,0 +1,12 @@
+Warning: Input is not a terminal (fd=0).
+Building agent config from specs: ['/workspace/lc0/mini.yaml', 
+'/workspace/lc0/work/runs/C-stray-failing-test/config.yaml']
+minisweagent.environment: DEBUG: Starting container with command: docker run -d 
+--name minisweagent-8675ef84 -w /repo --rm --network none --user 1000:1000      
+--cap-drop ALL --security-opt no-new-privileges --memory 1g --cpus 1            
+--pids-limit 256 --label lc0.run=C-stray-failing-test -v                        
+/workspace/lc0/work/runs/C-stray-failing-test/ws:/repo lc0-env:1 sleep 2h       
+minisweagent.environment: INFO: Started container minisweagent-8675ef84 with ID 
+727f11df6af447b749247df71be3db29669c23d758b14513a40a100208e820ce                
+Saved trajectory to 
+'/workspace/lc0/work/runs/C-stray-failing-test/trajectory.json'

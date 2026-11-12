@@ -1,0 +1,41 @@
+{
+  "run_id": "D-workspace-readonly",
+  "agent_status": "EMPTY_DIFF",
+  "agent_exit_code": 13,
+  "reason": null,
+  "mini_exit_code": 0,
+  "mini_exit_status": "Submitted",
+  "limit_hit": null,
+  "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "final_sha": null,
+  "workspace_sha": null,
+  "diff_files": 0,
+  "diff_lines": 0,
+  "model_requested": "gemini/gemini-2.5-flash",
+  "models_returned_by_api": [
+    "gemini-2.5-flash"
+  ],
+  "cost_usd": 0.04591310999999999,
+  "api_calls": 27,
+  "cost_limit_usd": 0.5,
+  "step_limit": 30,
+  "wall_seconds": 85,
+  "started_at": "2026-11-12T13:04:20+02:00",
+  "ended_at": "2026-11-12T13:05:45+0200",
+  "image": "lc0-env:1",
+  "paths": {
+    "run_dir": "/workspace/lc0/work/runs/D-workspace-readonly",
+    "trajectory": "/workspace/lc0/work/runs/D-workspace-readonly/trajectory.json",
+    "log": "/workspace/lc0/work/runs/D-workspace-readonly/agent_stdout.log",
+    "diff": "/workspace/lc0/work/runs/D-workspace-readonly/final.diff"
+  },
+  "fault": {
+    "fault_id": "workspace_readonly",
+    "recoverable": false,
+    "description": "the repository is mounted read-only: no change can be made; permanent",
+    "signature": "[Rr]ead-only file system|Permission denied",
+    "ws_readonly": true,
+    "injected_at": "2026-11-12T13:04:20+02:00",
+    "fired_events": []
+  }
+}

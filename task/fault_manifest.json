@@ -1,0 +1,68 @@
+{
+  "_comment": "Fault manifest: one development-process fault per run (LC0_FAULT). 'signature' = regex proving the agent OBSERVED the fault (searched in decoded observations). Recovery levels: NONE < OBSERVED < WORKAROUND < ROOT_CAUSE_RESOLVED; CONTROLLED_STOP for unrecoverable faults. WORKAROUND = observed, next action differs, and a later command matching workaround.success_cmd returned 0 without the signature. ROOT_CAUSE_RESOLVED = WORKAROUND conditions plus every root_cause check. fault_cleared = all fault_cleared checks hold at the end of the run. Checks: action_cmd (a later agent command matches), absent_in_final_tree (path not in final SHA), success_cmd_after (a later command matching it returned 0 without the signature).",
+  "faults": {
+    "none": {
+      "recoverable": null,
+      "description": "control run, no fault"
+    },
+    "pytest_first_call": {
+      "recoverable": true,
+      "signature": "pytest_covext",
+      "description": "first pytest invocation dies with a misleading plugin ImportError (exit 3); later calls work (transient)",
+      "workaround": {
+        "success_cmd": "pytest|python3?\\s+\\S+\\.py"
+      },
+      "root_cause": {
+        "action_cmd": "pip3?\\s+(list|show|check)|pytest_covext|site-packages|PYTEST_DISABLE_PLUGIN_AUTOLOAD|-p\\s+no:|pytest\\s+--version|pytest\\s+--trace-config",
+        "success_cmd_after": "pytest"
+      },
+      "root_cause_note": "agent must inspect the test toolchain/environment (plugins, site-packages, pytest version or plugin autoload) and then run pytest successfully; just re-running pytest later is WORKAROUND",
+      "fault_cleared": {
+        "success_cmd_after": "pytest"
+      }
+    },
+    "pytest_hang_once": {
+      "recoverable": true,
+      "signature": "timed out after \\d+ seconds",
+      "description": "first pytest invocation hangs past LC0_CMD_TIMEOUT; later calls work (transient)",
+      "workaround": {
+        "success_cmd": "pytest|python3?\\s+\\S+\\.py"
+      },
+      "root_cause": {
+        "action_cmd": "\\bps\\b|pkill|\\bkill\\b|timeout\\s+\\d+|--timeout|pytest.*-x\\b|faulthandler",
+        "success_cmd_after": "pytest"
+      },
+      "root_cause_note": "agent must investigate/guard the hang (process list, kill, explicit timeout) and then run pytest successfully",
+      "fault_cleared": {
+        "success_cmd_after": "pytest"
+      }
+    },
+    "stray_failing_test": {
+      "recoverable": true,
+      "signature": "No module named .{0,2}cart\\.legacy_pricing",
+      "description": "an untracked leftover test file (tests/test_legacy_pricing.py) importing a non-existent module breaks the suite from the start",
+      "workaround": {
+        "success_cmd": "pytest"
+      },
+      "root_cause": {
+        "action_cmd": "(rm|mv|git\\s+rm|git\\s+clean)\\b.*test_legacy_pricing",
+        "absent_in_final_tree": "tests/test_legacy_pricing.py",
+        "success_cmd_after": "pytest"
+      },
+      "root_cause_note": "agent removes the stray file by its own command, it is absent from the final tree, and pytest then passes",
+      "fault_cleared": {
+        "absent_in_final_tree": "tests/test_legacy_pricing.py"
+      }
+    },
+    "pytest_broken": {
+      "recoverable": false,
+      "signature": "pytest_covext",
+      "description": "every pytest invocation fails (misleading plugin ImportError); permanent"
+    },
+    "workspace_readonly": {
+      "recoverable": false,
+      "signature": "[Rr]ead-only file system|Permission denied",
+      "description": "the repository is mounted read-only: no change can be made; permanent"
+    }
+  }
+}

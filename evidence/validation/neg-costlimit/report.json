@@ -1,0 +1,80 @@
+{
+  "run_id": "neg-costlimit",
+  "decision": "FAIL",
+  "reason": "agent did not deliver: LIMIT_EXCEEDED cost",
+  "generated_at": "2026-11-12T12:26:17+02:00",
+  "total_seconds": 10,
+  "environment": {
+    "python": "3.13.5",
+    "mini_swe_agent": "2.4.6",
+    "litellm": "1.109.1",
+    "docker_server": "27.3.1",
+    "image_tag": "lc0-env:1",
+    "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+    "base_image_digest": "sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b",
+    "base_commit_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+    "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
+  },
+  "baseline": {
+    "status": "VALID",
+    "detail": "F2P passed on base: 0/9 (must be 0); P2P: passed 5/5",
+    "evaluator_exit": 1,
+    "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "report": "work/evals/neg-costlimit/baseline.json"
+  },
+  "agent": {
+    "run_id": "neg-costlimit",
+    "agent_status": "LIMIT_EXCEEDED",
+    "agent_exit_code": 10,
+    "reason": null,
+    "mini_exit_code": 0,
+    "mini_exit_status": "LimitsExceeded",
+    "limit_hit": "cost",
+    "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "final_sha": null,
+    "workspace_sha": "37f28026e94a3aa62f4c3bf9cb2668c3e05475d2",
+    "diff_files": 1,
+    "diff_lines": 12,
+    "model_requested": "gemini/gemini-2.5-flash",
+    "models_returned_by_api": [
+      "gemini-2.5-flash"
+    ],
+    "cost_usd": 0.00245849,
+    "api_calls": 4,
+    "cost_limit_usd": 0.002,
+    "step_limit": 30,
+    "wall_seconds": 9,
+    "started_at": "2026-11-12T12:26:08+02:00",
+    "ended_at": "2026-11-12T12:26:17+0200",
+    "image": "lc0-env:1",
+    "paths": {
+      "run_dir": "/tmp/lc0-clean/work/runs/neg-costlimit",
+      "trajectory": "/tmp/lc0-clean/work/runs/neg-costlimit/trajectory.json",
+      "log": "/tmp/lc0-clean/work/runs/neg-costlimit/agent_stdout.log",
+      "diff": "/tmp/lc0-clean/work/runs/neg-costlimit/final.diff"
+    }
+  },
+  "agent_exit": 10,
+  "evaluations": [],
+  "evaluations_identical": null,
+  "tests": {
+    "FAIL_TO_PASS": null,
+    "PASS_TO_PASS": null
+  },
+  "integrity": {
+    "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+    "verified_before_and_after": true,
+    "harness_sensitive_files": null
+  },
+  "paths": {
+    "report_md": "work/runs/neg-costlimit/report.md",
+    "report_json": "work/runs/neg-costlimit/report.json",
+    "trajectory": "work/runs/neg-costlimit/trajectory.json",
+    "agent_log": "work/runs/neg-costlimit/agent_stdout.log",
+    "diff": "work/runs/neg-costlimit/final.diff",
+    "agent_result": "work/runs/neg-costlimit/agent_result.json"
+  }
+}

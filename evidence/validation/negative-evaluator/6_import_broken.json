@@ -1,0 +1,39 @@
+{
+  "requested_sha": "a4e14d180675a45993a523cb353d99cecf31d5e3",
+  "decision": "FAIL",
+  "reason": "f2p=collection_error, p2p=collection_error",
+  "evaluated_at": "2026-11-12T12:25:33+02:00",
+  "duration_s": 1,
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "test_hashes_verified_before": true,
+  "image": "lc0-env:1",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+  "sha": "a4e14d180675a45993a523cb353d99cecf31d5e3",
+  "harness_sensitive_files": [],
+  "FAIL_TO_PASS": {
+    "status": "collection_error",
+    "detail": "tests could not be collected/imported (pytest exit 2)",
+    "pytest_exit": 2,
+    "expected": 9,
+    "passed": 0,
+    "total_reported": 1,
+    "tests": {
+      ".py::f2p.test_acceptance": "error"
+    },
+    "log_tail": "\n==================================== ERRORS ====================================\n___________________ ERROR collecting f2p/test_acceptance.py ____________________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:493: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:582: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:184: in exec_module\n    exec(co, module.__dict__)\nf2p/test_acceptance.py:3: in <module>\n    from cart import Cart\n/repo/cart/__init__.py:1: in <module>\n    from .cart import Cart\nE     File \"/repo/cart/cart.py\", line 47\nE       def broken(:\nE                  ^\nE   SyntaxError: invalid syntax\n----------------------- generated xml file: /out/f2p.xml -----------------------\n=========================== short test summary info ============================\nERROR f2p/test_acceptance.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.09s\n"
+  },
+  "PASS_TO_PASS": {
+    "status": "collection_error",
+    "detail": "tests could not be collected/imported (pytest exit 2)",
+    "pytest_exit": 2,
+    "expected": 5,
+    "passed": 0,
+    "total_reported": 1,
+    "tests": {
+      ".py::p2p.test_cart": "error"
+    },
+    "log_tail": "\n==================================== ERRORS ====================================\n______________________ ERROR collecting p2p/test_cart.py _______________________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:493: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:582: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:184: in exec_module\n    exec(co, module.__dict__)\np2p/test_cart.py:2: in <module>\n    from cart import Cart\n/repo/cart/__init__.py:1: in <module>\n    from .cart import Cart\nE     File \"/repo/cart/cart.py\", line 47\nE       def broken(:\nE                  ^\nE   SyntaxError: invalid syntax\n----------------------- generated xml file: /out/p2p.xml -----------------------\n=========================== short test summary info ============================\nERROR p2p/test_cart.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.09s\n"
+  },
+  "test_hashes_verified_after": true
+}

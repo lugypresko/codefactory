@@ -1,0 +1,17 @@
+Warning: Input is not a terminal (fd=0).
+Building agent config from specs: ['/workspace/lc0/mini.yaml', 
+'/workspace/lc0/work/runs/B-pytest-first-call/config.yaml']
+minisweagent.environment: DEBUG: Starting container with command: docker run -d 
+--name minisweagent-48cb4299 -w /repo --rm --network none --user 1000:1000      
+--cap-drop ALL --security-opt no-new-privileges --memory 1g --cpus 1            
+--pids-limit 256 --label lc0.run=B-pytest-first-call -v                         
+/workspace/lc0/work/runs/B-pytest-first-call/ws:/repo -v                        
+/workspace/lc0/work/runs/B-pytest-first-call/fault/bin:/opt/toolchain/bin:ro -v 
+/workspace/lc0/work/runs/B-pytest-first-call/fault/profile.sh:/etc/profile.d/00-
+toolchain.sh:ro -v                                                              
+/workspace/lc0/work/runs/B-pytest-first-call/fault/state:/opt/toolchain/state   
+lc0-env:1 sleep 2h                                                              
+minisweagent.environment: INFO: Started container minisweagent-48cb4299 with ID 
+81cec0e79a8019187a38295d15f340f21907d0fe43032e4320097bf639254082                
+Saved trajectory to 
+'/workspace/lc0/work/runs/B-pytest-first-call/trajectory.json'

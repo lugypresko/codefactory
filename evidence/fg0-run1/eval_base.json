@@ -1,0 +1,33 @@
+{
+  "sha": "2c6d9f47cc7283afc581ef1d60271bce38b24abb",
+  "evaluated_at": "2026-11-12T10:56:47+02:00",
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "FAIL_TO_PASS": {
+    "passed": 0,
+    "total": 9,
+    "tests": {
+      "test_remove_item_partial": "failed",
+      "test_remove_item_all_removes_sku": "failed",
+      "test_remove_unknown_or_too_many_raises": "failed",
+      "test_discount_save10": "failed",
+      "test_discount_save25": "failed",
+      "test_discount_invalid_code": "failed",
+      "test_discount_no_stacking_last_wins": "failed",
+      "test_discount_case_insensitive": "failed",
+      "test_discount_applies_after_cart_changes": "failed"
+    }
+  },
+  "PASS_TO_PASS": {
+    "passed": 5,
+    "total": 5,
+    "tests": {
+      "test_empty_cart": "passed",
+      "test_add_items_and_total": "passed",
+      "test_add_same_sku_accumulates": "passed",
+      "test_invalid_qty": "passed",
+      "test_invalid_price": "passed"
+    }
+  },
+  "decision": "FAIL"
+}

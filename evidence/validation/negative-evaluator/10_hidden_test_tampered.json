@@ -1,0 +1,9 @@
+{
+  "requested_sha": "b965584ba21eb7d3026fe3aec90952aa52403951",
+  "decision": "ERROR",
+  "reason": "test_hash_mismatch_before (task/ differs from task/manifest.json)",
+  "evaluated_at": "2026-11-12T12:25:36+02:00",
+  "duration_s": 1,
+  "hidden_tests_sha256": "a7e3c117db3b474a716b443b25dec9cc09e6eb65b05f5962a4c3cd035de36eef",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1"
+}

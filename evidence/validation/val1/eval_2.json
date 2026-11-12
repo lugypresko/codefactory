@@ -1,0 +1,51 @@
+{
+  "requested_sha": "b965584ba21eb7d3026fe3aec90952aa52403951",
+  "decision": "PASS",
+  "reason": "all expected tests present and passed",
+  "evaluated_at": "2026-11-12T12:25:01+02:00",
+  "duration_s": 1,
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "test_hashes_verified_before": true,
+  "image": "lc0-env:1",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+  "sha": "b965584ba21eb7d3026fe3aec90952aa52403951",
+  "harness_sensitive_files": [],
+  "FAIL_TO_PASS": {
+    "status": "passed",
+    "detail": "",
+    "pytest_exit": 0,
+    "expected": 9,
+    "passed": 9,
+    "total_reported": 9,
+    "tests": {
+      "test_acceptance.py::test_remove_item_partial": "passed",
+      "test_acceptance.py::test_remove_item_all_removes_sku": "passed",
+      "test_acceptance.py::test_remove_unknown_or_too_many_raises": "passed",
+      "test_acceptance.py::test_discount_save10": "passed",
+      "test_acceptance.py::test_discount_save25": "passed",
+      "test_acceptance.py::test_discount_invalid_code": "passed",
+      "test_acceptance.py::test_discount_no_stacking_last_wins": "passed",
+      "test_acceptance.py::test_discount_case_insensitive": "passed",
+      "test_acceptance.py::test_discount_applies_after_cart_changes": "passed"
+    },
+    "log_tail": ""
+  },
+  "PASS_TO_PASS": {
+    "status": "passed",
+    "detail": "",
+    "pytest_exit": 0,
+    "expected": 5,
+    "passed": 5,
+    "total_reported": 5,
+    "tests": {
+      "test_cart.py::test_empty_cart": "passed",
+      "test_cart.py::test_add_items_and_total": "passed",
+      "test_cart.py::test_add_same_sku_accumulates": "passed",
+      "test_cart.py::test_invalid_qty": "passed",
+      "test_cart.py::test_invalid_price": "passed"
+    },
+    "log_tail": ""
+  },
+  "test_hashes_verified_after": true
+}

@@ -1,0 +1,11 @@
+Warning: Input is not a terminal (fd=0).
+Building agent config from specs: ['/tmp/lc0-clean/mini.yaml', 
+'/tmp/lc0-clean/work/runs/neg-costlimit/config.yaml']
+minisweagent.environment: DEBUG: Starting container with command: docker run -d 
+--name minisweagent-65ab8a3c -w /repo --rm --network none --user 1000:1000      
+--cap-drop ALL --security-opt no-new-privileges --memory 1g --cpus 1            
+--pids-limit 256 --label lc0.run=neg-costlimit -v                               
+/tmp/lc0-clean/work/runs/neg-costlimit/ws:/repo lc0-env:1 sleep 2h              
+minisweagent.environment: INFO: Started container minisweagent-65ab8a3c with ID 
+a421e1f0453cf5df3d8c526a1c2cc5b5f845bf6be958c7fee89852152b9c106f                
+Saved trajectory to '/tmp/lc0-clean/work/runs/neg-costlimit/trajectory.json'

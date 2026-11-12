@@ -1,0 +1,12 @@
+diff --git a/cart/cart.py b/cart/cart.py
+index 5e0bd9d..e8d02f8 100644
+--- a/cart/cart.py
++++ b/cart/cart.py
+@@ -4,6 +4,7 @@
+ class Cart:
+     def __init__(self):
+         self._items = {}  # sku -> {"price": float, "qty": int}
++        self._discount = None
+ 
+     def add_item(self, sku: str, price: float, qty: int = 1) -> None:
+         if qty <= 0:

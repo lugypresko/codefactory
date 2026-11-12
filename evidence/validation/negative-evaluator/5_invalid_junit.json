@@ -1,0 +1,35 @@
+{
+  "requested_sha": "b965584ba21eb7d3026fe3aec90952aa52403951",
+  "decision": "ERROR",
+  "reason": "suite_error (f2p=error, p2p=error)",
+  "evaluated_at": "2026-11-12T12:25:32+02:00",
+  "duration_s": 1,
+  "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+  "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+  "test_hashes_verified_before": true,
+  "image": "lc0-env:1",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+  "sha": "b965584ba21eb7d3026fe3aec90952aa52403951",
+  "harness_sensitive_files": [],
+  "FAIL_TO_PASS": {
+    "status": "error",
+    "detail": "invalid JUnit XML: unclosed token: line 1, column 12",
+    "pytest_exit": 0,
+    "expected": 9,
+    "passed": 0,
+    "total_reported": 0,
+    "tests": {},
+    "log_tail": ""
+  },
+  "PASS_TO_PASS": {
+    "status": "error",
+    "detail": "invalid JUnit XML: unclosed token: line 1, column 12",
+    "pytest_exit": 0,
+    "expected": 5,
+    "passed": 0,
+    "total_reported": 0,
+    "tests": {},
+    "log_tail": ""
+  },
+  "test_hashes_verified_after": true
+}
