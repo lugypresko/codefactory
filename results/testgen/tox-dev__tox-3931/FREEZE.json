@@ -1,0 +1,12 @@
+{
+ "instance_id": "tox-dev__tox-3931",
+ "frozen_at": "2026-11-12T20:41:42+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/tox-dev__tox-3931/task.txt": "00860f45747245e163d1c1354644ed94615605a4734a31d445685683e053b902",
+  "results/testgen/tox-dev__tox-3931/CLARIFICATION_NEEDED.md": "b3caef106f0dc5e1514d1889b4314b4aec3c65f75602c8457fce795b18dbeb5c",
+  "results/testgen/tox-dev__tox-3931/record.json": "af6f6f8b7b1cd49e836edc7a181ae2de5914b4f9e02d9263f9e333259423e89e",
+  "results/testgen/tox-dev__tox-3931/config.yaml": "977d87fee702ef88d1166749d9389ab354e255835bdd5b94a697d26869f6313c",
+  "results/testgen/tox-dev__tox-3931/pre_eval.json": "292d43a0654a5095188099c185fde1dd147dd93b2e79c2e7f131a3798bdfa76d"
+ }
+}

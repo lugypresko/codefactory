@@ -1,0 +1,45 @@
+{
+  "instance_id": "tox-dev__tox-3931",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/tox-dev__tox-3931/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-tox-dev__tox-3931",
+    "mini_rc": 0,
+    "wall_seconds": 23,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.011507870000000002,
+    "api_calls": 3,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.6109
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "1ddc94aeaa02b2fa9c3c083f2031bf0a26e55df1",
+  "original_base_commit": "dd305fe8f347c49fcd3bd63d5e56c912e4c428f2",
+  "task_sha256": "00860f45747245e163d1c1354644ed94615605a4734a31d445685683e053b902",
+  "test_files": {},
+  "clarification": true,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/tox-dev__tox-3931/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.tox-dev_1776_tox-3931:latest"
+  }
+}
