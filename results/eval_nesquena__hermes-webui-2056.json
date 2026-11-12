@@ -1,0 +1,39 @@
+{
+  "instance_id": "nesquena__hermes-webui-2056",
+  "evaluated_patch_sha256": "b94125c45efa19d62ea63a8b3344c35aeb5c33598c41ce6041bddad0b9003e26",
+  "evaluated_patch_bytes": 785,
+  "producer_run_id": "pa-nesquena__hermes-webui-2056-20261112T192755-f766cf81",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "3/3",
+  "gt_p2p_failed": "0/54",
+  "gt_correct": false,
+  "gate_units_passed": [
+    2,
+    2
+  ],
+  "gate_units": 4,
+  "gate_deterministic": true,
+  "gate_p2p_files": [
+    "tests/test_1058_adaptive_title_refresh.py",
+    "tests/test_1560_password_env_var_no_op.py",
+    "tests/test_779_html_preview.py",
+    "tests/test_auth_session_persistence.py",
+    "tests/test_byok_model_dropdown.py",
+    "tests/test_cancel_interrupt.py",
+    "tests/test_credential_pool_providers.py",
+    "tests/test_custom_provider_display_name.py",
+    "tests/test_custom_providers_in_panel.py",
+    "tests/test_default_workspace_fallback.py"
+  ],
+  "gate_p2p_stems": [
+    "config"
+  ],
+  "gate_p2p_broken": [],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "0/131 stable pre-fix passing tests broken",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch",
+  "A_decision": "APPROVE"
+}
