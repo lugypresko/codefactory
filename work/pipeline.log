@@ -1,0 +1,211 @@
+[2026-11-12 17:28:27] START full run per frozen protocol 2617a58 (user approval 17:28)
+[2026-11-12 17:28:28] #1 schemathesis__schemathesis-4087: stage1 testgen
+[2026-11-12 17:29:38] schemathesis__schemathesis-4087 INVALID SUBMITTED 0.0256975 [] True
+[2026-11-12 17:29:38] schemathesis__schemathesis-4087 0 disc: 0 det: None
+[2026-11-12 17:29:38] stage1 frozen: commit fd918db
+[2026-11-12 17:29:38] #1 schemathesis__schemathesis-4087: stage2 patch
+[2026-11-12 17:35:06] PAUSED by user (17:33) after #1 stage2: testgen sandbox infra defect (bash -lc login shell drops conda testbed PATH; python/pytest unavailable to generator). #1 stage3 NOT run; 0/30 scored. Stage2 #1 recorded as-is: A=APPROVE, cost 0.10127.
+[2026-11-12 17:39:14] AMENDMENT 2 committed 9fc8e38; #1 attempt voided (infra). 0/30 scored.
+[2026-11-12 19:11:17] START SCORED RUN. GO_CHECKLIST commit 479b4d37a50e0faef6a7c0ee16aab7e875f2e80a (evidence/smoke3/GO_CHECKLIST.md sha256 682c5b92df36ad91079cbbc633be08d896291638c8e0108b859c9d7ee873aa01); code fe548622d06dc1b2416a41b38b7971297f3850a6 (Amendment 3); frozen order; #1 re-run from scratch
+[2026-11-12 19:11:17] #1 schemathesis__schemathesis-4087: stage1 testgen
+[2026-11-12 19:14:07] schemathesis__schemathesis-4087 INVALID LIMIT_EXCEEDED 0.09376183999999996 [] False
+[2026-11-12 19:14:07] schemathesis__schemathesis-4087 0 disc: 0 det: None
+[2026-11-12 19:14:07] stage1 frozen: commit e6322ed
+[2026-11-12 19:14:07] #1 schemathesis__schemathesis-4087: stage2 patch
+[2026-11-12 19:15:24] schemathesis__schemathesis-4087 APPROVE  0.02280866 546
+[2026-11-12 19:15:24] stage2 sealed: commit 2dce490 rc=0 run_id=pa-schemathesis__schemathesis-4087-20261112T191407-092afee4
+[2026-11-12 19:15:24] #1 schemathesis__schemathesis-4087: stage3 eval
+[2026-11-12 19:15:34] schemathesis__schemathesis-4087 A APPROVE B REJECT REJECT_INSUFFICIENT_EVIDENCE GT False
+[2026-11-12 19:15:35] #1 schemathesis__schemathesis-4087: done; spent $0.9735; free 84.8 GB
+[2026-11-12 19:15:35] #2 cs-si__eodag-2176: stage1 testgen
+[2026-11-12 19:16:29] cs-si__eodag-2176 VALID SUBMITTED 0.031367830000000006 ['tests/integration/test_issue_bug_42.py'] True
+[2026-11-12 19:16:34] cs-si__eodag-2176 1 disc: 4 det: True
+[2026-11-12 19:16:34] stage1 frozen: commit a646cca
+[2026-11-12 19:16:34] #2 cs-si__eodag-2176: stage2 patch
+[2026-11-12 19:27:16] cs-si__eodag-2176 REJECT ERROR/LIMIT: RuntimeError('agent server not healthy:\nException in thread litellm-model-cost-map-retry:\nTraceback (most recent call last):\n  File "__main__.py", line 13, in <module>\n  File "pyimod02_importers.p 0.0 0
+[2026-11-12 19:27:16] stage2 sealed: commit ee8369e rc=0 run_id=pa-cs-si__eodag-2176-20261112T191634-d775cd77
+[2026-11-12 19:27:16] #2 cs-si__eodag-2176: stage3 eval
+[2026-11-12 19:27:16] cs-si__eodag-2176 A REJECT B REJECT NO_PATCH GT False
+[2026-11-12 19:27:17] #2 cs-si__eodag-2176: done; spent $1.0048; free 86.1 GB
+[2026-11-12 19:27:17] #3 nesquena__hermes-webui-2056: stage1 testgen
+[2026-11-12 19:27:52] nesquena__hermes-webui-2056 VALID SUBMITTED 0.020574010000000004 ['tests/test_custom_provider_name_parsing.py'] False
+[2026-11-12 19:27:55] nesquena__hermes-webui-2056 1 disc: 4 det: True
+[2026-11-12 19:27:55] stage1 frozen: commit 98f3bd5
+[2026-11-12 19:27:55] #3 nesquena__hermes-webui-2056: stage2 patch
+[2026-11-12 19:29:06] nesquena__hermes-webui-2056 APPROVE  0.020614900000000002 785
+[2026-11-12 19:29:06] stage2 sealed: commit 8dcad0b rc=0 run_id=pa-nesquena__hermes-webui-2056-20261112T192755-f766cf81
+[2026-11-12 19:29:06] #3 nesquena__hermes-webui-2056: stage3 eval
+[2026-11-12 19:29:24] nesquena__hermes-webui-2056 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 19:29:25] #3 nesquena__hermes-webui-2056: done; spent $1.0460; free 86.6 GB
+[2026-11-12 19:29:25] #4 youssofal__mtplx-21: stage1 testgen
+[2026-11-12 19:45:55] youssofal__mtplx-21 VALID WALL_TIMEOUT 0.026122629999999997 [] False
+[2026-11-12 19:45:56] youssofal__mtplx-21 0 disc: 0 det: None
+[2026-11-12 19:45:56] stage1 frozen: commit 6ca2226
+[2026-11-12 19:45:56] #4 youssofal__mtplx-21: stage2 patch
+[2026-11-12 19:48:03] youssofal__mtplx-21 APPROVE  0.0233869 3326
+[2026-11-12 19:48:03] stage2 sealed: commit da0002d rc=0 run_id=pa-youssofal__mtplx-21-20261112T194556-dd3a69ae
+[2026-11-12 19:48:03] #4 youssofal__mtplx-21: stage3 eval
+[2026-11-12 19:48:05] youssofal__mtplx-21 A APPROVE B REJECT REJECT_INSUFFICIENT_EVIDENCE GT False
+[2026-11-12 19:48:06] #4 youssofal__mtplx-21: done; spent $1.0955; free 87.4 GB
+[2026-11-12 19:48:06] #5 raullenchai__rapid-mlx-289: stage1 testgen
+[2026-11-12 19:48:31] raullenchai__rapid-mlx-289 VALID SUBMITTED 0.016751150000000003 ['tests/test_gemma4_parser_issue.py'] False
+[2026-11-12 19:48:33] raullenchai__rapid-mlx-289 1 disc: 1 det: True
+[2026-11-12 19:48:33] stage1 frozen: commit 3b653de
+[2026-11-12 19:48:33] #5 raullenchai__rapid-mlx-289: stage2 patch
+[2026-11-12 20:15:22] raullenchai__rapid-mlx-289 REJECT WALL_TIMEOUT 0.29197754000000004 0
+[2026-11-12 20:15:22] stage2 sealed: commit 31d2eda rc=0 run_id=pa-raullenchai__rapid-mlx-289-20261112T194833-a2b5598f
+[2026-11-12 20:15:22] #5 raullenchai__rapid-mlx-289: stage3 eval
+[2026-11-12 20:15:22] raullenchai__rapid-mlx-289 A REJECT B REJECT NO_PATCH GT False
+[2026-11-12 20:15:23] #5 raullenchai__rapid-mlx-289: done; spent $1.4042; free 88.3 GB
+[2026-11-12 20:15:23] #6 python-wheel-build__fromager-1124: stage1 testgen
+[2026-11-12 20:17:16] python-wheel-build__fromager-1124 VALID SUBMITTED 0.07332754999999999 ['tests/test_cooldown_exemption.py'] False
+[2026-11-12 20:17:18] python-wheel-build__fromager-1124 1 disc: 1 det: True
+[2026-11-12 20:17:18] stage1 frozen: commit 02af46f
+[2026-11-12 20:17:18] #6 python-wheel-build__fromager-1124: stage2 patch
+[2026-11-12 20:19:15] python-wheel-build__fromager-1124 APPROVE  0.03469659 4446
+[2026-11-12 20:19:15] stage2 sealed: commit e9ef748 rc=0 run_id=pa-python-wheel-build__fromager-1124-20261112T201718-10584d63
+[2026-11-12 20:19:15] #6 python-wheel-build__fromager-1124: stage3 eval
+[2026-11-12 20:23:05] python-wheel-build__fromager-1124 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 20:23:06] #6 python-wheel-build__fromager-1124: done; spent $1.5123; free 89.0 GB
+[2026-11-12 20:23:06] #7 itsdnns__docsight-437: stage1 testgen
+[2026-11-12 20:23:54] itsdnns__docsight-437 VALID SUBMITTED 0.030212340000000004 ['tests/test_comparison_error_handling.py'] False
+[2026-11-12 20:23:56] itsdnns__docsight-437 1 disc: 4 det: True
+[2026-11-12 20:23:56] stage1 frozen: commit e9fcac9
+[2026-11-12 20:23:56] #7 itsdnns__docsight-437: stage2 patch
+[2026-11-12 20:26:18] itsdnns__docsight-437 APPROVE  0.018795520000000003 2094
+[2026-11-12 20:26:18] stage2 sealed: commit ebd75ef rc=0 run_id=pa-itsdnns__docsight-437-20261112T202356-63a2710f
+[2026-11-12 20:26:18] #7 itsdnns__docsight-437: stage3 eval
+[2026-11-12 20:26:30] itsdnns__docsight-437 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 20:26:31] #7 itsdnns__docsight-437: done; spent $1.5613; free 89.9 GB
+[2026-11-12 20:26:31] #8 agronholm__anyio-1134: stage1 testgen
+[2026-11-12 20:27:45] agronholm__anyio-1134 VALID SUBMITTED 0.038147310000000004 ['tests/test_issue_main_module.py'] True
+[2026-11-12 20:27:46] agronholm__anyio-1134 1 disc: 1 det: True
+[2026-11-12 20:27:46] stage1 frozen: commit 5dd4653
+[2026-11-12 20:27:46] #8 agronholm__anyio-1134: stage2 patch
+[2026-11-12 20:41:17] agronholm__anyio-1134 REJECT ERROR/LIMIT: RuntimeError('agent server not healthy:\n  File "pyimod02_importers.py", line 457, in exec_module\n  File "openhands/agent_server/logging_config.py", line 8, in <module>\n  File "pyimod02_importers.py 0.0 0
+[2026-11-12 20:41:17] stage2 sealed: commit a3b580c rc=0 run_id=pa-agronholm__anyio-1134-20261112T202746-30e3317d
+[2026-11-12 20:41:17] #8 agronholm__anyio-1134: stage3 eval
+[2026-11-12 20:41:17] agronholm__anyio-1134 A REJECT B REJECT NO_PATCH GT False
+[2026-11-12 20:41:17] #8 agronholm__anyio-1134: done; spent $1.5994; free 90.5 GB
+[2026-11-12 20:41:17] #9 tox-dev__tox-3931: stage1 testgen
+[2026-11-12 20:41:42] tox-dev__tox-3931 VALID SUBMITTED 0.011507870000000002 [] True
+[2026-11-12 20:41:42] tox-dev__tox-3931 0 disc: 0 det: None
+[2026-11-12 20:41:42] stage1 frozen: commit 6a97b36
+[2026-11-12 20:41:42] #9 tox-dev__tox-3931: stage2 patch
+[2026-11-12 20:42:55] tox-dev__tox-3931 APPROVE  0.016035670000000002 652
+[2026-11-12 20:42:55] stage2 sealed: commit dab2408 rc=0 run_id=pa-tox-dev__tox-3931-20261112T204142-4275ebcd
+[2026-11-12 20:42:55] #9 tox-dev__tox-3931: stage3 eval
+[2026-11-12 20:42:56] tox-dev__tox-3931 A APPROVE B REJECT REJECT_INSUFFICIENT_EVIDENCE GT False
+[2026-11-12 20:42:57] #9 tox-dev__tox-3931: done; spent $1.6270; free 91.1 GB
+[2026-11-12 20:42:57] #10 copier-org__copier-2646: stage1 testgen
+[2026-11-12 20:47:10] copier-org__copier-2646 VALID LIMIT_EXCEEDED 0.08793545 ['tests/test_tmp_cleanup.py'] False
+[2026-11-12 20:47:20] copier-org__copier-2646 1 disc: 1 det: True
+[2026-11-12 20:47:20] stage1 frozen: commit 1d37222
+[2026-11-12 20:47:20] #10 copier-org__copier-2646: stage2 patch
+[2026-11-12 20:49:29] copier-org__copier-2646 APPROVE  0.032796120000000005 881
+[2026-11-12 20:49:29] stage2 sealed: commit 4ec55ba rc=0 run_id=pa-copier-org__copier-2646-20261112T204720-aa7fcac8
+[2026-11-12 20:49:29] #10 copier-org__copier-2646: stage3 eval
+[2026-11-12 20:54:17] copier-org__copier-2646 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 20:54:18] #10 copier-org__copier-2646: done; spent $1.7477; free 91.6 GB
+[2026-11-12 20:54:18] #11 hkuds__openharness-217: stage1 testgen
+[2026-11-12 20:55:38] hkuds__openharness-217 VALID SUBMITTED 0.03858035 ['tests/test_auth/test_flows.py'] False
+[2026-11-12 20:55:41] hkuds__openharness-217 1 disc: 3 det: True
+[2026-11-12 20:55:41] stage1 frozen: commit 1d846ee
+[2026-11-12 20:55:41] #11 hkuds__openharness-217: stage2 patch
+[2026-11-12 20:56:43] hkuds__openharness-217 APPROVE  0.011731990000000001 1360
+[2026-11-12 20:56:43] stage2 sealed: commit 0f7fb2e rc=0 run_id=pa-hkuds__openharness-217-20261112T205541-222468c0
+[2026-11-12 20:56:43] #11 hkuds__openharness-217: stage3 eval
+[2026-11-12 20:56:47] hkuds__openharness-217 A APPROVE B APPROVE  GT True
+[2026-11-12 20:56:48] #11 hkuds__openharness-217: done; spent $1.7980; free 92.6 GB
+[2026-11-12 20:56:48] #12 astronomy-commons__lsdb-1349: stage1 testgen
+[2026-11-12 20:57:23] astronomy-commons__lsdb-1349 VALID SUBMITTED 0.015865960000000002 ['tests/lsdb/io/test_write_pixel_directories.py'] False
+[2026-11-12 20:57:29] astronomy-commons__lsdb-1349 1 disc: 2 det: True
+[2026-11-12 20:57:29] stage1 frozen: commit 2d17289
+[2026-11-12 20:57:29] #12 astronomy-commons__lsdb-1349: stage2 patch
+[2026-11-12 20:59:31] astronomy-commons__lsdb-1349 APPROVE  0.04884613999999999 4504
+[2026-11-12 20:59:31] stage2 sealed: commit 1c578a5 rc=0 run_id=pa-astronomy-commons__lsdb-1349-20261112T205729-dfec7f11
+[2026-11-12 20:59:31] #12 astronomy-commons__lsdb-1349: stage3 eval
+[2026-11-12 21:04:59] astronomy-commons__lsdb-1349 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 21:05:00] #12 astronomy-commons__lsdb-1349: done; spent $1.8627; free 94.4 GB
+[2026-11-12 21:05:00] #13 alibaba__opensandbox-816: stage1 testgen
+[2026-11-12 21:06:45] alibaba__opensandbox-816 VALID SUBMITTED 0.07450229000000001 ['server/tests/test_security_symlink_volume.py'] False
+[2026-11-12 21:06:48] alibaba__opensandbox-816 1 disc: 1 det: True
+[2026-11-12 21:06:48] stage1 frozen: commit 7ffdd1a
+[2026-11-12 21:06:48] #13 alibaba__opensandbox-816: stage2 patch
+[2026-11-12 21:09:10] alibaba__opensandbox-816 APPROVE  0.051979050000000006 7013
+[2026-11-12 21:09:10] stage2 sealed: commit a97f17c rc=0 run_id=pa-alibaba__opensandbox-816-20261112T210648-295ff4aa
+[2026-11-12 21:09:10] #13 alibaba__opensandbox-816: stage3 eval
+[2026-11-12 21:09:25] alibaba__opensandbox-816 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 21:09:26] #13 alibaba__opensandbox-816: done; spent $1.9892; free 95.1 GB
+[2026-11-12 21:09:26] #14 apache__iceberg-python-3295: stage1 testgen
+[2026-11-12 21:09:54] apache__iceberg-python-3295 VALID SUBMITTED 0.013167289999999998 ['tests/expressions/test_deepcopy.py'] False
+[2026-11-12 21:09:57] apache__iceberg-python-3295 1 disc: 3 det: True
+[2026-11-12 21:09:57] stage1 frozen: commit 7694ed3
+[2026-11-12 21:09:57] #14 apache__iceberg-python-3295: stage2 patch
+[2026-11-12 21:12:00] apache__iceberg-python-3295 APPROVE  0.04522686000000001 382
+[2026-11-12 21:12:00] stage2 sealed: commit ebf9123 rc=0 run_id=pa-apache__iceberg-python-3295-20261112T210957-54181d0e
+[2026-11-12 21:12:00] #14 apache__iceberg-python-3295: stage3 eval
+[2026-11-12 21:12:14] apache__iceberg-python-3295 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 21:12:15] #14 apache__iceberg-python-3295: done; spent $2.0476; free 96.5 GB
+[2026-11-12 21:12:15] #15 databricks__dbt-databricks-1428: stage1 testgen
+[2026-11-12 21:15:12] databricks__dbt-databricks-1428 VALID SUBMITTED 0.07296603000000002 ['tests/functional/adapter/catalog_integrations/test_databricks_empty_schema_docs_generate.py'] True
+[2026-11-12 21:15:16] databricks__dbt-databricks-1428 1 disc: 1 det: True
+[2026-11-12 21:15:16] stage1 frozen: commit 048331a
+[2026-11-12 21:15:16] #15 databricks__dbt-databricks-1428: stage2 patch
+[2026-11-12 21:33:35] databricks__dbt-databricks-1428 REJECT ERROR/LIMIT: RuntimeError('agent server not healthy:\nException in thread litellm-model-cost-map-retry:\nTraceback (most recent call last):\n  File "__main__.py", line 13, in <module>\n  File "pyimod02_importers.p 0.0 0
+[2026-11-12 21:33:35] stage2 sealed: commit 66326c3 rc=0 run_id=pa-databricks__dbt-databricks-1428-20261112T211516-9388241f
+[2026-11-12 21:33:35] #15 databricks__dbt-databricks-1428: stage3 eval
+[2026-11-12 21:33:35] databricks__dbt-databricks-1428 A REJECT B REJECT NO_PATCH GT False
+[2026-11-12 21:33:36] #15 databricks__dbt-databricks-1428: done; spent $2.1206; free 97.7 GB
+[2026-11-12 21:33:36] #16 zarr-developers__virtualizarr-979: stage1 testgen
+[2026-11-12 21:35:13] zarr-developers__virtualizarr-979 VALID LIMIT_EXCEEDED 0.058083299999999984 ['virtualizarr/tests/test_parsers/test_issue_inline_data.py'] False
+[2026-11-12 21:35:17] zarr-developers__virtualizarr-979 1 disc: 1 det: True
+[2026-11-12 21:35:17] stage1 frozen: commit 59a9fa6
+[2026-11-12 21:35:17] #16 zarr-developers__virtualizarr-979: stage2 patch
+[2026-11-12 21:36:16] zarr-developers__virtualizarr-979 REJECT EMPTY_DIFF 0.01368657 0
+[2026-11-12 21:36:16] stage2 sealed: commit b27f185 rc=0 run_id=pa-zarr-developers__virtualizarr-979-20261112T213517-78c5ec4d
+[2026-11-12 21:36:16] #16 zarr-developers__virtualizarr-979: stage3 eval
+[2026-11-12 21:36:16] zarr-developers__virtualizarr-979 A REJECT B REJECT NO_PATCH GT False
+[2026-11-12 21:36:17] #16 zarr-developers__virtualizarr-979: done; spent $2.1923; free 98.9 GB
+[2026-11-12 21:36:17] #17 ultraplot__ultraplot-696: stage1 testgen
+[2026-11-12 21:38:29] ultraplot__ultraplot-696 VALID SUBMITTED 0.08631578999999999 ['ultraplot/tests/test_legend_visibility.py'] True
+[2026-11-12 21:38:34] ultraplot__ultraplot-696 1 disc: 0 det: True
+[2026-11-12 21:38:34] stage1 frozen: commit f163914
+[2026-11-12 21:38:34] #17 ultraplot__ultraplot-696: stage2 patch
+[2026-11-12 21:41:42] ultraplot__ultraplot-696 APPROVE  0.055406630000000005 737
+[2026-11-12 21:41:42] stage2 sealed: commit c88064a rc=0 run_id=pa-ultraplot__ultraplot-696-20261112T213834-98206fd6
+[2026-11-12 21:41:42] #17 ultraplot__ultraplot-696: stage3 eval
+[2026-11-12 21:43:00] ultraplot__ultraplot-696 A APPROVE B REJECT REJECT_INSUFFICIENT_EVIDENCE GT False
+[2026-11-12 21:43:01] #17 ultraplot__ultraplot-696: done; spent $2.3341; free 100.0 GB
+[2026-11-12 21:43:01] #18 pyinfra-dev__pyinfra-1665: stage1 testgen
+[2026-11-12 21:46:04] pyinfra-dev__pyinfra-1665 VALID SUBMITTED 0.13779185000000002 ['tests/test_server_reboot_sudo_password.py'] True
+[2026-11-12 21:46:05] pyinfra-dev__pyinfra-1665 1 disc: 0 det: True
+[2026-11-12 21:46:05] stage1 frozen: commit b1914e0
+[2026-11-12 21:46:05] #18 pyinfra-dev__pyinfra-1665: stage2 patch
+[2026-11-12 21:47:08] pyinfra-dev__pyinfra-1665 APPROVE  0.01643329 860
+[2026-11-12 21:47:09] stage2 sealed: commit 3cfa66a rc=0 run_id=pa-pyinfra-dev__pyinfra-1665-20261112T214605-c7108b3f
+[2026-11-12 21:47:09] #18 pyinfra-dev__pyinfra-1665: stage3 eval
+[2026-11-12 21:47:10] pyinfra-dev__pyinfra-1665 A APPROVE B REJECT REJECT_INSUFFICIENT_EVIDENCE GT False
+[2026-11-12 21:47:10] #18 pyinfra-dev__pyinfra-1665: done; spent $2.4883; free 100.6 GB
+[2026-11-12 21:47:10] #19 pennylaneai__pennylane-9298: stage1 testgen
+[2026-11-12 21:49:28] pennylaneai__pennylane-9298 VALID SUBMITTED 0.06383911 ['tests/transforms/test_graph_decomposer_work_wires.py'] False
+[2026-11-12 21:49:33] pennylaneai__pennylane-9298 1 disc: 1 det: True
+[2026-11-12 21:49:33] stage1 frozen: commit 72272a1
+[2026-11-12 21:49:33] #19 pennylaneai__pennylane-9298: stage2 patch
+[2026-11-12 22:01:23] pennylaneai__pennylane-9298 REJECT ERROR/LIMIT: RuntimeError('agent server not healthy:\nException in thread litellm-model-cost-map-retry:\nTraceback (most recent call last):\n  File "__main__.py", line 13, in <module>\n  File "pyimod02_importers.p 0.0 0
+[2026-11-12 22:01:23] stage2 sealed: commit 31b7ee8 rc=0 run_id=pa-pennylaneai__pennylane-9298-20261112T214933-d072776b
+[2026-11-12 22:01:23] #19 pennylaneai__pennylane-9298: stage3 eval
+[2026-11-12 22:01:23] pennylaneai__pennylane-9298 A REJECT B REJECT NO_PATCH GT False
+[2026-11-12 22:01:24] #19 pennylaneai__pennylane-9298: done; spent $2.5521; free 101.9 GB
+[2026-11-12 22:01:24] #20 microsoft__qcodes-8039: stage1 testgen
+[2026-11-12 22:02:18] microsoft__qcodes-8039 VALID SUBMITTED 0.00885604 ['tests/utils/test_issue_8024.py'] False
+[2026-11-12 22:03:37] microsoft__qcodes-8039 1 disc: 1 det: True
+[2026-11-12 22:03:37] stage1 frozen: commit 9fa797d
+[2026-11-12 22:03:37] #20 microsoft__qcodes-8039: stage2 patch
+[2026-11-12 22:04:40] microsoft__qcodes-8039 APPROVE  0.008280860000000001 866
+[2026-11-12 22:04:40] stage2 sealed: commit 9dc21ab rc=0 run_id=pa-microsoft__qcodes-8039-20261112T220337-8f681b88
+[2026-11-12 22:04:40] #20 microsoft__qcodes-8039: stage3 eval
+[2026-11-12 22:05:19] microsoft__qcodes-8039 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 22:05:20] #20 microsoft__qcodes-8039: done; spent $2.5693; free 103.7 GB
+[2026-11-12 22:05:20] #21 pypsa__pypsa-1653: stage1 testgen
+[2026-11-12 22:05:38] STOPPED by user decision 22:03 IST after #20; issues #21-#30 not run (#21 pypsa__pypsa-1653 stage1 killed at 22:05:23 during workspace prep, before preflight/mini start: no model call, no results; partial run dir moved to work/not_run_user_stop/)

@@ -1,0 +1,54 @@
+{"run_id": "arm1-tox-dev__tox-3931", "role": "arm1", "cost_usd": 0.024730490000000004, "ts": "2026-11-12T16:50:53+0200"}
+{"run_id": "oh-feasibility-schemathesis__schemathesis-4087", "role": "oh-feasibility", "cost_usd": 0.0, "ts": "2026-11-12T17:04:48+0200", "note": "feasibility attempt 1: proxy rejected path (403) before forwarding; no Google call made"}
+{"run_id": "oh-feasibility-schemathesis__schemathesis-4087", "role": "oh-feasibility", "cost_usd": 0.0, "ts": "2026-11-12T17:06:27+0200", "note": "feasibility attempt 2: proxy rejected path (403) before forwarding; no Google call made"}
+{"run_id": "oh-feasibility-schemathesis__schemathesis-4087", "role": "oh-feasibility", "cost_usd": 0.01562834, "ts": "2026-11-12T17:07:40+0200", "note": "feasibility attempt 3: proxy metering bug (nested usageMetadata) -> backfilled from agent-server litellm accumulated_cost in events.json"}
+{"run_id": "oh-feasibility-4-metering", "role": "oh-feasibility", "cost_usd": 0.1293802, "ts": "2026-11-12T17:10:19+0200"}
+{"run_id": "gate0-smoke-schemathesis__schemathesis-4087", "role": "gate0-smoke", "cost_usd": 0.02776507, "ts": "2026-11-12T17:13:56+0200"}
+{"run_id": "tg-schemathesis__schemathesis-4087", "role": "testgen", "cost_usd": 0.0256975, "ts": "2026-11-12T17:29:37+0200"}
+{"run_id": "pa-schemathesis__schemathesis-4087", "role": "patch-openhands", "cost_usd": 0.10126969000000002, "ts": "2026-11-12T17:33:52+0200"}
+{"run_id": "tg-schemathesis__schemathesis-4087", "role": "testgen", "cost_usd": 0.12295393999999997, "ts": "2026-11-12T17:42:32+0200"}
+{"run_id": "pa-schemathesis__schemathesis-4087", "role": "patch-openhands", "cost_usd": 0.03152687, "ts": "2026-11-12T17:44:16+0200"}
+{"run_id": "tg-schemathesis__schemathesis-4087", "role": "testgen", "cost_usd": 0.0, "ts": "2026-11-12T18:47:32+0200"}
+{"run_id": "accidental-pipeline-import-testgen-x2-schemathesis__schemathesis-4087", "role": "testgen-killed", "cost_usd": 0.10, "ts": "2026-11-12T18:47:44+0200", "note": "2 test-writer runs (~45 s each) started by an accidental `import pipeline` in the smoke driver at 18:46:49, killed 18:47:3x before mini wrote trajectories; unmetered -> conservative estimate $0.05 each"}
+{"run_id": "tg-schemathesis__schemathesis-4087", "role": "testgen", "cost_usd": 0.14680017000000004, "ts": "2026-11-12T19:02:47+0200"}
+{"run_id": "pa-schemathesis__schemathesis-4087-20261112T190247-55d42e99", "role": "patch-openhands", "cost_usd": 0.13112917000000002, "ts": "2026-11-12T19:07:05+0200"}
+{"run_id": "tg-schemathesis__schemathesis-4087", "role": "testgen", "cost_usd": 0.09376183999999996, "ts": "2026-11-12T19:14:06+0200"}
+{"run_id": "pa-schemathesis__schemathesis-4087-20261112T191407-092afee4", "role": "patch-openhands", "cost_usd": 0.02280866, "ts": "2026-11-12T19:15:22+0200"}
+{"run_id": "tg-cs-si__eodag-2176", "role": "testgen", "cost_usd": 0.031367830000000006, "ts": "2026-11-12T19:16:28+0200"}
+{"run_id": "pa-cs-si__eodag-2176-20261112T191634-d775cd77", "role": "patch-openhands", "cost_usd": 0.0, "ts": "2026-11-12T19:27:15+0200"}
+{"run_id": "tg-nesquena__hermes-webui-2056", "role": "testgen", "cost_usd": 0.020574010000000004, "ts": "2026-11-12T19:27:52+0200"}
+{"run_id": "pa-nesquena__hermes-webui-2056-20261112T192755-f766cf81", "role": "patch-openhands", "cost_usd": 0.020614900000000002, "ts": "2026-11-12T19:29:05+0200"}
+{"run_id": "tg-youssofal__mtplx-21", "role": "testgen", "cost_usd": 0.026122629999999997, "ts": "2026-11-12T19:45:55+0200"}
+{"run_id": "pa-youssofal__mtplx-21-20261112T194556-dd3a69ae", "role": "patch-openhands", "cost_usd": 0.0233869, "ts": "2026-11-12T19:48:01+0200"}
+{"run_id": "tg-raullenchai__rapid-mlx-289", "role": "testgen", "cost_usd": 0.016751150000000003, "ts": "2026-11-12T19:48:31+0200"}
+{"run_id": "pa-raullenchai__rapid-mlx-289-20261112T194833-a2b5598f", "role": "patch-openhands", "cost_usd": 0.29197754000000004, "ts": "2026-11-12T20:15:19+0200"}
+{"run_id": "tg-python-wheel-build__fromager-1124", "role": "testgen", "cost_usd": 0.07332754999999999, "ts": "2026-11-12T20:17:16+0200"}
+{"run_id": "pa-python-wheel-build__fromager-1124-20261112T201718-10584d63", "role": "patch-openhands", "cost_usd": 0.03469659, "ts": "2026-11-12T20:19:12+0200"}
+{"run_id": "tg-itsdnns__docsight-437", "role": "testgen", "cost_usd": 0.030212340000000004, "ts": "2026-11-12T20:23:54+0200"}
+{"run_id": "pa-itsdnns__docsight-437-20261112T202356-63a2710f", "role": "patch-openhands", "cost_usd": 0.018795520000000003, "ts": "2026-11-12T20:26:16+0200"}
+{"run_id": "tg-agronholm__anyio-1134", "role": "testgen", "cost_usd": 0.038147310000000004, "ts": "2026-11-12T20:27:45+0200"}
+{"run_id": "pa-agronholm__anyio-1134-20261112T202746-30e3317d", "role": "patch-openhands", "cost_usd": 0.0, "ts": "2026-11-12T20:41:16+0200"}
+{"run_id": "tg-tox-dev__tox-3931", "role": "testgen", "cost_usd": 0.011507870000000002, "ts": "2026-11-12T20:41:42+0200"}
+{"run_id": "pa-tox-dev__tox-3931-20261112T204142-4275ebcd", "role": "patch-openhands", "cost_usd": 0.016035670000000002, "ts": "2026-11-12T20:42:53+0200"}
+{"run_id": "tg-copier-org__copier-2646", "role": "testgen", "cost_usd": 0.08793545, "ts": "2026-11-12T20:47:10+0200"}
+{"run_id": "pa-copier-org__copier-2646-20261112T204720-aa7fcac8", "role": "patch-openhands", "cost_usd": 0.032796120000000005, "ts": "2026-11-12T20:49:26+0200"}
+{"run_id": "tg-hkuds__openharness-217", "role": "testgen", "cost_usd": 0.03858035, "ts": "2026-11-12T20:55:38+0200"}
+{"run_id": "pa-hkuds__openharness-217-20261112T205541-222468c0", "role": "patch-openhands", "cost_usd": 0.011731990000000001, "ts": "2026-11-12T20:56:40+0200"}
+{"run_id": "tg-astronomy-commons__lsdb-1349", "role": "testgen", "cost_usd": 0.015865960000000002, "ts": "2026-11-12T20:57:22+0200"}
+{"run_id": "pa-astronomy-commons__lsdb-1349-20261112T205729-dfec7f11", "role": "patch-openhands", "cost_usd": 0.04884613999999999, "ts": "2026-11-12T20:59:28+0200"}
+{"run_id": "tg-alibaba__opensandbox-816", "role": "testgen", "cost_usd": 0.07450229000000001, "ts": "2026-11-12T21:06:44+0200"}
+{"run_id": "pa-alibaba__opensandbox-816-20261112T210648-295ff4aa", "role": "patch-openhands", "cost_usd": 0.051979050000000006, "ts": "2026-11-12T21:09:08+0200"}
+{"run_id": "tg-apache__iceberg-python-3295", "role": "testgen", "cost_usd": 0.013167289999999998, "ts": "2026-11-12T21:09:54+0200"}
+{"run_id": "pa-apache__iceberg-python-3295-20261112T210957-54181d0e", "role": "patch-openhands", "cost_usd": 0.04522686000000001, "ts": "2026-11-12T21:11:58+0200"}
+{"run_id": "tg-databricks__dbt-databricks-1428", "role": "testgen", "cost_usd": 0.07296603000000002, "ts": "2026-11-12T21:15:12+0200"}
+{"run_id": "pa-databricks__dbt-databricks-1428-20261112T211516-9388241f", "role": "patch-openhands", "cost_usd": 0.0, "ts": "2026-11-12T21:33:33+0200"}
+{"run_id": "tg-zarr-developers__virtualizarr-979", "role": "testgen", "cost_usd": 0.058083299999999984, "ts": "2026-11-12T21:35:13+0200"}
+{"run_id": "pa-zarr-developers__virtualizarr-979-20261112T213517-78c5ec4d", "role": "patch-openhands", "cost_usd": 0.01368657, "ts": "2026-11-12T21:36:13+0200"}
+{"run_id": "tg-ultraplot__ultraplot-696", "role": "testgen", "cost_usd": 0.08631578999999999, "ts": "2026-11-12T21:38:29+0200"}
+{"run_id": "pa-ultraplot__ultraplot-696-20261112T213834-98206fd6", "role": "patch-openhands", "cost_usd": 0.055406630000000005, "ts": "2026-11-12T21:41:40+0200"}
+{"run_id": "tg-pyinfra-dev__pyinfra-1665", "role": "testgen", "cost_usd": 0.13779185000000002, "ts": "2026-11-12T21:46:04+0200"}
+{"run_id": "pa-pyinfra-dev__pyinfra-1665-20261112T214605-c7108b3f", "role": "patch-openhands", "cost_usd": 0.01643329, "ts": "2026-11-12T21:47:07+0200"}
+{"run_id": "tg-pennylaneai__pennylane-9298", "role": "testgen", "cost_usd": 0.06383911, "ts": "2026-11-12T21:49:28+0200"}
+{"run_id": "pa-pennylaneai__pennylane-9298-20261112T214933-d072776b", "role": "patch-openhands", "cost_usd": 0.0, "ts": "2026-11-12T22:01:22+0200"}
+{"run_id": "tg-microsoft__qcodes-8039", "role": "testgen", "cost_usd": 0.00885604, "ts": "2026-11-12T22:02:18+0200"}
+{"run_id": "pa-microsoft__qcodes-8039-20261112T220337-8f681b88", "role": "patch-openhands", "cost_usd": 0.008280860000000001, "ts": "2026-11-12T22:04:38+0200"}

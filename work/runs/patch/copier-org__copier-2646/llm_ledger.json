@@ -1,0 +1,1 @@
+{"cost": 0.032796120000000005, "calls": 15, "in": 246620, "out": 6009, "cached": 208194, "ts": "2026-11-12T20:49:21+0200", "price_table": "gemini-2.5-flash: $0.30/M uncached input, $0.03/M cached input, $2.50/M output incl. thinking (litellm model_cost)"}

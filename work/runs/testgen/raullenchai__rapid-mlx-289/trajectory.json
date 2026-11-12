@@ -1,0 +1,1718 @@
+{
+  "info": {
+    "model_stats": {
+      "instance_cost": 0.016751150000000003,
+      "api_calls": 14
+    },
+    "config": {
+      "agent": {
+        "system_template": "You are a helpful assistant that can interact with a computer.\n",
+        "instance_template": "{{task}}\n\n## Command Execution Rules\n\nYou are operating in an environment where\n\n1. You issue at least one command\n2. The system executes the command(s) in a subshell\n3. You see the result(s)\n4. You write your next command(s)\n\nEach response should include:\n\n1. **Reasoning text** where you explain your analysis and plan\n2. At least one tool call with your command\n\n**CRITICAL REQUIREMENTS:**\n\n- Your response SHOULD include reasoning text explaining what you're doing\n- Your response MUST include AT LEAST ONE bash tool call\n- Directory or environment variable changes are not persistent. Every action is executed in a new subshell.\n- However, you can prefix any action with `MY_ENV_VAR=MY_VALUE cd /path/to/working/dir && ...` or write/load environment variables from files\n- When you are done, finish by issuing the following command: `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`.\n  Do not combine it with any other command. <important>After this command, you cannot continue working on this task.</important>\n\nExample of a CORRECT response:\n<example_response>\nI need to understand the structure of the repository first. Let me check what files are in the current directory to get a better understanding of the codebase.\n\n[Makes bash tool call with {\"command\": \"ls -la\"} as arguments]\n</example_response>\n\n<system_information>\n{{system}} {{release}} {{version}} {{machine}}\n</system_information>\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\n### Edit files with sed:\n\n{%- if system == \"Darwin\" -%}\n<important>\nYou are on MacOS. For all the below examples, you need to use `sed -i ''` instead of `sed -i`.\n</important>\n{%- endif -%}\n\n```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n### Any other command you want to run\n\n```bash\nanything\n```\n",
+        "step_limit": 40,
+        "cost_limit": 0.25,
+        "wall_time_limit_seconds": 900,
+        "max_consecutive_format_errors": 3,
+        "output_path": "/workspace/lc1a0/work/runs/testgen/raullenchai__rapid-mlx-289/trajectory.json"
+      },
+      "agent_type": "minisweagent.agents.default.DefaultAgent",
+      "model": {
+        "model_name": "gemini/gemini-2.5-flash",
+        "model_kwargs": {
+          "drop_params": true
+        },
+        "litellm_model_registry": null,
+        "set_cache_control": null,
+        "cost_tracking": "default",
+        "format_error_template": "{% if finish_reason is defined and (finish_reason == \"length\" or (finish_reason == \"tool_calls\" and not has_tool_calls)) -%}\nYour previous response reached the output token limit (finish_reason={{ finish_reason }}) before you produced a tool call, so it was cut off. Respond more concisely and finish with exactly one bash tool call. If you need to think more, do so briefly.\n{%- else -%}\nTool call error:\n\n<error>\n{{error}}\n</error>\n\nHere is general guidance on how to submit correct toolcalls:\n\nEvery response needs to use the 'bash' tool at least once to execute commands.\n\nCall the bash tool with your command as the argument:\n- Tool: bash\n- Arguments: {\"command\": \"your_command_here\"}\n\nIf you want to end the task, please issue the following command: `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`\nwithout any other command.\n{%- endif %}\n",
+        "observation_template": "{%- if output.output | length < 10000 -%}\n{\n  \"returncode\": {{ output.returncode }},\n  \"output\": {{ output.output | tojson }}\n  {%- if output.exception_info %}, \"exception_info\": {{ output.exception_info | tojson }}{% endif %}\n}\n{%- else -%}\n{\n  \"returncode\": {{ output.returncode }},\n  \"output_head\": {{ output.output[:5000] | tojson }},\n  \"output_tail\": {{ output.output[-5000:] | tojson }},\n  \"elided_chars\": {{ output.output | length - 10000 }},\n  \"warning\": \"Output too long.\"\n  {%- if output.exception_info %}, \"exception_info\": {{ output.exception_info | tojson }}{% endif %}\n}\n{%- endif -%}\n",
+        "multimodal_regex": ""
+      },
+      "model_type": "minisweagent.models.litellm_model.LitellmModel",
+      "environment": {
+        "image": "swerebench/sweb.eval.x86_64.raullenchai_1776_rapid-mlx-289:latest",
+        "cwd": "/testbed",
+        "env": {
+          "PAGER": "cat",
+          "MANPAGER": "cat",
+          "LESS": "-R",
+          "PIP_PROGRESS_BAR": "off",
+          "TQDM_DISABLE": "1",
+          "HOME": "/tmp",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "PIP_NO_INDEX": "1",
+          "CONDA_DEFAULT_ENV": "testbed",
+          "PATH": "/opt/conda/envs/testbed/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        },
+        "forward_env": [],
+        "timeout": 120,
+        "executable": "docker",
+        "run_args": [
+          "--rm",
+          "--network",
+          "none",
+          "--user",
+          "1000:1000",
+          "--cap-drop",
+          "ALL",
+          "--security-opt",
+          "no-new-privileges",
+          "--memory",
+          "1536m",
+          "--cpus",
+          "1",
+          "--pids-limit",
+          "256",
+          "--label",
+          "lc1a0.run=tg-raullenchai__rapid-mlx-289",
+          "-v",
+          "/workspace/lc1a0/work/runs/testgen/raullenchai__rapid-mlx-289/ws:/testbed"
+        ],
+        "container_timeout": "2h",
+        "pull_timeout": 120,
+        "interpreter": [
+          "bash",
+          "-c"
+        ]
+      },
+      "environment_type": "minisweagent.environments.docker.DockerEnvironment"
+    },
+    "mini_version": "2.4.6",
+    "exit_status": "Submitted",
+    "submission": ""
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant that can interact with a computer."
+    },
+    {
+      "role": "user",
+      "content": "You are a test engineer. Your job is to write ACCEPTANCE TESTS for the GitHub issue below, for the Python repository in /testbed (already installed; run tests with `python -m pytest`). The issue has NOT been fixed in this code. Do NOT fix it.\n\nGoal: write new pytest test file(s) that encode the behaviour the issue asks for, such that\n  (a) they FAIL on the current, unfixed code, for the reason described in the issue (an assertion about the issue's behaviour, not an unrelated error);\n  (b) they PASS once a correct fix is implemented, whatever reasonable implementation the developer chooses;\n  (c) they would FAIL for plausible-but-incomplete fixes (cover the edge cases the issue implies, not only its literal example).\n\nRules:\n- Create only NEW test files named test_*.py, placed next to the project's existing tests (look at how the existing tests are organised and import the code). Do not modify, delete or rename any existing file. Do not create any other file inside /testbed; use /tmp for scratch work.\n- Test observable behaviour described by the issue. Do not depend on exact error-message wording or on private implementation details unless the issue itself specifies them; a correct fix may name internals differently. If you must assume a new public API name (parameter/function), take it from the issue text when it gives one.\n- There is no network access. Tests must not need the network.\n- Run your tests and confirm they fail on the current code for the right reason, and that the rest of the file runs.\n- If the issue is too vague or does not define a checkable expected behaviour, do NOT write tests. Instead create /testbed/CLARIFICATION_NEEDED.md with the specific questions you would ask the reporter, then finish.\n\n<issue>\nStreaming reasoning parsers misclassify deltas that straddle a channel marker\n### Rapid-MLX version\n\n0.6.11\n\n### Last version where it worked (if regression)\n\n_No response_\n\n### Hardware\n\nM3 Ultra 256GB\n\n### macOS version\n\n26.3.1\n\n### Python version\n\n3.13\n\n### Model\n\ngemma-4-31b-it-mxfp8\n\n### Full serve command\n\nserve mlx-community/gemma-4-31b-it-mxfp8 --port 8880 --max-num-seqs 4  --default-temperature 0.0 --kv-cache-quantization --cache-memory-mb 6000 --stream-interval 100 --timeout 1800\n\n### Streaming or non-streaming?\n\nStreaming (`stream: true`)\n\n### What happened? What did you expect?\n\n**Affects:** `vllm_mlx/reasoning/gemma4_parser.py` (confirmed). Likely also `qwen3_parser.py`, `harmony_parser.py`, `deepseek_r1_parser.py`, `minimax_parser.py` (same shape, see \"Other parsers\" below).\n\n**Surfaced by:** PR #210 (`fix(streaming): accumulate new_text across skipped steps for stream_interval > 1`). Pre-#210, every streaming delta was a single token wide, so no delta could straddle a channel marker. Once #210 starts batching deltas at `stream_interval > 1`, deltas can span the thought-to-content boundary, and the parser misclassifies the part on the wrong side of the marker.\n\n## Symptom\n\nStreaming responses from Gemma 4 (and any model whose parser keys off in-line channel markers) start with a stray fragment from the tail of the model's reasoning, prepended to the actual answer. The fragment is exactly the bytes the model produced between the last `should_send()` flush and the channel marker.\n\nExample with `--stream-interval 100`, prompt \"List all 50 US states alphabetically with two-letter postal codes\":\n\n| | first chars of `choices[0].delta.content` reassembly |\n|---|---|\n| streamed (`stream=true`) | `. Wyoming (WY)1. Alabama (AL)\\n2. Alaska (AK)\\n...` |\n| non-streamed (`stream=false`) | `1. Alabama (AL)\\n2. Alaska (AK)\\n...` |\n\nThe 14-character prefix `\". Wyoming (WY)\"` comes from item 50 of the model's CoT scratchpad in the `<|channel>thought` block. It should have been routed to `delta.reasoning_content`, not `delta.content`.\n\nThe body of the answer (items 1 through 50 of the formatted list) is byte-identical between streaming and non-streaming. The bug is purely a misrouting at the single chunk that contains the channel transition.\n\n## Per-chunk evidence\n\nDumping the SSE stream and inspecting each chunk's `choices[0].delta.{reasoning_content, content}`:\n\n```\nchunk 1: delta.role=\"assistant\"                                 (no content)\nchunk 2: delta.reasoning_content=\"*  Task: List...    *  Colorado (\"\nchunk 3: delta.reasoning_content=\"CO)\\n  *  Connecticut (CT)\\n...   *  Louisiana (LA)\\n\"\nchunk 4: delta.reasoning_content=\"  *  Maine (ME)\\n...  *  New Jersey (NJ)\\n\"\nchunk 5: delta.reasoning_content=\" Dakota (SD)\\n  *  Tennessee\"\nchunk 6: delta.reasoning_content=\"ka (AK)\\n  *  ...\\n  *  50\"   (reasoning ends mid-token)\nchunk 7: delta.content=\". Wyoming (WY)1. Alabama (AL)\\n2. Alaska (AK)\\n...\"   (BUG: 14 chars belong in reasoning)\nchunk 8 to 11: delta.content=\"...rest of formatted list...\"\n```\n\nChunk 7 is the chunk that contains the `<channel|>` close marker separating thought from content. With `stream_interval=100` the buffer flushes a delta containing both the trailing reasoning bytes (`. Wyoming (WY)`) and the newly-emitted content bytes (`1. Alabama (AL)\\n...`). The parser sees the marker in `current_text`, sets `_in_content=True`, and labels the entire delta as content, including the bytes that arrived before the marker.\n\n## Root cause\n\n`vllm_mlx/reasoning/gemma4_parser.py:71-127`. The function `extract_reasoning_streaming` decides where the whole delta belongs based on the channel state at the end of `current_text`:\n\n```python\ndef extract_reasoning_streaming(\n    self, previous_text: str, current_text: str, delta_text: str\n) -> DeltaMessage | None:\n    # ... updates self._in_thought / self._in_content based on substrings of\n    # current_text ...\n    clean = delta_text  # never split internally\n    # ...\n    if self._in_thought:\n        return DeltaMessage(reasoning=clean)\n    elif self._in_content:\n        return DeltaMessage(content=clean)\n```\n\nThe function never inspects whether `delta_text` itself contains a channel marker (or, equivalently, whether the marker landed inside the window `previous_text..current_text`). When it does, the bytes on the wrong side of the marker are misrouted.\n\nPre-#210 this was unobservable: with `stream_interval=1`, each delta is one token, so the marker always arrives as its own delta. There is never any \"delta straddles a marker\" case.\n\n## Proposed fix\n\nInside `extract_reasoning_streaming`, when the delta contains (or completes) a channel marker that flips state, split the delta at the marker and emit both parts in their correct channels.\n\nSketch:\n\n```python\ndef extract_reasoning_streaming(self, previous_text, current_text, delta_text):\n    if not delta_text:\n        return None\n\n    # Find any channel marker that flips state inside this delta. The\n    # window we care about is current_text[len(previous_text):], i.e.\n    # exactly delta_text, but we look at it in the context of\n    # previous_text to know which markers we were waiting for.\n    transitions = self._find_transitions_in_delta(previous_text, delta_text)\n\n    if not transitions:\n        # No state flip inside the delta, original logic applies.\n        return self._classify_whole_delta(delta_text)\n\n    # Emit pre/post-marker pieces in their respective channels. For a\n    # single thought-to-content transition the result is a DeltaMessage with\n    # both .reasoning and .content set (DeltaMessage already supports that\n    # shape, see DeltaMessage uses elsewhere).\n    pre, marker, post = transitions[0]  # multi-marker case is rare; loop if needed\n    self._apply_transition(marker)\n    return DeltaMessage(\n        reasoning=pre if was_in_thought else None,\n        content=post if now_in_content else None,\n    )\n```\n\nTwo implementation notes:\n\n1. **State update was already correct.** `_in_thought` and `_in_content` flips happen at the right time, based on `current_text` substring checks. The fix is purely about splitting `delta_text` itself at the marker boundary.\n2. **Marker detection across a chunk boundary.** A marker can be split across two consecutive deltas (e.g. `<channel` arrives in delta N and `|>` in delta N+1). The existing logic already handles this via the `_in_thought and \"<channel|>\" in current_text` checks. The split-fix needs to use `current_text` to know the marker landed, but find its position relative to delta_text by indexing `current_text.index(marker, start=len(previous_text))`.\n\n## Test plan\n\nAdd a unit test in `tests/test_streaming_think_router.py` that feeds a single delta containing a complete thought-to-content transition:\n\n```python\ndef test_delta_straddling_channel_close_splits_reasoning_and_content():\n    parser = Gemma4Parser()\n    # Simulate stream_interval > 1 flush: one delta containing the\n    # tail of thought, the channel-close marker, and the start of content.\n    previous = \"<|channel>thoughtthinking...\"\n    delta    = \" final thought<channel|><|channel>contentHello\"\n    current  = previous + delta\n    msg = parser.extract_reasoning_streaming(previous, current, delta)\n    assert msg.reasoning == \" final thought\"\n    assert msg.content == \"Hello\"\n```\n\nEnd-to-end verification: the streaming-vs-non-streaming parity test in the repro section above must produce a 0-byte diff after the fix.\n\n## Other parsers likely affected\n\nSame shape (whole-delta classification by end-state):\n\n- `vllm_mlx/reasoning/qwen3_parser.py`\n- `vllm_mlx/reasoning/harmony_parser.py`\n- `vllm_mlx/reasoning/deepseek_r1_parser.py`\n- `vllm_mlx/reasoning/minimax_parser.py`\n\nEach should be inspected for the same pattern. The fix is parser-by-parser because each marker syntax is different (`</think>` vs `<channel|>` vs the Harmony channel encoding etc.).\n\n## Severity\n\nLow to medium:\n\n- **Visible only when** `stream_interval > 1` AND the model emits in-stream channel markers (i.e. reasoning models). Default `stream_interval=1` is unaffected.\n- **Damage:** a small fragment of reasoning text leaks into the content field of one chunk per response. Body of answer is intact.\n- **Workaround:** run with default `--stream-interval 1`, which the reasoning models already implicitly require for correctness.\n\n## Status\n\nA PR is in progress for this issue, scoped to the gemma4 parser fix plus the regression test described above. The other parsers in the \"Other parsers likely affected\" list will be audited as part of that PR or as immediate follow-ups; the same split-at-marker fix shape applies to each.\n\n\n### Minimal reproduction\n\n**1. Start the server with `--stream-interval` greater than 1.** The larger the interval, the wider the buffered delta and the more visible the leak. `--stream-interval 100` gives a near-guaranteed multi-byte symptom:\n\n```\nrapid-mlx serve mlx-community/gemma-4-31b-it-mxfp8 \\\n    --port 8880 --max-num-seqs 4 --default-temperature 0.0 \\\n    --kv-cache-quantization --cache-memory-mb 6000 \\\n    --stream-interval 100 --timeout 1800\n```\n\n**2. Send the same prompt twice (once streaming, once not) and compare.** Use a deterministic prompt at temperature 0 that runs over a few hundred tokens. The \"list all 50 US states\" prompt works well because the body of the answer is large, regular, and easy to eyeball:\n\n```bash\nPROMPT='List all 50 US states alphabetically, one per line, with their two-letter postal codes. Format: \"1. Alabama (AL)\". Start at 1, end at 50.'\n\nREQ=$(jq -nc --arg p \"$PROMPT\" \\\n  '{model:\"mlx-community/gemma-4-31b-it-mxfp8\", max_tokens:600,\n    temperature:0, messages:[{role:\"user\", content:$p}]}')\n\nstreamed=$(curl -Ns http://127.0.0.1:8880/v1/chat/completions \\\n  -H 'Content-Type: application/json' \\\n  -d \"$(echo \"$REQ\" | jq -c '. + {stream:true}')\" \\\n  | awk '/^data: / && !/\\[DONE\\]/{ sub(/^data: /,\"\"); print }' \\\n  | jq -j '.choices[0].delta.content // \"\"')\n\nnonstreamed=$(curl -s http://127.0.0.1:8880/v1/chat/completions \\\n  -H 'Content-Type: application/json' -d \"$REQ\" \\\n  | jq -r '.choices[0].message.content')\n\ndiff <(printf '%s' \"$streamed\") <(printf '%s' \"$nonstreamed\") | head\n```\n\n**3. Observe.** At temperature 0 both responses are deterministic, so a correctly-routed stream should produce a 0-byte diff. With the bug present, the diff is non-empty and looks like this:\n\n```\n1c1\n< . Wyoming (WY)1. Alabama (AL)\n---\n> 1. Alabama (AL)\n```\n\nThe streamed reassembly carries an extra 14 characters (`\". Wyoming (WY)\"`) prepended to the start of the formatted list. Those 14 characters are item 50 of the model's CoT scratchpad and should have been routed to `delta.reasoning_content`, not `delta.content`. The body of the answer (items 1 to 50) is byte-identical between the two responses.\n\n\n### Server logs / error output\n\n```shell\nINFO:     192.168.4.20:53205 - \"POST /v1/chat/completions HTTP/1.1\" 200 OK\nINFO:vllm_mlx.service.helpers:[disconnect_guard] START poll_interval=0.5s\nINFO:vllm_mlx.routes.chat:[SSE-ROLE] data: {\"id\":\"chatcmpl-34a7477a\",\"object\":\"chat.completion.chunk\",\"created\":1777997542,\"model\":\"mlx-community/gemma-4-31b-it-mxfp8\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\"}}]}\nINFO:vllm_mlx.service.helpers:[disconnect_guard] first chunk arrived, elapsed=0.0s\nINFO:vllm_mlx.scheduler:[cache_fetch] request=7b08a3bf-676 HIT prompt_tokens=58 cached=58 remaining=0 time=0.002s\nINFO:vllm_mlx.engine_core:[stream_outputs] 7b08a3bf-676 START waiting for tokens\nINFO:vllm_mlx.scheduler:[schedule] request=7b08a3bf-676 uid=2 prompt_tokens=58 tokens_to_prefill=1, 58 cached max_tokens=2648 running=1 waiting=0\nINFO:vllm_mlx.scheduler:[prompt_cache_save] request=7b08a3bf-676 prompt_tokens=58 store_time=0.000s\nINFO:vllm_mlx.engine_core:[stream_outputs] 7b08a3bf-676 first token after 0.5s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #10 disconnected=False elapsed=5.0s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #20 disconnected=False elapsed=10.0s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.0GB peak=33.7GB cache=0.0GB step=2048 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #30 disconnected=False elapsed=15.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #40 disconnected=False elapsed=20.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #50 disconnected=False elapsed=25.1s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.2GB peak=33.7GB cache=0.0GB step=2304 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #60 disconnected=False elapsed=30.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #70 disconnected=False elapsed=35.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #80 disconnected=False elapsed=40.2s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.5GB peak=33.7GB cache=0.0GB step=2560 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #90 disconnected=False elapsed=45.2s\nINFO:vllm_mlx.scheduler:[cache_store] request=7b08a3bf-676 tokens=966 (58 prompt + 908 output) stored=True time=0.000s cache_entries=2 cache_mem=886MB\nINFO:vllm_mlx.engine_core:[stream_outputs] 7b08a3bf-676 finished normally, 11 tokens in 50.1s\nINFO:vllm_mlx.engine_core:[stream_outputs] 7b08a3bf-676 cleanup done\nINFO:vllm_mlx.routes.chat:Chat completion (stream): 908 tokens in 50.13s (18.1 tok/s)\nINFO:vllm_mlx.service.helpers:[disconnect_guard] generator exhausted normally, 12 chunks, elapsed=50.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] CLEANUP done, 12 chunks total, elapsed=50.1s\nINFO:vllm_mlx.routes.chat:[REQUEST] POST /v1/chat/completions stream=False model='mlx-community/gemma-4-31b-it-mxfp8' max_tokens=600 temp=0.0 msgs=1 roles=['user'] total_chars=138 tools=0 response_format=None\nINFO:vllm_mlx.scheduler:[cache_fetch] request=4a1e5aea-308 HIT prompt_tokens=58 cached=58 remaining=0 time=0.002s\nINFO:vllm_mlx.scheduler:[schedule] request=4a1e5aea-308 uid=3 prompt_tokens=58 tokens_to_prefill=1, 58 cached max_tokens=2648 running=1 waiting=0\nINFO:vllm_mlx.scheduler:[prompt_cache_save] request=4a1e5aea-308 prompt_tokens=58 store_time=0.000s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.0GB peak=33.7GB cache=0.0GB step=2816 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #10 disconnected=False elapsed=5.0s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #20 disconnected=False elapsed=10.0s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #30 disconnected=False elapsed=15.1s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.2GB peak=33.7GB cache=0.0GB step=3072 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #40 disconnected=False elapsed=20.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #50 disconnected=False elapsed=25.1s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #60 disconnected=False elapsed=30.1s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.5GB peak=33.7GB cache=0.0GB step=3328 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #70 disconnected=False elapsed=35.2s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #80 disconnected=False elapsed=40.2s\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #90 disconnected=False elapsed=45.2s\nINFO:vllm_mlx.scheduler:[Metal memory] active=33.6GB peak=33.7GB cache=0.0GB step=3584 running=1 waiting=0\nINFO:vllm_mlx.service.helpers:[disconnect_guard] poll #100 disconnected=False elapsed=50.2s\nINFO:vllm_mlx.scheduler:[cache_store] request=4a1e5aea-308 tokens=966 (58 prompt + 908 output) stored=True time=0.000s cache_entries=2 cache_mem=886MB\nINFO:vllm_mlx.routes.chat:Chat completion: 908 tokens in 51.20s (17.7 tok/s)\n```\n</issue>\n\n\n## Command Execution Rules\n\nYou are operating in an environment where\n\n1. You issue at least one command\n2. The system executes the command(s) in a subshell\n3. You see the result(s)\n4. You write your next command(s)\n\nEach response should include:\n\n1. **Reasoning text** where you explain your analysis and plan\n2. At least one tool call with your command\n\n**CRITICAL REQUIREMENTS:**\n\n- Your response SHOULD include reasoning text explaining what you're doing\n- Your response MUST include AT LEAST ONE bash tool call\n- Directory or environment variable changes are not persistent. Every action is executed in a new subshell.\n- However, you can prefix any action with `MY_ENV_VAR=MY_VALUE cd /path/to/working/dir && ...` or write/load environment variables from files\n- When you are done, finish by issuing the following command: `echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT`.\n  Do not combine it with any other command. <important>After this command, you cannot continue working on this task.</important>\n\nExample of a CORRECT response:\n<example_response>\nI need to understand the structure of the repository first. Let me check what files are in the current directory to get a better understanding of the codebase.\n\n[Makes bash tool call with {\"command\": \"ls -la\"} as arguments]\n</example_response>\n\n<system_information>\nLinux 6.12.113+ #1 SMP PREEMPT_DYNAMIC Wed Nov 11 22:36:51 UTC 2026 x86_64\n</system_information>\n\n## Useful command examples\n\n### Create a new file:\n\n```bash\ncat <<'EOF' > newfile.py\nimport numpy as np\nhello = \"world\"\nprint(hello)\nEOF\n```\n\n### Edit files with sed:```bash\n# Replace all occurrences\nsed -i 's/old_string/new_string/g' filename.py\n\n# Replace only first occurrence\nsed -i 's/old_string/new_string/' filename.py\n\n# Replace first occurrence on line 1\nsed -i '1s/old_string/new_string/' filename.py\n\n# Replace all occurrences in lines 1-10\nsed -i '1,10s/old_string/new_string/g' filename.py\n```\n\n### View file content:\n\n```bash\n# View specific lines with numbers\nnl -ba filename.py | sed -n '10,20p'\n```\n\n### Any other command you want to run\n\n```bash\nanything\n```"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk="
+          },
+          "function": {
+            "arguments": "{\"command\": \"ls -R /testbed\"}",
+            "name": "bash"
+          },
+          "id": "call_76e2de94f873435398540cd966a0__thought__CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "ls -R /testbed",
+            "tool_call_id": "call_76e2de94f873435398540cd966a0__thought__CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk="
+          }
+        ],
+        "response": {
+          "id": "3Pv1avTcKLi8xdIPid3YqQc",
+          "created": 1794505692,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"ls -R /testbed\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_76e2de94f873435398540cd966a0__thought__CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 56,
+            "prompt_tokens": 6064,
+            "total_tokens": 6120,
+            "completion_tokens_details": {
+              "reasoning_tokens": 38,
+              "text_tokens": 18
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": null,
+              "image_tokens": null,
+              "text_tokens": 6064,
+              "video_tokens": null,
+              "initial_prompt_tokens": null
+            },
+            "cache_read_input_tokens": null,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0019592,
+        "timestamp": 1794505693.2652361
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output_head\": \"/testbed:\\nCONTRIBUTING.md\\nLICENSE\\nMakefile\\nREADME.md\\nROADMAP.md\\nbenchmark_all_prompt_lookup.py\\ndocs\\nevals\\nexamples\\ngsm8k_qwen3_0.6b_results.json\\nharness\\ninstall.sh\\nmise.toml\\npyproject.toml\\npytest.ini\\nrapid_mlx.egg-info\\nreports\\nreviews\\nscripts\\ntests\\nvllm_mlx\\n\\n/testbed/docs:\\narchitecture.md\\nassets\\nbenchmarks\\ndevelopment\\ngetting-started\\nguides\\nindex.md\\ninference-efficiency-papers-2025.md\\nplans\\nreference\\nsuffix_decoding_eligibility.md\\n\\n/testbed/docs/assets:\\nbenchmark-comparison.png\\ndemo.cast\\ndemo.gif\\ndemo.mp4\\nlogo.png\\nsocial-preview.png\\n\\n/testbed/docs/benchmarks:\\nREADME.md\\naudio.md\\nimage.md\\nllm.md\\nvideo.md\\n\\n/testbed/docs/development:\\narchitecture.md\\ncontributing.md\\nreleasing.md\\n\\n/testbed/docs/getting-started:\\ninstallation.md\\nquickstart.md\\n\\n/testbed/docs/guides:\\naudio.md\\ncontinuous-batching.md\\nembeddings.md\\nmcp-tools.md\\nmultimodal.md\\npython-api.md\\nreasoning.md\\nserver.md\\ntool-calling.md\\n\\n/testbed/docs/plans:\\ntier0-pinned-prefix-cache.md\\n\\n/testbed/docs/reference:\\ncli.md\\nconfiguration.md\\nmodels.md\\n\\n/testbed/evals:\\nEVAL_CONFIGS.md\\nREADME.md\\nSCORECARD.md\\nTOOL_CALLING_TESTS.md\\ngenerate_scorecard.py\\nprompts\\nresults\\nrun_all_models.sh\\nrun_eval.py\\n\\n/testbed/evals/prompts:\\ncoding.json\\ngeneral.json\\nreasoning.json\\ntool_calling.json\\n\\n/testbed/evals/results:\\nSUFFIX_POC_REPORT.md\\nbaseline_benchmark.json\\ndevstral-small-2-4bit.json\\nglm-4.5-air-4bit.json\\nglm-4.7-flash-8bit.json\\ngpt-oss-20b-mxfp4-q8.json\\nhermes-3-llama-3.1-8b-4bit.json\\nminimax-m2.5-4bit.json\\nmistral-small-3.2-4bit.json\\nqwen3-0.6b-4bit.json\\nqwen3-coder-next-4bit.json\\nqwen3-coder-next-6bit.json\\nqwen3.5-122b-a10b-8bit.json\\nqwen3.5-122b-a10b-mxfp4.json\\nqwen3.5-27b-4bit.json\\nqwen3.5-35b-a3b-4bit.json\\nqwen3.5-35b-a3b-8bit.json\\nqwen3.5-4b-4bit.json\\nqwen3.5-9b-4bit.json\\nsuffix_bonsai-1.7b.json\\nsuffix_hermes3-8b.json\\nsuffix_llama3-3b.json\\nsuffix_ministral-3b.json\\nsuffix_phi4-14b.json\\nsuffix_poc_sweep.json\\nsuffix_smollm3-3b.json\\ntier1_benchmark.json\\ntier1b_benchmark.json\\nvlm_benchmark_results.json\\n\\n/testbed/examples:\\nassistant_bank_en.wav\\nassistant_callcenter_fr.wav\\nassistant_service_es.wav\\nassistant_support_zh.wav\\naudio_separation_example.py\\nbenchmark_all_models.py\\nbenchmark_audio.py\\nbenchmark_detokenizer.py\\nclosed_captions.py\\ndemo_curl_image.sh\\ndemo_curl_text.sh\\ndemo_curl_video.sh\\ndemo_openai_image.py\\ndemo_openai_text.py\\ndemo_openai_video.py\\ndrums_isolated.wav\\nmcp.example.json\\nmcp_chat.py\\nmcp_tool_use.py\\nmic_live.py\\nmic_realtime.py\\nmic_transcribe.py\\nmllm_benchmark.py\\nmllm_example.py\\nrock_get_ready.mp3\\nrock_no_drums.wav\\ntest_batch_sync.py\\ntest_batching.py\\ntest_openai_compatibility.py\\ntest_video.py\\ntts_example.py\\ntts_multilingual.py\\nvideo_benchmark.py\\n\\n/testbed/harness:\\nREADME.md\\nbaselines\\nruns\\nscorecard\\nthresholds.yaml\\n\\n/testbed/harness/baselines:\\nfull-qwen3.5-35b.json\\nfull-qwen3.6-35b.json\\n\\n/testbed/harness/runs:\\n\\n/testbed/harness/scorecard:\\nlatest.md\\n\\n/testbed/rapid_mlx.egg-info:\\nPKG-INFO\\nSOURCES.txt\\ndependency_links.txt\\nentry_points.txt\\nrequires.txt\\ntop_level.txt\\n\\n/testbed/reports:\\nbenchmarks\\nmhi\\n\\n/testbed/reports/benchmarks:\\ndevstral-24b.json\\ndevstral-small2-24b.json\\ngemma3-12b-ollama.json\\ngemma3-12b.json\\ngemma3-27b-ollama.json\\ngemma4-26b-a4b-4bit.json\\ngemma4-31b-4bit.json\\ngemma4-31b-bf16-mllm.json\\ngemma4-31b-bf16.json\\ngemma4-e4b-4bit.json\\nglm45-air-4bit.json\\nglm45-air.json\\nglm46v-flash-4bit.json\\nglm47-flash-9b-8bit.json\\nglm47-flash-9b.json\\ngpt-oss-20b.json\\nhermes3-llama31-8b.json\\nkimi-linear-48b-mlxlm.json\\nkimi-linear-48b-rapid.json\\nllama32-3b.json\\nllamacpp-gemma3-12b.json\\nllamacpp-phi4-14b.json\\nminimax-m25.json\\nmistral-small-24b.json\\nmlxlm-gemma3-12b.json\\nmlxlm-glm47-flash-9b-8bit.json\\nmlxlm-gpt-oss-20b.json\\nmlxlm-llama32-3b.json\\nmlxlm-minimax-m25.json\\nmlxlm-mistral-small-24b.json\\nmlxlm-phi4-mini-14b.json\\nmlxlm-qwen3-coder-next-80b.json\\nmlxlm-qwen35-122b-a10b-8bit.json\\nmlxlm-qwen35-9b.json\\nollama-gemma3-12b.json\\nollama-phi4-14b.json\\nollama-qwen35-9b.json\\nomlx-qwen35-9b.json\\nphi4-14b-ollama.json\\nphi4-mini-14b.json\\nphi4-mini.json\\nqwen3-06b-mlxlm.json\\nqwen3-06b-rapid.json\\nqwen3-coder-next-4bit.json\\nqwen3-coder-next-80b.json\\nqwen3-coder-next.json\\nqwen35-122b-a10b-8bit.json\\nqwen35-27b-4bit.json\\nqwen35-27b.json\\nqwen35-35b-a3b-8bit.json\\nqwen35-35b-a3b.json\\nqwen35-35b-mlxlm.json\\nqwen35-35b-rapid.json\\nqwen35-397b-rapid-mlx-baseline.json\\nqwen35-397b-rapid-mlx.json\\nqwen35-397b-realworld.json\\nqwen35-4b-mlxlm.json\\nqwen35-4b-rapid.json\\nqwen35-4b.json\\nqwen35-9b-ollama.json\\nqwen35-9b.json\\nupstream-devstral-24b.json\\nupstream-gemma3-12b.json\\nupstream-glm45-air.json\\nupstream-glm47-flash.json\\nupstream-gpt-oss-20b.json\\nupstream-hermes3-llama-8b.json\\nupstream-mistral-small-24b.json\\nupstream-phi4-mini-14b.json\\nupstream-qwen3-coder-4bit.json\\nupstream-qwen35-122b.json\\nupstream-qwen35-27b.json\\nupstream-qwen35-35b-a3b.json\\nupstream-qwen35-4b.json\\nupstream-qwen35-9b.json\\n\\n/testbed/reports/mhi:\\ndeepseek-r1-32b_20260412_203312.json\\ndeepseek-r1-32b_20260412_203342.json\\ngemma4-26b_20260412_205056.json\\ngemma4-26b_20260412_205104.json\\nllama-70b_20260412_203558.json\\nllama-70b_20260412_203654.json\\nqwen3\",\n  \"output_tail\": \"st_minimax_reasoning_parser.py\\ntest_minimax_tool_parser.py\\ntest_mllm.py\\ntest_mllm_cache.py\\ntest_mllm_continuous_batching.py\\ntest_model_aliases.py\\ntest_model_auto_config.py\\ntest_model_profiles_ssot.py\\ntest_model_registry.py\\ntest_native_tool_format.py\\ntest_optimizations.py\\ntest_output_router.py\\ntest_paged_cache.py\\ntest_paged_cache_benefits.py\\ntest_paged_cache_real_inference.py\\ntest_paged_cache_real_model.py\\ntest_platform.py\\ntest_postprocessor.py\\ntest_pr_validate_deepseek.py\\ntest_pr_validate_runner.py\\ntest_prefix_cache.py\\ntest_prefix_cache_persistence.py\\ntest_prompt_cache_snapshot.py\\ntest_prompt_lookup.py\\ntest_prompt_lookup_bench.py\\ntest_reasoning_parser.py\\ntest_reasoning_parsers.py\\ntest_request.py\\ntest_routes.py\\ntest_sanitize_output.py\\ntest_server.py\\ntest_server_load_model_order.py\\ntest_server_utils.py\\ntest_smoke_matrix.sh\\ntest_streaming.py\\ntest_streaming_detokenizer.py\\ntest_streaming_json_encoder.py\\ntest_streaming_latency.py\\ntest_streaming_newlines.py\\ntest_streaming_pipeline_integration.py\\ntest_streaming_simulator.py\\ntest_streaming_think_router.py\\ntest_streaming_tool_filter.py\\ntest_structured_output.py\\ntest_suffix_bench_methodology.py\\ntest_suffix_decoding.py\\ntest_suffix_decoding_tier.py\\ntest_text_model_from_vlm.py\\ntest_tool_call_e2e.py\\ntest_tool_calling.py\\ntest_tool_injection.py\\ntest_tool_logits.py\\ntest_tool_parsers.py\\ntest_turboquant.py\\ntest_upstream_regression.py\\ntest_version_check.py\\ntest_video.py\\n\\n/testbed/tests/evals:\\ngsm8k\\n\\n/testbed/tests/evals/gsm8k:\\ngsm8k_eval.py\\n\\n/testbed/tests/integrations:\\nREADME.md\\ntest_aider.sh\\ntest_anthropic_sdk.py\\ntest_hermes.py\\ntest_langchain.py\\ntest_librechat_docker.py\\ntest_openwebui.py\\ntest_pydantic_ai_full.py\\ntest_smolagents_full.py\\n\\n/testbed/vllm_mlx:\\n__init__.py\\n_integration_tests\\n_version_check.py\\nagents\\naliases.json\\napi\\nattention.py\\naudio\\nbenchmark.py\\ncli.py\\ncloud_router.py\\nconfig\\ndoctor\\ndomain\\nembedding.py\\nengine\\nengine_core.py\\ngradio_app.py\\ngradio_text_app.py\\nmcp\\nmemory_cache.py\\nmiddleware\\nmllm_batch_generator.py\\nmllm_cache.py\\nmllm_scheduler.py\\nmodel_aliases.py\\nmodel_auto_config.py\\nmodel_registry.py\\nmodel_runner.py\\nmodels\\nmultimodal_processor.py\\noptimizations.py\\noutput_collector.py\\noutput_router.py\\npaged_cache.py\\npatches\\npipeline\\nplugin.py\\nprefix_cache.py\\nreasoning\\nrequest.py\\nroutes\\nruntime\\nscheduler.py\\nserver.py\\nservice\\nspeculative\\ntext_model_from_vlm.py\\ntool_parsers\\nturboquant.py\\nutils\\nvision_embedding_cache.py\\nvllm_platform.py\\nworker.py\\n\\n/testbed/vllm_mlx/_integration_tests:\\n__init__.py\\ntest_aider.sh\\ntest_anthropic_sdk.py\\ntest_hermes.py\\ntest_langchain.py\\ntest_librechat_docker.py\\ntest_openwebui.py\\ntest_pydantic_ai_full.py\\ntest_smolagents_full.py\\n\\n/testbed/vllm_mlx/agents:\\n__init__.py\\nadapter.py\\nbase.py\\nprofiles\\ntesting.py\\n\\n/testbed/vllm_mlx/agents/profiles:\\naider.yaml\\ncline.yaml\\ncodex.yaml\\ngeneric.yaml\\ngoose.yaml\\nhermes.yaml\\nlangchain.yaml\\nopenclaude.yaml\\nopenhands.yaml\\npydanticai.yaml\\nsmolagents.yaml\\n\\n/testbed/vllm_mlx/api:\\n__init__.py\\nanthropic_adapter.py\\nanthropic_models.py\\nguided.py\\nharmony_tools.py\\nmodels.py\\nstreaming.py\\ntool_calling.py\\ntool_logits.py\\nutils.py\\n\\n/testbed/vllm_mlx/audio:\\n__init__.py\\nprocessor.py\\nstt.py\\ntts.py\\n\\n/testbed/vllm_mlx/config:\\n__init__.py\\nserver_config.py\\n\\n/testbed/vllm_mlx/doctor:\\n__init__.py\\nbaseline.py\\nchecks\\ncli.py\\ndiscovery.py\\nrunner.py\\nscorecard.py\\nserver.py\\n\\n/testbed/vllm_mlx/doctor/checks:\\n__init__.py\\nagent.py\\napi.py\\nbenchmark.py\\nperf.py\\nsmoke.py\\nstress.py\\nuser.py\\n\\n/testbed/vllm_mlx/domain:\\n__init__.py\\nevents.py\\n\\n/testbed/vllm_mlx/engine:\\n__init__.py\\nbase.py\\nbatched.py\\n\\n/testbed/vllm_mlx/mcp:\\n__init__.py\\nclient.py\\nconfig.py\\nexecutor.py\\nmanager.py\\nsecurity.py\\ntools.py\\ntypes.py\\n\\n/testbed/vllm_mlx/middleware:\\n__init__.py\\nauth.py\\n\\n/testbed/vllm_mlx/models:\\n__init__.py\\ndeepseek_v4.py\\ngemma4_text.py\\nmllm.py\\n\\n/testbed/vllm_mlx/patches:\\n__init__.py\\nqwen3_next_mtp.py\\n\\n/testbed/vllm_mlx/pipeline:\\n__init__.py\\ndecode.py\\ninterfaces.py\\n\\n/testbed/vllm_mlx/reasoning:\\n__init__.py\\nbase.py\\ndeepseek_r1_parser.py\\ngemma4_parser.py\\ngpt_oss_parser.py\\nharmony_parser.py\\nminimax_parser.py\\nqwen3_parser.py\\nthink_parser.py\\n\\n/testbed/vllm_mlx/routes:\\n__init__.py\\nanthropic.py\\naudio.py\\nchat.py\\ncompletions.py\\nembeddings.py\\nhealth.py\\nmcp_routes.py\\nmodels.py\\n\\n/testbed/vllm_mlx/runtime:\\n__init__.py\\ncache.py\\nmodel_registry.py\\n\\n/testbed/vllm_mlx/service:\\n__init__.py\\nhelpers.py\\npostprocessor.py\\n\\n/testbed/vllm_mlx/speculative:\\n__init__.py\\nmtp_generate.py\\nprompt_lookup.py\\nsuffix_decoding.py\\n\\n/testbed/vllm_mlx/tool_parsers:\\n__init__.py\\nabstract_tool_parser.py\\nauto_tool_parser.py\\ndeepseek_tool_parser.py\\ndeepseekv31_tool_parser.py\\nfunctionary_tool_parser.py\\ngemma4_tool_parser.py\\nglm47_tool_parser.py\\ngranite_tool_parser.py\\nharmony_tool_parser.py\\nhermes_tool_parser.py\\nkimi_tool_parser.py\\nllama_tool_parser.py\\nminimax_tool_parser.py\\nmistral_tool_parser.py\\nnemotron_tool_parser.py\\nqwen3coder_tool_parser.py\\nqwen_tool_parser.py\\nseed_oss_tool_parser.py\\nxlam_tool_parser.py\\n\\n/testbed/vllm_mlx/utils:\\n__init__.py\\nchat_template.py\\nchat_templates.py\\ndecode.py\\nmamba_cache.py\\ntokenizer.py\\n\",\n  \"elided_chars\": 2084,\n  \"warning\": \"Output too long.\"\n}",
+      "extra": {
+        "raw_output": "/testbed:\nCONTRIBUTING.md\nLICENSE\nMakefile\nREADME.md\nROADMAP.md\nbenchmark_all_prompt_lookup.py\ndocs\nevals\nexamples\ngsm8k_qwen3_0.6b_results.json\nharness\ninstall.sh\nmise.toml\npyproject.toml\npytest.ini\nrapid_mlx.egg-info\nreports\nreviews\nscripts\ntests\nvllm_mlx\n\n/testbed/docs:\narchitecture.md\nassets\nbenchmarks\ndevelopment\ngetting-started\nguides\nindex.md\ninference-efficiency-papers-2025.md\nplans\nreference\nsuffix_decoding_eligibility.md\n\n/testbed/docs/assets:\nbenchmark-comparison.png\ndemo.cast\ndemo.gif\ndemo.mp4\nlogo.png\nsocial-preview.png\n\n/testbed/docs/benchmarks:\nREADME.md\naudio.md\nimage.md\nllm.md\nvideo.md\n\n/testbed/docs/development:\narchitecture.md\ncontributing.md\nreleasing.md\n\n/testbed/docs/getting-started:\ninstallation.md\nquickstart.md\n\n/testbed/docs/guides:\naudio.md\ncontinuous-batching.md\nembeddings.md\nmcp-tools.md\nmultimodal.md\npython-api.md\nreasoning.md\nserver.md\ntool-calling.md\n\n/testbed/docs/plans:\ntier0-pinned-prefix-cache.md\n\n/testbed/docs/reference:\ncli.md\nconfiguration.md\nmodels.md\n\n/testbed/evals:\nEVAL_CONFIGS.md\nREADME.md\nSCORECARD.md\nTOOL_CALLING_TESTS.md\ngenerate_scorecard.py\nprompts\nresults\nrun_all_models.sh\nrun_eval.py\n\n/testbed/evals/prompts:\ncoding.json\ngeneral.json\nreasoning.json\ntool_calling.json\n\n/testbed/evals/results:\nSUFFIX_POC_REPORT.md\nbaseline_benchmark.json\ndevstral-small-2-4bit.json\nglm-4.5-air-4bit.json\nglm-4.7-flash-8bit.json\ngpt-oss-20b-mxfp4-q8.json\nhermes-3-llama-3.1-8b-4bit.json\nminimax-m2.5-4bit.json\nmistral-small-3.2-4bit.json\nqwen3-0.6b-4bit.json\nqwen3-coder-next-4bit.json\nqwen3-coder-next-6bit.json\nqwen3.5-122b-a10b-8bit.json\nqwen3.5-122b-a10b-mxfp4.json\nqwen3.5-27b-4bit.json\nqwen3.5-35b-a3b-4bit.json\nqwen3.5-35b-a3b-8bit.json\nqwen3.5-4b-4bit.json\nqwen3.5-9b-4bit.json\nsuffix_bonsai-1.7b.json\nsuffix_hermes3-8b.json\nsuffix_llama3-3b.json\nsuffix_ministral-3b.json\nsuffix_phi4-14b.json\nsuffix_poc_sweep.json\nsuffix_smollm3-3b.json\ntier1_benchmark.json\ntier1b_benchmark.json\nvlm_benchmark_results.json\n\n/testbed/examples:\nassistant_bank_en.wav\nassistant_callcenter_fr.wav\nassistant_service_es.wav\nassistant_support_zh.wav\naudio_separation_example.py\nbenchmark_all_models.py\nbenchmark_audio.py\nbenchmark_detokenizer.py\nclosed_captions.py\ndemo_curl_image.sh\ndemo_curl_text.sh\ndemo_curl_video.sh\ndemo_openai_image.py\ndemo_openai_text.py\ndemo_openai_video.py\ndrums_isolated.wav\nmcp.example.json\nmcp_chat.py\nmcp_tool_use.py\nmic_live.py\nmic_realtime.py\nmic_transcribe.py\nmllm_benchmark.py\nmllm_example.py\nrock_get_ready.mp3\nrock_no_drums.wav\ntest_batch_sync.py\ntest_batching.py\ntest_openai_compatibility.py\ntest_video.py\ntts_example.py\ntts_multilingual.py\nvideo_benchmark.py\n\n/testbed/harness:\nREADME.md\nbaselines\nruns\nscorecard\nthresholds.yaml\n\n/testbed/harness/baselines:\nfull-qwen3.5-35b.json\nfull-qwen3.6-35b.json\n\n/testbed/harness/runs:\n\n/testbed/harness/scorecard:\nlatest.md\n\n/testbed/rapid_mlx.egg-info:\nPKG-INFO\nSOURCES.txt\ndependency_links.txt\nentry_points.txt\nrequires.txt\ntop_level.txt\n\n/testbed/reports:\nbenchmarks\nmhi\n\n/testbed/reports/benchmarks:\ndevstral-24b.json\ndevstral-small2-24b.json\ngemma3-12b-ollama.json\ngemma3-12b.json\ngemma3-27b-ollama.json\ngemma4-26b-a4b-4bit.json\ngemma4-31b-4bit.json\ngemma4-31b-bf16-mllm.json\ngemma4-31b-bf16.json\ngemma4-e4b-4bit.json\nglm45-air-4bit.json\nglm45-air.json\nglm46v-flash-4bit.json\nglm47-flash-9b-8bit.json\nglm47-flash-9b.json\ngpt-oss-20b.json\nhermes3-llama31-8b.json\nkimi-linear-48b-mlxlm.json\nkimi-linear-48b-rapid.json\nllama32-3b.json\nllamacpp-gemma3-12b.json\nllamacpp-phi4-14b.json\nminimax-m25.json\nmistral-small-24b.json\nmlxlm-gemma3-12b.json\nmlxlm-glm47-flash-9b-8bit.json\nmlxlm-gpt-oss-20b.json\nmlxlm-llama32-3b.json\nmlxlm-minimax-m25.json\nmlxlm-mistral-small-24b.json\nmlxlm-phi4-mini-14b.json\nmlxlm-qwen3-coder-next-80b.json\nmlxlm-qwen35-122b-a10b-8bit.json\nmlxlm-qwen35-9b.json\nollama-gemma3-12b.json\nollama-phi4-14b.json\nollama-qwen35-9b.json\nomlx-qwen35-9b.json\nphi4-14b-ollama.json\nphi4-mini-14b.json\nphi4-mini.json\nqwen3-06b-mlxlm.json\nqwen3-06b-rapid.json\nqwen3-coder-next-4bit.json\nqwen3-coder-next-80b.json\nqwen3-coder-next.json\nqwen35-122b-a10b-8bit.json\nqwen35-27b-4bit.json\nqwen35-27b.json\nqwen35-35b-a3b-8bit.json\nqwen35-35b-a3b.json\nqwen35-35b-mlxlm.json\nqwen35-35b-rapid.json\nqwen35-397b-rapid-mlx-baseline.json\nqwen35-397b-rapid-mlx.json\nqwen35-397b-realworld.json\nqwen35-4b-mlxlm.json\nqwen35-4b-rapid.json\nqwen35-4b.json\nqwen35-9b-ollama.json\nqwen35-9b.json\nupstream-devstral-24b.json\nupstream-gemma3-12b.json\nupstream-glm45-air.json\nupstream-glm47-flash.json\nupstream-gpt-oss-20b.json\nupstream-hermes3-llama-8b.json\nupstream-mistral-small-24b.json\nupstream-phi4-mini-14b.json\nupstream-qwen3-coder-4bit.json\nupstream-qwen35-122b.json\nupstream-qwen35-27b.json\nupstream-qwen35-35b-a3b.json\nupstream-qwen35-4b.json\nupstream-qwen35-9b.json\n\n/testbed/reports/mhi:\ndeepseek-r1-32b_20260412_203312.json\ndeepseek-r1-32b_20260412_203342.json\ngemma4-26b_20260412_205056.json\ngemma4-26b_20260412_205104.json\nllama-70b_20260412_203558.json\nllama-70b_20260412_203654.json\nqwen3.5-27b_20260412_204900.json\nqwen3.5-27b_20260412_204927.json\nqwopus-27b_20260412_202721.json\nqwopus-27b_20260412_203205.json\n\n/testbed/reviews:\nreview-20260315-173408-c89dc4.md\nreview-20260315-195920-a2e83f.md\n\n/testbed/scripts:\nadd_mtp_weights.py\nagent_discovery.py\nagent_promo_gen.py\nagent_soak_test.py\nagent_test_gen.py\nautoresearch_bench.py\nbench_all_models.sh\nbench_cache_perf.py\nbench_decode_tps.py\nbench_detok.py\nbench_engine_parity.py\nbench_engine_solo.py\nbench_kv_cache.py\nbench_snapshot.py\nbench_suffix_decoding.py\nbench_suffix_decoding_integrated.py\nbench_vs_ollama.py\nbenchmark_engines.py\nbenchmark_minmax.py\nbenchmark_prompt_lookup.py\nbenchmark_realworld.py\ndemo.tape\ndemo_race.py\ndev_test.py\nextract_mtp_weights.py\nlocal_bench_vs_ollama.py\nmhi_batch.sh\nmhi_eval.py\npr_validate\nstress_test.py\nusage_stats.py\n\n/testbed/scripts/pr_validate:\nREADME.md\n__init__.py\nbase.py\ncontext.py\ngolden_models.yaml\npr_validate.py\nprompts\nrunner.py\nscorecard.py\nsteps\n\n/testbed/scripts/pr_validate/prompts:\ndeepseek_review.md\n\n/testbed/scripts/pr_validate/steps:\n__init__.py\ndeepseek_review.py\nfetch.py\nfull_unit.py\nlint.py\nstress_e2e_bench.py\nsupply_chain.py\ntargeted_tests.py\n\n/testbed/tests:\n__init__.py\nconftest.py\nevals\ngolden_prompts.py\nintegrations\nregression_suite.py\ntest_anthropic_adapter.py\ntest_anthropic_models.py\ntest_anthropic_route_streaming.py\ntest_anthropic_stream_reasoning.py\ntest_anthropic_streaming_reasoning.py\ntest_api_models.py\ntest_api_utils.py\ntest_audio.py\ntest_batching.py\ntest_batching_deterministic.py\ntest_bench_vs_ollama.py\ntest_chat_route_tool_tag_leak.py\ntest_cloud_router.py\ntest_config_and_middleware.py\ntest_continuous_batching.py\ntest_deepseek_v4_vendored.py\ntest_disk_space_check.py\ntest_doctor_baseline.py\ntest_doctor_discovery.py\ntest_doctor_runner.py\ntest_embeddings.py\ntest_engine_step_thread.py\ntest_event_loop.py\ntest_fix_reasoning_mtp_doctor.py\ntest_gemma4_tool_parser.py\ntest_guided.py\ntest_harmony_parsers.py\ntest_hybrid_prefix_cache_growth.py\ntest_idle_event_wakeup.py\ntest_mcp_security.py\ntest_memory_cache.py\ntest_memory_stability.py\ntest_minimax_reasoning_parser.py\ntest_minimax_tool_parser.py\ntest_mllm.py\ntest_mllm_cache.py\ntest_mllm_continuous_batching.py\ntest_model_aliases.py\ntest_model_auto_config.py\ntest_model_profiles_ssot.py\ntest_model_registry.py\ntest_native_tool_format.py\ntest_optimizations.py\ntest_output_router.py\ntest_paged_cache.py\ntest_paged_cache_benefits.py\ntest_paged_cache_real_inference.py\ntest_paged_cache_real_model.py\ntest_platform.py\ntest_postprocessor.py\ntest_pr_validate_deepseek.py\ntest_pr_validate_runner.py\ntest_prefix_cache.py\ntest_prefix_cache_persistence.py\ntest_prompt_cache_snapshot.py\ntest_prompt_lookup.py\ntest_prompt_lookup_bench.py\ntest_reasoning_parser.py\ntest_reasoning_parsers.py\ntest_request.py\ntest_routes.py\ntest_sanitize_output.py\ntest_server.py\ntest_server_load_model_order.py\ntest_server_utils.py\ntest_smoke_matrix.sh\ntest_streaming.py\ntest_streaming_detokenizer.py\ntest_streaming_json_encoder.py\ntest_streaming_latency.py\ntest_streaming_newlines.py\ntest_streaming_pipeline_integration.py\ntest_streaming_simulator.py\ntest_streaming_think_router.py\ntest_streaming_tool_filter.py\ntest_structured_output.py\ntest_suffix_bench_methodology.py\ntest_suffix_decoding.py\ntest_suffix_decoding_tier.py\ntest_text_model_from_vlm.py\ntest_tool_call_e2e.py\ntest_tool_calling.py\ntest_tool_injection.py\ntest_tool_logits.py\ntest_tool_parsers.py\ntest_turboquant.py\ntest_upstream_regression.py\ntest_version_check.py\ntest_video.py\n\n/testbed/tests/evals:\ngsm8k\n\n/testbed/tests/evals/gsm8k:\ngsm8k_eval.py\n\n/testbed/tests/integrations:\nREADME.md\ntest_aider.sh\ntest_anthropic_sdk.py\ntest_hermes.py\ntest_langchain.py\ntest_librechat_docker.py\ntest_openwebui.py\ntest_pydantic_ai_full.py\ntest_smolagents_full.py\n\n/testbed/vllm_mlx:\n__init__.py\n_integration_tests\n_version_check.py\nagents\naliases.json\napi\nattention.py\naudio\nbenchmark.py\ncli.py\ncloud_router.py\nconfig\ndoctor\ndomain\nembedding.py\nengine\nengine_core.py\ngradio_app.py\ngradio_text_app.py\nmcp\nmemory_cache.py\nmiddleware\nmllm_batch_generator.py\nmllm_cache.py\nmllm_scheduler.py\nmodel_aliases.py\nmodel_auto_config.py\nmodel_registry.py\nmodel_runner.py\nmodels\nmultimodal_processor.py\noptimizations.py\noutput_collector.py\noutput_router.py\npaged_cache.py\npatches\npipeline\nplugin.py\nprefix_cache.py\nreasoning\nrequest.py\nroutes\nruntime\nscheduler.py\nserver.py\nservice\nspeculative\ntext_model_from_vlm.py\ntool_parsers\nturboquant.py\nutils\nvision_embedding_cache.py\nvllm_platform.py\nworker.py\n\n/testbed/vllm_mlx/_integration_tests:\n__init__.py\ntest_aider.sh\ntest_anthropic_sdk.py\ntest_hermes.py\ntest_langchain.py\ntest_librechat_docker.py\ntest_openwebui.py\ntest_pydantic_ai_full.py\ntest_smolagents_full.py\n\n/testbed/vllm_mlx/agents:\n__init__.py\nadapter.py\nbase.py\nprofiles\ntesting.py\n\n/testbed/vllm_mlx/agents/profiles:\naider.yaml\ncline.yaml\ncodex.yaml\ngeneric.yaml\ngoose.yaml\nhermes.yaml\nlangchain.yaml\nopenclaude.yaml\nopenhands.yaml\npydanticai.yaml\nsmolagents.yaml\n\n/testbed/vllm_mlx/api:\n__init__.py\nanthropic_adapter.py\nanthropic_models.py\nguided.py\nharmony_tools.py\nmodels.py\nstreaming.py\ntool_calling.py\ntool_logits.py\nutils.py\n\n/testbed/vllm_mlx/audio:\n__init__.py\nprocessor.py\nstt.py\ntts.py\n\n/testbed/vllm_mlx/config:\n__init__.py\nserver_config.py\n\n/testbed/vllm_mlx/doctor:\n__init__.py\nbaseline.py\nchecks\ncli.py\ndiscovery.py\nrunner.py\nscorecard.py\nserver.py\n\n/testbed/vllm_mlx/doctor/checks:\n__init__.py\nagent.py\napi.py\nbenchmark.py\nperf.py\nsmoke.py\nstress.py\nuser.py\n\n/testbed/vllm_mlx/domain:\n__init__.py\nevents.py\n\n/testbed/vllm_mlx/engine:\n__init__.py\nbase.py\nbatched.py\n\n/testbed/vllm_mlx/mcp:\n__init__.py\nclient.py\nconfig.py\nexecutor.py\nmanager.py\nsecurity.py\ntools.py\ntypes.py\n\n/testbed/vllm_mlx/middleware:\n__init__.py\nauth.py\n\n/testbed/vllm_mlx/models:\n__init__.py\ndeepseek_v4.py\ngemma4_text.py\nmllm.py\n\n/testbed/vllm_mlx/patches:\n__init__.py\nqwen3_next_mtp.py\n\n/testbed/vllm_mlx/pipeline:\n__init__.py\ndecode.py\ninterfaces.py\n\n/testbed/vllm_mlx/reasoning:\n__init__.py\nbase.py\ndeepseek_r1_parser.py\ngemma4_parser.py\ngpt_oss_parser.py\nharmony_parser.py\nminimax_parser.py\nqwen3_parser.py\nthink_parser.py\n\n/testbed/vllm_mlx/routes:\n__init__.py\nanthropic.py\naudio.py\nchat.py\ncompletions.py\nembeddings.py\nhealth.py\nmcp_routes.py\nmodels.py\n\n/testbed/vllm_mlx/runtime:\n__init__.py\ncache.py\nmodel_registry.py\n\n/testbed/vllm_mlx/service:\n__init__.py\nhelpers.py\npostprocessor.py\n\n/testbed/vllm_mlx/speculative:\n__init__.py\nmtp_generate.py\nprompt_lookup.py\nsuffix_decoding.py\n\n/testbed/vllm_mlx/tool_parsers:\n__init__.py\nabstract_tool_parser.py\nauto_tool_parser.py\ndeepseek_tool_parser.py\ndeepseekv31_tool_parser.py\nfunctionary_tool_parser.py\ngemma4_tool_parser.py\nglm47_tool_parser.py\ngranite_tool_parser.py\nharmony_tool_parser.py\nhermes_tool_parser.py\nkimi_tool_parser.py\nllama_tool_parser.py\nminimax_tool_parser.py\nmistral_tool_parser.py\nnemotron_tool_parser.py\nqwen3coder_tool_parser.py\nqwen_tool_parser.py\nseed_oss_tool_parser.py\nxlam_tool_parser.py\n\n/testbed/vllm_mlx/utils:\n__init__.py\nchat_template.py\nchat_templates.py\ndecode.py\nmamba_cache.py\ntokenizer.py\n",
+        "returncode": 0,
+        "timestamp": 1794505693.3559136,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_76e2de94f873435398540cd966a0__thought__CuMBAWkUfRNx8goBhDZPEj3jLFXiUBlxLGR328zddyQsQxLE+NXx7EzQEdVjpDQn8VZqDGxjaNvM4+R8vRieClzy6R+5kESyYZT+EYshufkEodi2q2DclYtF5z58KaJUXwxuJygeLxnk2HozBgDh94HNxFL7ZhYW91tvctNL1XjycWXI6lUA+irbameH7zWqk7a9e3Eh4BzwNjZ7VUJwdAYpuZuvVEABFKyxftVVtJ9w3uaqfSqlA0/rUqZXaAcU3aOvh/ry1szGJfyb0+wTLdryM9DqkMIaQfL2jgZa9mBTlnyVyYk=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN"
+          },
+          "function": {
+            "arguments": "{\"command\": \"cat <<'EOF' > /testbed/tests/test_gemma4_parser_issue.py\\nimport pytest\\nfrom vllm_mlx.reasoning.gemma4_parser import Gemma4Parser\\nfrom vllm_mlx.api.models import DeltaMessage\\n\\ndef test_delta_straddling_channel_close_splits_reasoning_and_content():\\n    parser = Gemma4Parser()\\n    # Simulate stream_interval > 1 flush: one delta containing the\\n    # tail of thought, the channel-close marker, and the start of content.\\n    previous = \\\"<|channel>thoughtthinking...\\\"\\n    delta    = \\\" final thought<channel|><|channel>contentHello\\\"\\n    current  = previous + delta\\n    msg = parser.extract_reasoning_streaming(previous, current, delta)\\n    assert msg.reasoning == \\\" final thought\\\"\\n    assert msg.content == \\\"Hello\\\"\\nEOF\\n\"}",
+            "name": "bash"
+          },
+          "id": "call_8a5aaa3add9545ddbb021214bc5c__thought__Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN"
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "cat <<'EOF' > /testbed/tests/test_gemma4_parser_issue.py\nimport pytest\nfrom vllm_mlx.reasoning.gemma4_parser import Gemma4Parser\nfrom vllm_mlx.api.models import DeltaMessage\n\ndef test_delta_straddling_channel_close_splits_reasoning_and_content():\n    parser = Gemma4Parser()\n    # Simulate stream_interval > 1 flush: one delta containing the\n    # tail of thought, the channel-close marker, and the start of content.\n    previous = \"<|channel>thoughtthinking...\"\n    delta    = \" final thought<channel|><|channel>contentHello\"\n    current  = previous + delta\n    msg = parser.extract_reasoning_streaming(previous, current, delta)\n    assert msg.reasoning == \" final thought\"\n    assert msg.content == \"Hello\"\nEOF\n",
+            "tool_call_id": "call_8a5aaa3add9545ddbb021214bc5c__thought__Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN"
+          }
+        ],
+        "response": {
+          "id": "3fv1av6MI5nFxdIPzpD26Qw",
+          "created": 1794505693,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN"
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"cat <<'EOF' > /testbed/tests/test_gemma4_parser_issue.py\\nimport pytest\\nfrom vllm_mlx.reasoning.gemma4_parser import Gemma4Parser\\nfrom vllm_mlx.api.models import DeltaMessage\\n\\ndef test_delta_straddling_channel_close_splits_reasoning_and_content():\\n    parser = Gemma4Parser()\\n    # Simulate stream_interval > 1 flush: one delta containing the\\n    # tail of thought, the channel-close marker, and the start of content.\\n    previous = \\\"<|channel>thoughtthinking...\\\"\\n    delta    = \\\" final thought<channel|><|channel>contentHello\\\"\\n    current  = previous + delta\\n    msg = parser.extract_reasoning_streaming(previous, current, delta)\\n    assert msg.reasoning == \\\" final thought\\\"\\n    assert msg.content == \\\"Hello\\\"\\nEOF\\n\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_8a5aaa3add9545ddbb021214bc5c__thought__Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN"
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 330,
+            "prompt_tokens": 11046,
+            "total_tokens": 11376,
+            "completion_tokens_details": {
+              "reasoning_tokens": 101,
+              "text_tokens": 229
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 5893,
+              "image_tokens": null,
+              "text_tokens": 11046,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 5893,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 5893,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.00254769,
+        "timestamp": 1794505695.2547894
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"\"\n}",
+      "extra": {
+        "raw_output": "",
+        "returncode": 0,
+        "timestamp": 1794505695.3387797,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_8a5aaa3add9545ddbb021214bc5c__thought__Cs4DAWkUfRPPm3wFiGXwcx+0RNJn9zWvaRvXeB1SLEY6zLk4yWNKsGh+4wcN/qBxt6uJ7JpuN5a5UZwpYbWTq43uH2Db10PUSh/u/yLFlAIed1M9p66+IODetnPwIIOfIADdTtoMCtn+MhNa+d+NninIZmDan33pjccKZCKdY88HocyvZJZdqukEcASau7WIDeQArihYV/b+UVZZmBJhysp+c1wDkrZUQnFfDXNfeDObwU1olodlKRqQnFeuuufgzagThq3JOd5srDB3+/EUM5PlGDXUxVRIiAWufU+ANmU2JSXz98vFv58vXkrVwX8g5JR349yQiqT798FbXcef4h48yqPPGQr3n3MGt7IcjWN3qcJEgdkObXUSnCVw2h0VBtc08g8zM2e2SPhi9WPNDlq1pI+Pq/hy7wM04xlRxLNB1/BOpDDo3fic9rZfDJBjf7i2pqm2keJk71mLUWSWw5uTFq66NJISPEPIC1jo8IeCOliVns/s78m3AfCklZSovrc34s9k7webVjb7vgWcbIj9p6s/C4CT1h+KqH312NZ24s/e6i39DF3GKBsx1nkcEOuGyh43+77Zh1snEKdrXLlpAQhUwgOU8nQ1i1MdYKEN",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw="
+          },
+          "function": {
+            "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_f2fb2c5a945e43f6b8eddb548a37__thought__CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "python -m pytest /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_f2fb2c5a945e43f6b8eddb548a37__thought__CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw="
+          }
+        ],
+        "response": {
+          "id": "3_v1apymIp3ExdIPrZDV0Ak",
+          "created": 1794505695,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_f2fb2c5a945e43f6b8eddb548a37__thought__CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 74,
+            "prompt_tokens": 11293,
+            "total_tokens": 11367,
+            "completion_tokens_details": {
+              "reasoning_tokens": 41,
+              "text_tokens": 33
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 10707,
+              "image_tokens": null,
+              "text_tokens": 11293,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 10707,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 10707,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.00068201,
+        "timestamp": 1794505696.1171618
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 2,\n  \"output\": \"============================= test session starts ==============================\\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\\ncachedir: .pytest_cache\\nrootdir: /testbed\\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\\nplugins: anyio-4.13.0\\ncollecting ... collected 0 items / 1 error\\n\\n==================================== ERRORS ====================================\\n______________ ERROR collecting tests/test_gemma4_parser_issue.py ______________\\nImportError while importing test module \\u0027/testbed/tests/test_gemma4_parser_issue.py\\u0027.\\nHint: make sure your test modules/packages have valid Python names.\\nTraceback:\\n/opt/conda/envs/testbed/lib/python3.13/importlib/__init__.py:88: in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\ntests/test_gemma4_parser_issue.py:2: in \\u003cmodule\\u003e\\n    from vllm_mlx.reasoning.gemma4_parser import Gemma4Parser\\nE   ImportError: cannot import name \\u0027Gemma4Parser\\u0027 from \\u0027vllm_mlx.reasoning.gemma4_parser\\u0027 (/testbed/vllm_mlx/reasoning/gemma4_parser.py)\\n=========================== short test summary info ============================\\nERROR tests/test_gemma4_parser_issue.py\\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\\n=============================== 1 error in 0.12s ===============================\\n\"\n}",
+      "extra": {
+        "raw_output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\ncachedir: .pytest_cache\nrootdir: /testbed\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\nplugins: anyio-4.13.0\ncollecting ... collected 0 items / 1 error\n\n==================================== ERRORS ====================================\n______________ ERROR collecting tests/test_gemma4_parser_issue.py ______________\nImportError while importing test module '/testbed/tests/test_gemma4_parser_issue.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/opt/conda/envs/testbed/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/test_gemma4_parser_issue.py:2: in <module>\n    from vllm_mlx.reasoning.gemma4_parser import Gemma4Parser\nE   ImportError: cannot import name 'Gemma4Parser' from 'vllm_mlx.reasoning.gemma4_parser' (/testbed/vllm_mlx/reasoning/gemma4_parser.py)\n=========================== short test summary info ============================\nERROR tests/test_gemma4_parser_issue.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 0.12s ===============================\n",
+        "returncode": 2,
+        "timestamp": 1794505696.9679956,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_f2fb2c5a945e43f6b8eddb548a37__thought__CuABAWkUfRM3xMEKRhbJrRGxD2Abmvm474sHA0cDGS7XFiMm6uI/mMEOCUpDeQZR1NMDueLytzUL8iln1k7WqnVFL59JcCRAzBP6UOjHMvoUH2VSQC7grUQFdxvMsHSHE0oo4wrjcMOW46xCTKFk2fJNyA7IiaFS/fwx9Yjpx8dfrPb1oAX47NWHPsuQTqv+rsIz7iHEuoV/jhPogOPx5sN668CZBE1lIlYkZ73s4a/IQZjvejHnTXUhkeD8I6Em3pAxUNrxMx9YqL/saK73+faIOVn+O/rYhcjl4tZMdqfPpvw=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII="
+          },
+          "function": {
+            "arguments": "{\"command\": \"cat /testbed/vllm_mlx/reasoning/gemma4_parser.py | head -n 20\"}",
+            "name": "bash"
+          },
+          "id": "call_1b314528d5e641d7978d7cf9b69f__thought__Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "cat /testbed/vllm_mlx/reasoning/gemma4_parser.py | head -n 20",
+            "tool_call_id": "call_1b314528d5e641d7978d7cf9b69f__thought__Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII="
+          }
+        ],
+        "response": {
+          "id": "4fv1avj1C8bDxdIPhNTUyQ0",
+          "created": 1794505696,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"cat /testbed/vllm_mlx/reasoning/gemma4_parser.py | head -n 20\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_1b314528d5e641d7978d7cf9b69f__thought__Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 104,
+            "prompt_tokens": 11767,
+            "total_tokens": 11871,
+            "completion_tokens_details": {
+              "reasoning_tokens": 64,
+              "text_tokens": 40
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 10679,
+              "image_tokens": null,
+              "text_tokens": 11767,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 10679,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 10679,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.00090677,
+        "timestamp": 1794505698.0212393
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"# SPDX-License-Identifier: Apache-2.0\\n\\\"\\\"\\\"\\nGemma 4 reasoning parser.\\n\\nGemma 4 uses channel tokens for thinking:\\n  \\u003c|channel\\u003ethought\\\\n...reasoning...\\u003cchannel|\\u003e\\n  \\u003c|channel\\u003econtent\\\\n...answer...\\u003cchannel|\\u003e\\n\\nThe parser separates thinking from content by tracking the active channel.\\n\\\"\\\"\\\"\\n\\nimport re\\n\\nfrom .base import DeltaMessage, ReasoningParser\\n\\n# Match full thought blocks in complete text\\n_THOUGHT_BLOCK = re.compile(r\\\"\\u003c\\\\|channel\\u003ethought\\\\n[\\\\s\\\\S]*?\\u003cchannel\\\\|\\u003e\\\\s*\\\", re.DOTALL)\\n# Match content channel markers\\n_CONTENT_START = re.compile(r\\\"\\u003c\\\\|channel\\u003e(?:content|final)\\\\n?\\\")\\n_CHANNEL_END = re.compile(r\\\"\\u003cchannel\\\\|\\u003e\\\")\\n\"\n}",
+      "extra": {
+        "raw_output": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"\nGemma 4 reasoning parser.\n\nGemma 4 uses channel tokens for thinking:\n  <|channel>thought\\n...reasoning...<channel|>\n  <|channel>content\\n...answer...<channel|>\n\nThe parser separates thinking from content by tracking the active channel.\n\"\"\"\n\nimport re\n\nfrom .base import DeltaMessage, ReasoningParser\n\n# Match full thought blocks in complete text\n_THOUGHT_BLOCK = re.compile(r\"<\\|channel>thought\\n[\\s\\S]*?<channel\\|>\\s*\", re.DOTALL)\n# Match content channel markers\n_CONTENT_START = re.compile(r\"<\\|channel>(?:content|final)\\n?\")\n_CHANNEL_END = re.compile(r\"<channel\\|>\")\n",
+        "returncode": 0,
+        "timestamp": 1794505698.111152,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_1b314528d5e641d7978d7cf9b69f__thought__Cq4CAWkUfRNoCe6w15Gaf5BNkOFNrskOiwT8RVaAEwbz3wbTwDd1LOU7e7hf7gwoNeUbyDqbcHmzg4Vr3GJWcRcWkiYbZyFfM+k8JU4JMZ4JkU6Ts0z1hHUfK2r6gRbbYFYOmgxqzyJ27L/CoT4GyBq4qUKkR0v8U4ETkdD9HJKfK8bJtyWWanENVx+0s7VO8tbwVf5vsgf7UtX3XXU7nEjnpstKkmcR9u2lX+WQyz5EzqXrC/2cz8C3Ejf7hxPe/5AgV+tPPQthqJ5v/Y8OkuUnMOYE7IQx8xcBDsr4pbpCXIHFt3TiRsYcYtHfnESI6lMWkxjhuGCXgaD//5V59FwXUmeuJ7jig0/41WJWxOi4AgB0x5glsZ5hKRkxyLj6UEItAaAvmV8Y1EbTdRwGSII=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk="
+          },
+          "function": {
+            "arguments": "{\"command\": \"cat /testbed/vllm_mlx/reasoning/gemma4_parser.py\"}",
+            "name": "bash"
+          },
+          "id": "call_7cf5b10acb0746a69e0594462b01__thought__CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "cat /testbed/vllm_mlx/reasoning/gemma4_parser.py",
+            "tool_call_id": "call_7cf5b10acb0746a69e0594462b01__thought__CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk="
+          }
+        ],
+        "response": {
+          "id": "4vv1apChFPGD1sgPla3YsQM",
+          "created": 1794505698,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"cat /testbed/vllm_mlx/reasoning/gemma4_parser.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_7cf5b10acb0746a69e0594462b01__thought__CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 105,
+            "prompt_tokens": 12036,
+            "total_tokens": 12141,
+            "completion_tokens_details": {
+              "reasoning_tokens": 72,
+              "text_tokens": 33
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 11590,
+              "image_tokens": null,
+              "text_tokens": 12036,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 11590,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 11590,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0007440000000000001,
+        "timestamp": 1794505699.0659225
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"# SPDX-License-Identifier: Apache-2.0\\n\\\"\\\"\\\"\\nGemma 4 reasoning parser.\\n\\nGemma 4 uses channel tokens for thinking:\\n  \\u003c|channel\\u003ethought\\\\n...reasoning...\\u003cchannel|\\u003e\\n  \\u003c|channel\\u003econtent\\\\n...answer...\\u003cchannel|\\u003e\\n\\nThe parser separates thinking from content by tracking the active channel.\\n\\\"\\\"\\\"\\n\\nimport re\\n\\nfrom .base import DeltaMessage, ReasoningParser\\n\\n# Match full thought blocks in complete text\\n_THOUGHT_BLOCK = re.compile(r\\\"\\u003c\\\\|channel\\u003ethought\\\\n[\\\\s\\\\S]*?\\u003cchannel\\\\|\\u003e\\\\s*\\\", re.DOTALL)\\n# Match content channel markers\\n_CONTENT_START = re.compile(r\\\"\\u003c\\\\|channel\\u003e(?:content|final)\\\\n?\\\")\\n_CHANNEL_END = re.compile(r\\\"\\u003cchannel\\\\|\\u003e\\\")\\n_TURN_END = re.compile(r\\\"\\u003cturn\\\\|\\u003e\\\")\\n\\n\\nclass Gemma4ReasoningParser(ReasoningParser):\\n    \\\"\\\"\\\"Parser for Gemma 4\\u0027s channel-based thinking format.\\\"\\\"\\\"\\n\\n    def __init__(self, tokenizer=None):\\n        super().__init__(tokenizer)\\n        self._in_thought = False\\n        self._in_content = False\\n        self._saw_any_channel = False\\n\\n    def reset_state(self):\\n        super().reset_state()\\n        self._in_thought = False\\n        self._in_content = False\\n        self._saw_any_channel = False\\n\\n    def extract_reasoning(self, model_output: str) -\\u003e tuple[str | None, str | None]:\\n        \\\"\\\"\\\"Extract reasoning from complete output.\\\"\\\"\\\"\\n        if not model_output:\\n            return None, model_output\\n\\n        # Extract thought blocks as reasoning\\n        thought_blocks = _THOUGHT_BLOCK.findall(model_output)\\n        if not thought_blocks:\\n            # No thinking tags \\u2014 all content\\n            cleaned = _CONTENT_START.sub(\\\"\\\", model_output)\\n            cleaned = _CHANNEL_END.sub(\\\"\\\", cleaned)\\n            cleaned = _TURN_END.sub(\\\"\\\", cleaned).strip()\\n            return None, cleaned\\n\\n        # Reasoning = thought block contents (strip markers)\\n        reasoning = \\\"\\\"\\n        for block in thought_blocks:\\n            inner = (\\n                block.replace(\\\"\\u003c|channel\\u003ethought\\\\n\\\", \\\"\\\")\\n                .replace(\\\"\\u003cchannel|\\u003e\\\", \\\"\\\")\\n                .strip()\\n            )\\n            reasoning += inner\\n\\n        # Content = everything after thought blocks, strip markers\\n        content = _THOUGHT_BLOCK.sub(\\\"\\\", model_output)\\n        content = _CONTENT_START.sub(\\\"\\\", content)\\n        content = _CHANNEL_END.sub(\\\"\\\", content)\\n        content = _TURN_END.sub(\\\"\\\", content).strip()\\n\\n        return reasoning or None, content or None\\n\\n    def extract_reasoning_streaming(\\n        self, previous_text: str, current_text: str, delta_text: str\\n    ) -\\u003e DeltaMessage | None:\\n        \\\"\\\"\\\"Extract reasoning from streaming delta.\\\"\\\"\\\"\\n        if not delta_text:\\n            return None\\n\\n        # Track channel state based on accumulated text\\n        # Check if we just entered thought channel\\n        if \\\"\\u003c|channel\\u003ethought\\\" in current_text and not self._in_content:\\n            self._in_thought = True\\n            self._saw_any_channel = True\\n\\n        # Check if we just entered content channel\\n        if \\\"\\u003c|channel\\u003econtent\\\" in current_text or \\\"\\u003c|channel\\u003efinal\\\" in current_text:\\n            self._in_thought = False\\n            self._in_content = True\\n\\n        # Check if thought ended (first \\u003cchannel|\\u003e after thought start)\\n        if self._in_thought and \\\"\\u003cchannel|\\u003e\\\" in current_text:\\n            thought_starts = current_text.count(\\\"\\u003c|channel\\u003ethought\\\")\\n            channel_ends = current_text.count(\\\"\\u003cchannel|\\u003e\\\")\\n            if channel_ends \\u003e= thought_starts:\\n                self._in_thought = False\\n                # If no explicit content channel follows, switch to content mode\\n                if (\\n                    \\\"\\u003c|channel\\u003econtent\\\" not in current_text\\n                    and \\\"\\u003c|channel\\u003efinal\\\" not in current_text\\n                ):\\n                    self._in_content = True\\n\\n        # Filter out channel markers from delta\\n        clean = delta_text\\n        for marker in [\\n            \\\"\\u003c|channel\\u003e\\\",\\n            \\\"\\u003cchannel|\\u003e\\\",\\n            \\\"\\u003c|turn\\u003e\\\",\\n            \\\"\\u003cturn|\\u003e\\\",\\n            \\\"thought\\\\n\\\",\\n            \\\"content\\\\n\\\",\\n            \\\"final\\\\n\\\",\\n        ]:\\n            clean = clean.replace(marker, \\\"\\\")\\n\\n        if not clean:\\n            return None  # pure marker token, skip\\n\\n        if self._in_thought:\\n            return DeltaMessage(reasoning=clean)\\n        elif self._in_content:\\n            return DeltaMessage(content=clean)\\n        elif not self._saw_any_channel:\\n            # No channel tokens seen \\u2014 plain content (no thinking)\\n            return DeltaMessage(content=clean)\\n        else:\\n            # Between channels \\u2014 treat as reasoning\\n            return DeltaMessage(reasoning=clean)\\n\\n    def finalize_streaming(self, accumulated_text: str) -\\u003e DeltaMessage | None:\\n        \\\"\\\"\\\"Handle end of stream \\u2014 emit any remaining content.\\\"\\\"\\\"\\n        return None\\n\"\n}",
+      "extra": {
+        "raw_output": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"\nGemma 4 reasoning parser.\n\nGemma 4 uses channel tokens for thinking:\n  <|channel>thought\\n...reasoning...<channel|>\n  <|channel>content\\n...answer...<channel|>\n\nThe parser separates thinking from content by tracking the active channel.\n\"\"\"\n\nimport re\n\nfrom .base import DeltaMessage, ReasoningParser\n\n# Match full thought blocks in complete text\n_THOUGHT_BLOCK = re.compile(r\"<\\|channel>thought\\n[\\s\\S]*?<channel\\|>\\s*\", re.DOTALL)\n# Match content channel markers\n_CONTENT_START = re.compile(r\"<\\|channel>(?:content|final)\\n?\")\n_CHANNEL_END = re.compile(r\"<channel\\|>\")\n_TURN_END = re.compile(r\"<turn\\|>\")\n\n\nclass Gemma4ReasoningParser(ReasoningParser):\n    \"\"\"Parser for Gemma 4's channel-based thinking format.\"\"\"\n\n    def __init__(self, tokenizer=None):\n        super().__init__(tokenizer)\n        self._in_thought = False\n        self._in_content = False\n        self._saw_any_channel = False\n\n    def reset_state(self):\n        super().reset_state()\n        self._in_thought = False\n        self._in_content = False\n        self._saw_any_channel = False\n\n    def extract_reasoning(self, model_output: str) -> tuple[str | None, str | None]:\n        \"\"\"Extract reasoning from complete output.\"\"\"\n        if not model_output:\n            return None, model_output\n\n        # Extract thought blocks as reasoning\n        thought_blocks = _THOUGHT_BLOCK.findall(model_output)\n        if not thought_blocks:\n            # No thinking tags \u2014 all content\n            cleaned = _CONTENT_START.sub(\"\", model_output)\n            cleaned = _CHANNEL_END.sub(\"\", cleaned)\n            cleaned = _TURN_END.sub(\"\", cleaned).strip()\n            return None, cleaned\n\n        # Reasoning = thought block contents (strip markers)\n        reasoning = \"\"\n        for block in thought_blocks:\n            inner = (\n                block.replace(\"<|channel>thought\\n\", \"\")\n                .replace(\"<channel|>\", \"\")\n                .strip()\n            )\n            reasoning += inner\n\n        # Content = everything after thought blocks, strip markers\n        content = _THOUGHT_BLOCK.sub(\"\", model_output)\n        content = _CONTENT_START.sub(\"\", content)\n        content = _CHANNEL_END.sub(\"\", content)\n        content = _TURN_END.sub(\"\", content).strip()\n\n        return reasoning or None, content or None\n\n    def extract_reasoning_streaming(\n        self, previous_text: str, current_text: str, delta_text: str\n    ) -> DeltaMessage | None:\n        \"\"\"Extract reasoning from streaming delta.\"\"\"\n        if not delta_text:\n            return None\n\n        # Track channel state based on accumulated text\n        # Check if we just entered thought channel\n        if \"<|channel>thought\" in current_text and not self._in_content:\n            self._in_thought = True\n            self._saw_any_channel = True\n\n        # Check if we just entered content channel\n        if \"<|channel>content\" in current_text or \"<|channel>final\" in current_text:\n            self._in_thought = False\n            self._in_content = True\n\n        # Check if thought ended (first <channel|> after thought start)\n        if self._in_thought and \"<channel|>\" in current_text:\n            thought_starts = current_text.count(\"<|channel>thought\")\n            channel_ends = current_text.count(\"<channel|>\")\n            if channel_ends >= thought_starts:\n                self._in_thought = False\n                # If no explicit content channel follows, switch to content mode\n                if (\n                    \"<|channel>content\" not in current_text\n                    and \"<|channel>final\" not in current_text\n                ):\n                    self._in_content = True\n\n        # Filter out channel markers from delta\n        clean = delta_text\n        for marker in [\n            \"<|channel>\",\n            \"<channel|>\",\n            \"<|turn>\",\n            \"<turn|>\",\n            \"thought\\n\",\n            \"content\\n\",\n            \"final\\n\",\n        ]:\n            clean = clean.replace(marker, \"\")\n\n        if not clean:\n            return None  # pure marker token, skip\n\n        if self._in_thought:\n            return DeltaMessage(reasoning=clean)\n        elif self._in_content:\n            return DeltaMessage(content=clean)\n        elif not self._saw_any_channel:\n            # No channel tokens seen \u2014 plain content (no thinking)\n            return DeltaMessage(content=clean)\n        else:\n            # Between channels \u2014 treat as reasoning\n            return DeltaMessage(reasoning=clean)\n\n    def finalize_streaming(self, accumulated_text: str) -> DeltaMessage | None:\n        \"\"\"Handle end of stream \u2014 emit any remaining content.\"\"\"\n        return None\n",
+        "returncode": 0,
+        "timestamp": 1794505699.1596258,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_7cf5b10acb0746a69e0594462b01__thought__CrECAWkUfRNQfpaMvccSpalojqBhY54WfUXVMEnJmkJOEGSBLGP9xIp8JQzIb68yshF0DNcF1ynMpL4ST9YCiWuHT4xisbGOqPt7FufcwtjlVWcXhuxIRdt3fgVqrCEYEB5/0+74PPl6eAnJ8uULZ85Jh1FripC+jDPuB2OgV3aRIoWK0nGDpZs4EGBnSatj8pLtxLL+BMNfeNWig7K/aD1OlNYx7CxHqnOxT2uFUoopbHCkC2EPg2Dwq9XPcSqhMfhUiosmexvi74s1WyZrBXRuAR4EhixiQk8UQKtgRb6NGZV4vhQ7bmLOCodVqvF1y3vaf3TyUcZax2o5urzwV8hKj3rDDRq6nxf7cQDSciYrcglnaVpVtQvxFpGHMtE8EsCvlLupWxI67hgyZL+loHRO8tk=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8="
+          },
+          "function": {
+            "arguments": "{\"command\": \"sed -i 's/from vllm_mlx.reasoning.gemma4_parser import Gemma4Parser/from vllm_mlx.reasoning.gemma4_parser import Gemma4ReasoningParser/' /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_f8281b5ed15a40f5be7bdf8ff191__thought__Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "sed -i 's/from vllm_mlx.reasoning.gemma4_parser import Gemma4Parser/from vllm_mlx.reasoning.gemma4_parser import Gemma4ReasoningParser/' /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_f8281b5ed15a40f5be7bdf8ff191__thought__Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8="
+          }
+        ],
+        "response": {
+          "id": "4_v1aqP8Fou9xdIPyZ636Qo",
+          "created": 1794505699,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"sed -i 's/from vllm_mlx.reasoning.gemma4_parser import Gemma4Parser/from vllm_mlx.reasoning.gemma4_parser import Gemma4ReasoningParser/' /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_f8281b5ed15a40f5be7bdf8ff191__thought__Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 118,
+            "prompt_tokens": 13416,
+            "total_tokens": 13534,
+            "completion_tokens_details": {
+              "reasoning_tokens": 40,
+              "text_tokens": 78
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 11586,
+              "image_tokens": null,
+              "text_tokens": 13416,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 11586,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 11586,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0011915799999999998,
+        "timestamp": 1794505700.1963108
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"\"\n}",
+      "extra": {
+        "raw_output": "",
+        "returncode": 0,
+        "timestamp": 1794505700.2955213,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_f8281b5ed15a40f5be7bdf8ff191__thought__Cr8BAWkUfRPn7oX+rdbCsSwF20eObubayv8paUOIXHp+U+c6DSQWdJ1IkxxHd7dCpO8szeqoNRNmAM3WWO4yzsnxH3sxeQC6Nle64v2ehgYrZM9S4uuAfomecyxvJeoGjHas/sy33yC9ow4Vlh863XeEIzPppCVOVYygR6WUErtOSxO1fv8jkDIl3Gi6UjXhO3ALXNjChkHwdq4fjA+cUu2uVeU088++5noia8IxGu7u0GVM1Z49y8UczR3p6QB+4q8=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo="
+          },
+          "function": {
+            "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_bbeedf460e01409a85475a48114f__thought__Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "python -m pytest /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_bbeedf460e01409a85475a48114f__thought__Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo="
+          }
+        ],
+        "response": {
+          "id": "5Pv1atHPH_H8wbUPofyiyQU",
+          "created": 1794505700,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_bbeedf460e01409a85475a48114f__thought__Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 75,
+            "prompt_tokens": 13512,
+            "total_tokens": 13587,
+            "completion_tokens_details": {
+              "reasoning_tokens": 42,
+              "text_tokens": 33
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 12508,
+              "image_tokens": null,
+              "text_tokens": 13512,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 12508,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 12508,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0008639399999999999,
+        "timestamp": 1794505701.092786
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 2,\n  \"output\": \"============================= test session starts ==============================\\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\\ncachedir: .pytest_cache\\nrootdir: /testbed\\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\\nplugins: anyio-4.13.0\\ncollecting ... collected 0 items / 1 error\\n\\n==================================== ERRORS ====================================\\n______________ ERROR collecting tests/test_gemma4_parser_issue.py ______________\\nImportError while importing test module \\u0027/testbed/tests/test_gemma4_parser_issue.py\\u0027.\\nHint: make sure your test modules/packages have valid Python names.\\nTraceback:\\n/opt/conda/envs/testbed/lib/python3.13/importlib/__init__.py:88: in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\ntests/test_gemma4_parser_issue.py:3: in \\u003cmodule\\u003e\\n    from vllm_mlx.api.models import DeltaMessage\\nE   ImportError: cannot import name \\u0027DeltaMessage\\u0027 from \\u0027vllm_mlx.api.models\\u0027 (/testbed/vllm_mlx/api/models.py)\\n=========================== short test summary info ============================\\nERROR tests/test_gemma4_parser_issue.py\\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\\n=============================== 1 error in 0.36s ===============================\\n\"\n}",
+      "extra": {
+        "raw_output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\ncachedir: .pytest_cache\nrootdir: /testbed\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\nplugins: anyio-4.13.0\ncollecting ... collected 0 items / 1 error\n\n==================================== ERRORS ====================================\n______________ ERROR collecting tests/test_gemma4_parser_issue.py ______________\nImportError while importing test module '/testbed/tests/test_gemma4_parser_issue.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/opt/conda/envs/testbed/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/test_gemma4_parser_issue.py:3: in <module>\n    from vllm_mlx.api.models import DeltaMessage\nE   ImportError: cannot import name 'DeltaMessage' from 'vllm_mlx.api.models' (/testbed/vllm_mlx/api/models.py)\n=========================== short test summary info ============================\nERROR tests/test_gemma4_parser_issue.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 0.36s ===============================\n",
+        "returncode": 2,
+        "timestamp": 1794505702.0136895,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_bbeedf460e01409a85475a48114f__thought__Cu8BAWkUfRMjCZ6q9LMqzp1jRbjw1n+2xqfUCltVURuC4a4VUZ5i7L32PITWoIDXpU9Bvg3BiAtUz6vHMh9RM8qEuDW5XqmEePUCJ2vkKuKXAVy3xZpSj2AY0fVYr7cA6QwQs+dDt44YJSz8AjfQeKXMAMIwCem9cMJY47AqP/PMKghK6OavdP+aEcUDeNS2uO0ff9yDunYA4mskWgyDHxgBF6TWVCf4YRf9I/ampz1IdvqEu7xjXwB/+2fXI245+cScbwkpf/5KN/aiowq8fKFvpfKExH8oEcY4j1YyMz9M6dejxbKmdwlj39jxHG+OTOo=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO"
+          },
+          "function": {
+            "arguments": "{\"command\": \"cat /testbed/vllm_mlx/api/models.py | head -n 20\"}",
+            "name": "bash"
+          },
+          "id": "call_988f00541e934330ac045b999e0a__thought__Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO"
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "cat /testbed/vllm_mlx/api/models.py | head -n 20",
+            "tool_call_id": "call_988f00541e934330ac045b999e0a__thought__Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO"
+          }
+        ],
+        "response": {
+          "id": "5vv1arntDq-uxdIPg6OO4QY",
+          "created": 1794505702,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO"
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"cat /testbed/vllm_mlx/api/models.py | head -n 20\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_988f00541e934330ac045b999e0a__thought__Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO"
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 94,
+            "prompt_tokens": 13968,
+            "total_tokens": 14062,
+            "completion_tokens_details": {
+              "reasoning_tokens": 59,
+              "text_tokens": 35
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 13444,
+              "image_tokens": null,
+              "text_tokens": 13968,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 13444,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 13444,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0007955200000000001,
+        "timestamp": 1794505702.8584876
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"# SPDX-License-Identifier: Apache-2.0\\n\\\"\\\"\\\"\\nPydantic models for OpenAI-compatible API.\\n\\nThese models define the request and response schemas for:\\n- Chat completions\\n- Text completions\\n- Tool calling\\n- MCP (Model Context Protocol) integration\\n\\\"\\\"\\\"\\n\\nimport time\\nimport uuid\\n\\nfrom pydantic import BaseModel, Field\\n\\n# =============================================================================\\n# Content Types (for multimodal messages)\\n# =============================================================================\\n\\n\"\n}",
+      "extra": {
+        "raw_output": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"\nPydantic models for OpenAI-compatible API.\n\nThese models define the request and response schemas for:\n- Chat completions\n- Text completions\n- Tool calling\n- MCP (Model Context Protocol) integration\n\"\"\"\n\nimport time\nimport uuid\n\nfrom pydantic import BaseModel, Field\n\n# =============================================================================\n# Content Types (for multimodal messages)\n# =============================================================================\n\n",
+        "returncode": 0,
+        "timestamp": 1794505702.9540887,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_988f00541e934330ac045b999e0a__thought__Cu0BAWkUfRMq/g8uEK4OYL/IAP/kuJAvHPfAOBk123Vld3AwjuY80R83F8GURdzkIiROpb04sDnplPuWulBV/hS3WoHLZsm09ZUEolGAS1yB+9hFD1OlwP/9kueDwnHPlTtxOQmlksdLnRzJ+e0u9XlZLp/mKdX3pXpHS6kGUB4DGpOamKlVL6RlhXSQ8vjo+1fQC/+JSzBCXpjB80rgn5zhacB9FxVvx+d1oOI+F3CtKwcSI7GjWkcJhWIe35pSHq7OYmalGQa81mDmho0iME9P/KOLtlAe0/1j4lHmCbfu0zkkdsP7hiAyNytqs1HO",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw=="
+          },
+          "function": {
+            "arguments": "{\"command\": \"cat /testbed/vllm_mlx/api/models.py\"}",
+            "name": "bash"
+          },
+          "id": "call_6f1e5babbfff4ff4a5e59dd7c4d3__thought__CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw==",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw=="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "cat /testbed/vllm_mlx/api/models.py",
+            "tool_call_id": "call_6f1e5babbfff4ff4a5e59dd7c4d3__thought__CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw=="
+          }
+        ],
+        "response": {
+          "id": "5_v1atnlCoqE1sgPspum2QY",
+          "created": 1794505702,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw=="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"cat /testbed/vllm_mlx/api/models.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_6f1e5babbfff4ff4a5e59dd7c4d3__thought__CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw==",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw=="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 73,
+            "prompt_tokens": 14144,
+            "total_tokens": 14217,
+            "completion_tokens_details": {
+              "reasoning_tokens": 45,
+              "text_tokens": 28
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 13388,
+              "image_tokens": null,
+              "text_tokens": 14144,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 13388,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 13388,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.00081094,
+        "timestamp": 1794505703.7941298
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output_head\": \"# SPDX-License-Identifier: Apache-2.0\\n\\\"\\\"\\\"\\nPydantic models for OpenAI-compatible API.\\n\\nThese models define the request and response schemas for:\\n- Chat completions\\n- Text completions\\n- Tool calling\\n- MCP (Model Context Protocol) integration\\n\\\"\\\"\\\"\\n\\nimport time\\nimport uuid\\n\\nfrom pydantic import BaseModel, Field\\n\\n# =============================================================================\\n# Content Types (for multimodal messages)\\n# =============================================================================\\n\\n\\nclass ImageUrl(BaseModel):\\n    \\\"\\\"\\\"Image URL with optional detail level.\\\"\\\"\\\"\\n\\n    url: str\\n    detail: str | None = None\\n\\n\\nclass VideoUrl(BaseModel):\\n    \\\"\\\"\\\"Video URL.\\\"\\\"\\\"\\n\\n    url: str\\n\\n\\nclass AudioUrl(BaseModel):\\n    \\\"\\\"\\\"Audio URL for audio content.\\\"\\\"\\\"\\n\\n    url: str\\n\\n\\nclass ContentPart(BaseModel):\\n    \\\"\\\"\\\"\\n    A part of a multimodal message content.\\n\\n    Supports:\\n    - text: Plain text content\\n    - image_url: Image from URL or base64\\n    - video: Video from local path\\n    - video_url: Video from URL or base64\\n    - audio_url: Audio from URL or base64\\n    \\\"\\\"\\\"\\n\\n    type: str  # \\\"text\\\", \\\"image_url\\\", \\\"video\\\", \\\"video_url\\\", \\\"audio_url\\\"\\n    text: str | None = None\\n    image_url: ImageUrl | dict | str | None = None\\n    video: str | None = None\\n    video_url: VideoUrl | dict | str | None = None\\n    audio_url: AudioUrl | dict | str | None = None\\n\\n\\n# =============================================================================\\n# Messages\\n# =============================================================================\\n\\n\\nclass Message(BaseModel):\\n    \\\"\\\"\\\"\\n    A message in a chat conversation.\\n\\n    Supports:\\n    - Simple text messages (role + content string)\\n    - Multimodal messages (role + content list with text/images/videos)\\n    - Tool call messages (assistant with tool_calls)\\n    - Tool response messages (role=\\\"tool\\\" with tool_call_id)\\n    \\\"\\\"\\\"\\n\\n    role: str\\n    content: str | list[ContentPart] | list[dict] | None = None\\n    # For assistant messages with tool calls\\n    tool_calls: list[dict] | None = None\\n    # For tool response messages (role=\\\"tool\\\")\\n    tool_call_id: str | None = None\\n\\n\\n# =============================================================================\\n# Tool Calling\\n# =============================================================================\\n\\n\\nclass FunctionCall(BaseModel):\\n    \\\"\\\"\\\"A function call with name and arguments.\\\"\\\"\\\"\\n\\n    name: str\\n    arguments: str  # JSON string\\n\\n\\nclass ToolCall(BaseModel):\\n    \\\"\\\"\\\"A tool call from the model.\\\"\\\"\\\"\\n\\n    id: str\\n    type: str = \\\"function\\\"\\n    function: FunctionCall\\n\\n\\nclass ToolDefinition(BaseModel):\\n    \\\"\\\"\\\"Definition of a tool that can be called by the model.\\\"\\\"\\\"\\n\\n    type: str = \\\"function\\\"\\n    function: dict\\n\\n\\n# =============================================================================\\n# Structured Output (JSON Schema)\\n# =============================================================================\\n\\n\\nclass ResponseFormatJsonSchema(BaseModel):\\n    \\\"\\\"\\\"JSON Schema definition for structured output.\\\"\\\"\\\"\\n\\n    name: str\\n    description: str | None = None\\n    schema_: dict = Field(alias=\\\"schema\\\")  # JSON Schema specification\\n    strict: bool | None = False\\n\\n    class Config:\\n        populate_by_name = True\\n\\n\\nclass ResponseFormat(BaseModel):\\n    \\\"\\\"\\\"\\n    Response format specification for structured output.\\n\\n    Supports:\\n    - \\\"text\\\": Default text output (no structure enforcement)\\n    - \\\"json_object\\\": Forces valid JSON output\\n    - \\\"json_schema\\\": Forces JSON matching a specific schema\\n    \\\"\\\"\\\"\\n\\n    type: str = \\\"text\\\"  # \\\"text\\\", \\\"json_object\\\", \\\"json_schema\\\"\\n    json_schema: ResponseFormatJsonSchema | None = None\\n\\n\\n# =============================================================================\\n# Logprobs\\n# =============================================================================\\n\\n\\nclass TopLogProb(BaseModel):\\n    \\\"\\\"\\\"A top log probability for a token.\\\"\\\"\\\"\\n\\n    token: str\\n    logprob: float\\n    bytes: list[int] | None = None\\n\\n\\nclass TokenLogProb(BaseModel):\\n    \\\"\\\"\\\"Log probability information for a single token.\\\"\\\"\\\"\\n\\n    token: str\\n    logprob: float\\n    bytes: list[int] | None = None\\n    top_logprobs: list[TopLogProb] = []\\n\\n\\nclass ChoiceLogProbs(BaseModel):\\n    \\\"\\\"\\\"Log probability information for a choice.\\\"\\\"\\\"\\n\\n    content: list[TokenLogProb] | None = None\\n\\n\\n# =============================================================================\\n# Chat Completion\\n# =============================================================================\\n\\n\\nclass StreamOptions(BaseModel):\\n    \\\"\\\"\\\"Options for streaming responses.\\\"\\\"\\\"\\n\\n    include_usage: bool = False  # Include usage stats in final chunk\\n\\n\\nclass ChatCompletionRequest(BaseModel):\\n    \\\"\\\"\\\"Request for chat completion.\\\"\\\"\\\"\\n\\n    model: str = \\\"default\\\"\\n    messages: list[Message]\\n    temperature: float | None = None\\n    top_p: float | None = None\\n    max_tokens: int | None = None\\n    stream: bool = False\\n    stream_options: StreamOptions | None = (\\n        None  # Streaming options (include_usage, etc.)\\n    )\\n    stop: list[str] | None = No\",\n  \"output_tail\": \"\\n\\n    id: str = Field(default_factory=lambda: f\\\"cmpl-{uuid.uuid4().hex[:8]}\\\")\\n    object: str = \\\"text_completion\\\"\\n    created: int = Field(default_factory=lambda: int(time.time()))\\n    model: str\\n    choices: list[CompletionChoice]\\n    usage: Usage = Field(default_factory=Usage)\\n\\n\\n# =============================================================================\\n# Models List\\n# =============================================================================\\n\\n\\nclass ModelInfo(BaseModel):\\n    \\\"\\\"\\\"Information about an available model.\\\"\\\"\\\"\\n\\n    id: str\\n    object: str = \\\"model\\\"\\n    created: int = Field(default_factory=lambda: int(time.time()))\\n    owned_by: str = \\\"rapid-mlx\\\"\\n\\n\\nclass ModelsResponse(BaseModel):\\n    \\\"\\\"\\\"Response for listing models.\\\"\\\"\\\"\\n\\n    object: str = \\\"list\\\"\\n    data: list[ModelInfo]\\n\\n\\n# =============================================================================\\n# MCP (Model Context Protocol)\\n# =============================================================================\\n\\n\\nclass MCPToolInfo(BaseModel):\\n    \\\"\\\"\\\"Information about an MCP tool.\\\"\\\"\\\"\\n\\n    name: str\\n    description: str\\n    server: str\\n    parameters: dict = Field(default_factory=dict)\\n\\n\\nclass MCPToolsResponse(BaseModel):\\n    \\\"\\\"\\\"Response for listing MCP tools.\\\"\\\"\\\"\\n\\n    tools: list[MCPToolInfo]\\n    count: int\\n\\n\\nclass MCPServerInfo(BaseModel):\\n    \\\"\\\"\\\"Information about an MCP server.\\\"\\\"\\\"\\n\\n    name: str\\n    state: str\\n    transport: str\\n    tools_count: int\\n    error: str | None = None\\n\\n\\nclass MCPServersResponse(BaseModel):\\n    \\\"\\\"\\\"Response for listing MCP servers.\\\"\\\"\\\"\\n\\n    servers: list[MCPServerInfo]\\n\\n\\nclass MCPExecuteRequest(BaseModel):\\n    \\\"\\\"\\\"Request to execute an MCP tool.\\\"\\\"\\\"\\n\\n    tool_name: str\\n    arguments: dict = Field(default_factory=dict)\\n\\n\\nclass MCPExecuteResponse(BaseModel):\\n    \\\"\\\"\\\"Response from executing an MCP tool.\\\"\\\"\\\"\\n\\n    tool_name: str\\n    content: str | list | dict | None = None\\n    is_error: bool = False\\n    error_message: str | None = None\\n\\n\\n# =============================================================================\\n# Audio (STT/TTS)\\n# =============================================================================\\n\\n\\nclass AudioTranscriptionRequest(BaseModel):\\n    \\\"\\\"\\\"Request for audio transcription (STT).\\\"\\\"\\\"\\n\\n    model: str = \\\"whisper-large-v3\\\"\\n    language: str | None = None\\n    response_format: str = \\\"json\\\"\\n    temperature: float = 0.0\\n    timestamp_granularities: list[str] | None = None\\n\\n\\nclass AudioTranscriptionResponse(BaseModel):\\n    \\\"\\\"\\\"Response from audio transcription.\\\"\\\"\\\"\\n\\n    text: str\\n    language: str | None = None\\n    duration: float | None = None\\n    segments: list[dict] | None = None\\n\\n\\nclass AudioSpeechRequest(BaseModel):\\n    \\\"\\\"\\\"Request for text-to-speech.\\\"\\\"\\\"\\n\\n    model: str = \\\"kokoro\\\"\\n    input: str\\n    voice: str = \\\"af_heart\\\"\\n    speed: float = 1.0\\n    response_format: str = \\\"wav\\\"\\n\\n\\nclass AudioSeparationRequest(BaseModel):\\n    \\\"\\\"\\\"Request for audio source separation.\\\"\\\"\\\"\\n\\n    model: str = \\\"htdemucs\\\"\\n    stems: list[str] = Field(default_factory=lambda: [\\\"vocals\\\", \\\"accompaniment\\\"])\\n\\n\\n# =============================================================================\\n# Embeddings\\n# =============================================================================\\n\\n\\nclass EmbeddingRequest(BaseModel):\\n    \\\"\\\"\\\"Request for text embeddings (OpenAI compatible).\\\"\\\"\\\"\\n\\n    input: str | list[str]\\n    model: str\\n    encoding_format: str | None = \\\"float\\\"  # \\\"float\\\" or \\\"base64\\\"\\n\\n\\nclass EmbeddingData(BaseModel):\\n    \\\"\\\"\\\"A single embedding result.\\\"\\\"\\\"\\n\\n    object: str = \\\"embedding\\\"\\n    index: int\\n    embedding: list[float]\\n\\n\\nclass EmbeddingUsage(BaseModel):\\n    \\\"\\\"\\\"Token usage for embedding requests.\\\"\\\"\\\"\\n\\n    prompt_tokens: int = 0\\n    total_tokens: int = 0\\n\\n\\nclass EmbeddingResponse(BaseModel):\\n    \\\"\\\"\\\"Response for embeddings endpoint (OpenAI compatible).\\\"\\\"\\\"\\n\\n    object: str = \\\"list\\\"\\n    data: list[EmbeddingData]\\n    model: str\\n    usage: EmbeddingUsage = Field(default_factory=EmbeddingUsage)\\n\\n\\n# =============================================================================\\n# Streaming (for SSE responses)\\n# =============================================================================\\n\\n\\nclass ChatCompletionChunkDelta(BaseModel):\\n    \\\"\\\"\\\"Delta content in a streaming chunk.\\\"\\\"\\\"\\n\\n    role: str | None = None\\n    content: str | None = None\\n    reasoning_content: str | None = None\\n    tool_calls: list[dict] | None = None\\n\\n\\nclass ChatCompletionChunkChoice(BaseModel):\\n    \\\"\\\"\\\"A single choice in a streaming chunk.\\\"\\\"\\\"\\n\\n    index: int = 0\\n    delta: ChatCompletionChunkDelta\\n    finish_reason: str | None = None\\n    logprobs: ChoiceLogProbs | None = None\\n\\n\\nclass ChatCompletionChunk(BaseModel):\\n    \\\"\\\"\\\"A streaming chunk for chat completion.\\\"\\\"\\\"\\n\\n    id: str = Field(default_factory=lambda: f\\\"chatcmpl-{uuid.uuid4().hex[:8]}\\\")\\n    object: str = \\\"chat.completion.chunk\\\"\\n    created: int = Field(default_factory=lambda: int(time.time()))\\n    model: str\\n    choices: list[ChatCompletionChunkChoice]\\n    usage: Usage | None = None  # Included when stream_options.include_usage=true\\n\",\n  \"elided_chars\": 3438,\n  \"warning\": \"Output too long.\"\n}",
+      "extra": {
+        "raw_output": "# SPDX-License-Identifier: Apache-2.0\n\"\"\"\nPydantic models for OpenAI-compatible API.\n\nThese models define the request and response schemas for:\n- Chat completions\n- Text completions\n- Tool calling\n- MCP (Model Context Protocol) integration\n\"\"\"\n\nimport time\nimport uuid\n\nfrom pydantic import BaseModel, Field\n\n# =============================================================================\n# Content Types (for multimodal messages)\n# =============================================================================\n\n\nclass ImageUrl(BaseModel):\n    \"\"\"Image URL with optional detail level.\"\"\"\n\n    url: str\n    detail: str | None = None\n\n\nclass VideoUrl(BaseModel):\n    \"\"\"Video URL.\"\"\"\n\n    url: str\n\n\nclass AudioUrl(BaseModel):\n    \"\"\"Audio URL for audio content.\"\"\"\n\n    url: str\n\n\nclass ContentPart(BaseModel):\n    \"\"\"\n    A part of a multimodal message content.\n\n    Supports:\n    - text: Plain text content\n    - image_url: Image from URL or base64\n    - video: Video from local path\n    - video_url: Video from URL or base64\n    - audio_url: Audio from URL or base64\n    \"\"\"\n\n    type: str  # \"text\", \"image_url\", \"video\", \"video_url\", \"audio_url\"\n    text: str | None = None\n    image_url: ImageUrl | dict | str | None = None\n    video: str | None = None\n    video_url: VideoUrl | dict | str | None = None\n    audio_url: AudioUrl | dict | str | None = None\n\n\n# =============================================================================\n# Messages\n# =============================================================================\n\n\nclass Message(BaseModel):\n    \"\"\"\n    A message in a chat conversation.\n\n    Supports:\n    - Simple text messages (role + content string)\n    - Multimodal messages (role + content list with text/images/videos)\n    - Tool call messages (assistant with tool_calls)\n    - Tool response messages (role=\"tool\" with tool_call_id)\n    \"\"\"\n\n    role: str\n    content: str | list[ContentPart] | list[dict] | None = None\n    # For assistant messages with tool calls\n    tool_calls: list[dict] | None = None\n    # For tool response messages (role=\"tool\")\n    tool_call_id: str | None = None\n\n\n# =============================================================================\n# Tool Calling\n# =============================================================================\n\n\nclass FunctionCall(BaseModel):\n    \"\"\"A function call with name and arguments.\"\"\"\n\n    name: str\n    arguments: str  # JSON string\n\n\nclass ToolCall(BaseModel):\n    \"\"\"A tool call from the model.\"\"\"\n\n    id: str\n    type: str = \"function\"\n    function: FunctionCall\n\n\nclass ToolDefinition(BaseModel):\n    \"\"\"Definition of a tool that can be called by the model.\"\"\"\n\n    type: str = \"function\"\n    function: dict\n\n\n# =============================================================================\n# Structured Output (JSON Schema)\n# =============================================================================\n\n\nclass ResponseFormatJsonSchema(BaseModel):\n    \"\"\"JSON Schema definition for structured output.\"\"\"\n\n    name: str\n    description: str | None = None\n    schema_: dict = Field(alias=\"schema\")  # JSON Schema specification\n    strict: bool | None = False\n\n    class Config:\n        populate_by_name = True\n\n\nclass ResponseFormat(BaseModel):\n    \"\"\"\n    Response format specification for structured output.\n\n    Supports:\n    - \"text\": Default text output (no structure enforcement)\n    - \"json_object\": Forces valid JSON output\n    - \"json_schema\": Forces JSON matching a specific schema\n    \"\"\"\n\n    type: str = \"text\"  # \"text\", \"json_object\", \"json_schema\"\n    json_schema: ResponseFormatJsonSchema | None = None\n\n\n# =============================================================================\n# Logprobs\n# =============================================================================\n\n\nclass TopLogProb(BaseModel):\n    \"\"\"A top log probability for a token.\"\"\"\n\n    token: str\n    logprob: float\n    bytes: list[int] | None = None\n\n\nclass TokenLogProb(BaseModel):\n    \"\"\"Log probability information for a single token.\"\"\"\n\n    token: str\n    logprob: float\n    bytes: list[int] | None = None\n    top_logprobs: list[TopLogProb] = []\n\n\nclass ChoiceLogProbs(BaseModel):\n    \"\"\"Log probability information for a choice.\"\"\"\n\n    content: list[TokenLogProb] | None = None\n\n\n# =============================================================================\n# Chat Completion\n# =============================================================================\n\n\nclass StreamOptions(BaseModel):\n    \"\"\"Options for streaming responses.\"\"\"\n\n    include_usage: bool = False  # Include usage stats in final chunk\n\n\nclass ChatCompletionRequest(BaseModel):\n    \"\"\"Request for chat completion.\"\"\"\n\n    model: str = \"default\"\n    messages: list[Message]\n    temperature: float | None = None\n    top_p: float | None = None\n    max_tokens: int | None = None\n    stream: bool = False\n    stream_options: StreamOptions | None = (\n        None  # Streaming options (include_usage, etc.)\n    )\n    stop: list[str] | None = None\n    # Tool calling\n    tools: list[ToolDefinition] | None = None\n    tool_choice: str | dict | None = None  # \"auto\", \"none\", or specific tool\n    # Structured output\n    response_format: ResponseFormat | dict | None = None\n    # Logprobs\n    logprobs: bool | None = None\n    top_logprobs: int | None = None  # 0-20, per OpenAI spec\n    # MLLM-specific parameters\n    video_fps: float | None = None\n    video_max_frames: int | None = None\n    # Request timeout in seconds (None = use server default)\n    timeout: float | None = None\n    # Thinking/reasoning control (Qwen3 style).  None = server default.\n    enable_thinking: bool | None = None\n    # Number of completions (only n=1 supported)\n    n: int | None = None\n\n\nclass AssistantMessage(BaseModel):\n    \"\"\"Response message from the assistant.\"\"\"\n\n    role: str = \"assistant\"\n    content: str | None = None\n    reasoning_content: str | None = (\n        None  # Reasoning/thinking content (when --reasoning-parser is used)\n    )\n    tool_calls: list[ToolCall] | None = None\n\n    def model_post_init(self, __context) -> None:\n        \"\"\"Add deprecated 'reasoning' alias for backward compatibility.\"\"\"\n        pass\n\n    def model_dump(self, **kwargs) -> dict:\n        \"\"\"Include 'reasoning' as alias of reasoning_content for clients expecting it.\"\"\"\n        d = super().model_dump(**kwargs)\n        # Add backward-compat alias \u2014 clients may read either field\n        if \"reasoning_content\" in d:\n            d[\"reasoning\"] = d[\"reasoning_content\"]\n        return d\n\n\nclass ChatCompletionChoice(BaseModel):\n    \"\"\"A single choice in chat completion response.\"\"\"\n\n    index: int = 0\n    message: AssistantMessage\n    finish_reason: str | None = \"stop\"\n    logprobs: ChoiceLogProbs | None = None\n\n\nclass CompletionTokensDetails(BaseModel):\n    \"\"\"Breakdown of completion token usage (OpenAI-compatible).\"\"\"\n\n    reasoning_tokens: int = 0\n\n\nclass Usage(BaseModel):\n    \"\"\"Token usage statistics.\"\"\"\n\n    prompt_tokens: int = 0\n    completion_tokens: int = 0\n    total_tokens: int = 0\n    completion_tokens_details: CompletionTokensDetails | None = None\n\n\nclass ChatCompletionResponse(BaseModel):\n    \"\"\"Response for chat completion.\"\"\"\n\n    id: str = Field(default_factory=lambda: f\"chatcmpl-{uuid.uuid4().hex[:8]}\")\n    object: str = \"chat.completion\"\n    created: int = Field(default_factory=lambda: int(time.time()))\n    model: str\n    choices: list[ChatCompletionChoice]\n    usage: Usage = Field(default_factory=Usage)\n\n\n# =============================================================================\n# Text Completion\n# =============================================================================\n\n\nclass CompletionRequest(BaseModel):\n    \"\"\"Request for text completion.\"\"\"\n\n    model: str = \"default\"\n    prompt: str | list[str]\n    temperature: float | None = None\n    top_p: float | None = None\n    max_tokens: int | None = None\n    stream: bool = False\n    stop: list[str] | None = None\n    # Logprobs\n    logprobs: bool | None = None\n    top_logprobs: int | None = None  # 0-20, per OpenAI spec\n    # Request timeout in seconds (None = use server default)\n    timeout: float | None = None\n\n\nclass CompletionChoice(BaseModel):\n    \"\"\"A single choice in text completion response.\"\"\"\n\n    index: int = 0\n    text: str\n    finish_reason: str | None = \"stop\"\n    logprobs: ChoiceLogProbs | None = None\n\n\nclass CompletionResponse(BaseModel):\n    \"\"\"Response for text completion.\"\"\"\n\n    id: str = Field(default_factory=lambda: f\"cmpl-{uuid.uuid4().hex[:8]}\")\n    object: str = \"text_completion\"\n    created: int = Field(default_factory=lambda: int(time.time()))\n    model: str\n    choices: list[CompletionChoice]\n    usage: Usage = Field(default_factory=Usage)\n\n\n# =============================================================================\n# Models List\n# =============================================================================\n\n\nclass ModelInfo(BaseModel):\n    \"\"\"Information about an available model.\"\"\"\n\n    id: str\n    object: str = \"model\"\n    created: int = Field(default_factory=lambda: int(time.time()))\n    owned_by: str = \"rapid-mlx\"\n\n\nclass ModelsResponse(BaseModel):\n    \"\"\"Response for listing models.\"\"\"\n\n    object: str = \"list\"\n    data: list[ModelInfo]\n\n\n# =============================================================================\n# MCP (Model Context Protocol)\n# =============================================================================\n\n\nclass MCPToolInfo(BaseModel):\n    \"\"\"Information about an MCP tool.\"\"\"\n\n    name: str\n    description: str\n    server: str\n    parameters: dict = Field(default_factory=dict)\n\n\nclass MCPToolsResponse(BaseModel):\n    \"\"\"Response for listing MCP tools.\"\"\"\n\n    tools: list[MCPToolInfo]\n    count: int\n\n\nclass MCPServerInfo(BaseModel):\n    \"\"\"Information about an MCP server.\"\"\"\n\n    name: str\n    state: str\n    transport: str\n    tools_count: int\n    error: str | None = None\n\n\nclass MCPServersResponse(BaseModel):\n    \"\"\"Response for listing MCP servers.\"\"\"\n\n    servers: list[MCPServerInfo]\n\n\nclass MCPExecuteRequest(BaseModel):\n    \"\"\"Request to execute an MCP tool.\"\"\"\n\n    tool_name: str\n    arguments: dict = Field(default_factory=dict)\n\n\nclass MCPExecuteResponse(BaseModel):\n    \"\"\"Response from executing an MCP tool.\"\"\"\n\n    tool_name: str\n    content: str | list | dict | None = None\n    is_error: bool = False\n    error_message: str | None = None\n\n\n# =============================================================================\n# Audio (STT/TTS)\n# =============================================================================\n\n\nclass AudioTranscriptionRequest(BaseModel):\n    \"\"\"Request for audio transcription (STT).\"\"\"\n\n    model: str = \"whisper-large-v3\"\n    language: str | None = None\n    response_format: str = \"json\"\n    temperature: float = 0.0\n    timestamp_granularities: list[str] | None = None\n\n\nclass AudioTranscriptionResponse(BaseModel):\n    \"\"\"Response from audio transcription.\"\"\"\n\n    text: str\n    language: str | None = None\n    duration: float | None = None\n    segments: list[dict] | None = None\n\n\nclass AudioSpeechRequest(BaseModel):\n    \"\"\"Request for text-to-speech.\"\"\"\n\n    model: str = \"kokoro\"\n    input: str\n    voice: str = \"af_heart\"\n    speed: float = 1.0\n    response_format: str = \"wav\"\n\n\nclass AudioSeparationRequest(BaseModel):\n    \"\"\"Request for audio source separation.\"\"\"\n\n    model: str = \"htdemucs\"\n    stems: list[str] = Field(default_factory=lambda: [\"vocals\", \"accompaniment\"])\n\n\n# =============================================================================\n# Embeddings\n# =============================================================================\n\n\nclass EmbeddingRequest(BaseModel):\n    \"\"\"Request for text embeddings (OpenAI compatible).\"\"\"\n\n    input: str | list[str]\n    model: str\n    encoding_format: str | None = \"float\"  # \"float\" or \"base64\"\n\n\nclass EmbeddingData(BaseModel):\n    \"\"\"A single embedding result.\"\"\"\n\n    object: str = \"embedding\"\n    index: int\n    embedding: list[float]\n\n\nclass EmbeddingUsage(BaseModel):\n    \"\"\"Token usage for embedding requests.\"\"\"\n\n    prompt_tokens: int = 0\n    total_tokens: int = 0\n\n\nclass EmbeddingResponse(BaseModel):\n    \"\"\"Response for embeddings endpoint (OpenAI compatible).\"\"\"\n\n    object: str = \"list\"\n    data: list[EmbeddingData]\n    model: str\n    usage: EmbeddingUsage = Field(default_factory=EmbeddingUsage)\n\n\n# =============================================================================\n# Streaming (for SSE responses)\n# =============================================================================\n\n\nclass ChatCompletionChunkDelta(BaseModel):\n    \"\"\"Delta content in a streaming chunk.\"\"\"\n\n    role: str | None = None\n    content: str | None = None\n    reasoning_content: str | None = None\n    tool_calls: list[dict] | None = None\n\n\nclass ChatCompletionChunkChoice(BaseModel):\n    \"\"\"A single choice in a streaming chunk.\"\"\"\n\n    index: int = 0\n    delta: ChatCompletionChunkDelta\n    finish_reason: str | None = None\n    logprobs: ChoiceLogProbs | None = None\n\n\nclass ChatCompletionChunk(BaseModel):\n    \"\"\"A streaming chunk for chat completion.\"\"\"\n\n    id: str = Field(default_factory=lambda: f\"chatcmpl-{uuid.uuid4().hex[:8]}\")\n    object: str = \"chat.completion.chunk\"\n    created: int = Field(default_factory=lambda: int(time.time()))\n    model: str\n    choices: list[ChatCompletionChunkChoice]\n    usage: Usage | None = None  # Included when stream_options.include_usage=true\n",
+        "returncode": 0,
+        "timestamp": 1794505703.893217,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_6f1e5babbfff4ff4a5e59dd7c4d3__thought__CsoBAWkUfRNy7hKRhsNjnAMrcRv8gRJgey9R7MdmJddZtIJ6gSh8/xENdSFk08oOheyyZo3El4g3Kn08hOT9WueNhdwh3PZ4eTbFmVC/703czeoafyZj3fBQhdUSPstdcYRI2osEwrKPbAEqXxSTatfyjsXbS2WPW+SZZylLMbXogADpy2fjOvoUsW1rEFDJqNB0FIu56lsxC+Jxee+GrufHm+UjAC7Xnpxj2zM3HN1TZty7kgHu9Du/+jPcVX6ollwKJDz1mp0EC80UGw==",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY="
+          },
+          "function": {
+            "arguments": "{\"command\": \"sed -i 's/from vllm_mlx.api.models import DeltaMessage/from vllm_mlx.reasoning.base import DeltaMessage/' /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_b4062c55217f4892978c99e42ace__thought__CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "sed -i 's/from vllm_mlx.api.models import DeltaMessage/from vllm_mlx.reasoning.base import DeltaMessage/' /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_b4062c55217f4892978c99e42ace__thought__CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY="
+          }
+        ],
+        "response": {
+          "id": "6Pv1atfXB7fhytMPoueU4Ak",
+          "created": 1794505703,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"sed -i 's/from vllm_mlx.api.models import DeltaMessage/from vllm_mlx.reasoning.base import DeltaMessage/' /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_b4062c55217f4892978c99e42ace__thought__CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 210,
+            "prompt_tokens": 17190,
+            "total_tokens": 17400,
+            "completion_tokens_details": {
+              "reasoning_tokens": 145,
+              "text_tokens": 65
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 13501,
+              "image_tokens": null,
+              "text_tokens": 17190,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 13501,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 13501,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.00203673,
+        "timestamp": 1794505705.4383957
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"\"\n}",
+      "extra": {
+        "raw_output": "",
+        "returncode": 0,
+        "timestamp": 1794505705.5117853,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_b4062c55217f4892978c99e42ace__thought__CtEEAWkUfRPZCvEgMrY2+XAxcCUxVzyyg1oc4pFhbEzkcXvFec0x1jaoOYPRqRpskA4OBveMrsN1zFyZnoXkU/YeWiIbhNeZadX2GccjHKslvyRZdBB9vOf8o1yETK/1oSk+XkaFi2dgPq8uR+vQaxMr0fZQMxpBk8TteYd4ptDhloY8GHfampTdGoXApg1yI2oASpt8I4JXglMPzIeeqKmvFAuH5zKuTOLFXCKqTcGv1uLrRNh5FeeaAdGH726VdWvOjj1o02P4+5OUT1l8M4vSzGa+c1xNU5oWgT7ikOWyXPf1H5p4FTMQHFlemWQErPFo+oSzT9pdHhhNbvl3IqP2VrWc7aJ7TwLbMzfCSIYBard+tG/+UJHu7kbtG1EXeZx2zUCMYiLQ/XBWSK9uuTKgMcQmvyRFd8v5djT73Bqr+EcTovK0owdpDv9I8QazrfVfCIFVKmC/BuLca5+eKvIChPQQldF0uUiin5CzLHtAeJnY8204UtHCkN+L6FnhE/thNdp+lebrVzt+aHqP5SjXNwV6y/GjNeWY55l2usk8OzbBnTIgaUOGeP9lLrMbSOz7cO9JmKhdq8FGslu6HIPS/xXNInslY0CW8GKzOguKXv5kzDjDXV12wq10cFEwuCc0hhlKxk+/6tlsnXUmIxbjs0N8aeb1jaB/tsxNxaV60M4NUgmzFsYIKtwqyKD3PWupoJGheaKaG9CbZVqgWgIAvO0R5/xNK4RtMwyq5Q+2KV8uTGYL49eMqiCvmwY48sqyRbB4Q573oT4HBpAQTh6CztY=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA="
+          },
+          "function": {
+            "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_1c6db8fc5aff403c82ded42e59fd__thought__Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "python -m pytest /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_1c6db8fc5aff403c82ded42e59fd__thought__Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA="
+          }
+        ],
+        "response": {
+          "id": "6fv1aqXRLNCk5NoPg5zfkAc",
+          "created": 1794505705,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_1c6db8fc5aff403c82ded42e59fd__thought__Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 79,
+            "prompt_tokens": 17273,
+            "total_tokens": 17352,
+            "completion_tokens_details": {
+              "reasoning_tokens": 46,
+              "text_tokens": 33
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 16256,
+              "image_tokens": null,
+              "text_tokens": 17273,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 16256,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 16256,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0009902799999999998,
+        "timestamp": 1794505706.369979
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 1,\n  \"output\": \"============================= test session starts ==============================\\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\\ncachedir: .pytest_cache\\nrootdir: /testbed\\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\\nplugins: anyio-4.13.0\\ncollecting ... collected 1 item\\n\\ntests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content FAILED [100%]\\n\\n=================================== FAILURES ===================================\\n_______ test_delta_straddling_channel_close_splits_reasoning_and_content _______\\ntests/test_gemma4_parser_issue.py:6: in test_delta_straddling_channel_close_splits_reasoning_and_content\\n    parser = Gemma4Parser()\\n             ^^^^^^^^^^^^\\nE   NameError: name \\u0027Gemma4Parser\\u0027 is not defined\\n=========================== short test summary info ============================\\nFAILED tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content\\n============================== 1 failed in 0.04s ===============================\\n\"\n}",
+      "extra": {
+        "raw_output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\ncachedir: .pytest_cache\nrootdir: /testbed\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\nplugins: anyio-4.13.0\ncollecting ... collected 1 item\n\ntests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content FAILED [100%]\n\n=================================== FAILURES ===================================\n_______ test_delta_straddling_channel_close_splits_reasoning_and_content _______\ntests/test_gemma4_parser_issue.py:6: in test_delta_straddling_channel_close_splits_reasoning_and_content\n    parser = Gemma4Parser()\n             ^^^^^^^^^^^^\nE   NameError: name 'Gemma4Parser' is not defined\n=========================== short test summary info ============================\nFAILED tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content\n============================== 1 failed in 0.04s ===============================\n",
+        "returncode": 1,
+        "timestamp": 1794505706.8495476,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_1c6db8fc5aff403c82ded42e59fd__thought__Cv4BAWkUfRN7LtHEq31aGHh3lWE9NaP/gILnkmuR7nLvE+VN+4Ce28IPE9XDtkgKijXlk/6Odqjurh6AfR1OZH0oBoAAp4oW7ypSgJqYogpMBeZjWFIrIrH6QKJmOp87jLq9BdCyN4T7IIL8++Mjr2IeYb3BDXdcZc0nBxW/nubFrQDGCp53greg1E8uZA0a4JoVj4C/UG4ruiiPA5pgx0xfrLuYqjPsobcOYGSttzdGldqRV6geZwUvQDCWZdObkT0Nx3n/Wrx/RzTQ3DCEMsvXJdACPt4rd+HB9VcUbZvrmS0DfgcSU0n/xwf6aiLOjgVwd+e8oGDUqkOU54eNxAA=",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B"
+          },
+          "function": {
+            "arguments": "{\"command\": \"sed -i 's/parser = Gemma4Parser()/parser = Gemma4ReasoningParser()/' /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_5c7e9424fa6e422487c1f41318b4__thought__CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B"
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "sed -i 's/parser = Gemma4Parser()/parser = Gemma4ReasoningParser()/' /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_5c7e9424fa6e422487c1f41318b4__thought__CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B"
+          }
+        ],
+        "response": {
+          "id": "6_v1auujA86HytMPr5aNgAo",
+          "created": 1794505706,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B"
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"sed -i 's/parser = Gemma4Parser()/parser = Gemma4ReasoningParser()/' /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_5c7e9424fa6e422487c1f41318b4__thought__CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B"
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 112,
+            "prompt_tokens": 17653,
+            "total_tokens": 17765,
+            "completion_tokens_details": {
+              "reasoning_tokens": 61,
+              "text_tokens": 51
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 17181,
+              "image_tokens": null,
+              "text_tokens": 17653,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 17181,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 17181,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0009370299999999999,
+        "timestamp": 1794505707.8211868
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 0,\n  \"output\": \"\"\n}",
+      "extra": {
+        "raw_output": "",
+        "returncode": 0,
+        "timestamp": 1794505707.9067729,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_5c7e9424fa6e422487c1f41318b4__thought__CrUCAWkUfRPfd2vav91xEGkOscxda0j/vKOExMw04KGoNs0Qslr68ayCFic3s9Zq6VjMYcCm5RaSdJ+uHOVtAIpj8dQUMP6InFXbowalgk/CdaCzif7e4HAcrqDfhh3Mcxo0r6Lnk/UUJecMbu8t9c9vZq9ofgYnJF05+95uYjBJ4R70IIxZOkUKaD/YZ9UcnUN52S1JbnEGTXcmbrkcYhz1Ves9Awk78iGObImk8jRdZGUlzjp4RXD1JVs6okKLWZmvJenmtLDBDASVsJfo+LRH417Gwehspjtt0JOAdXH64Cz+osoqZidhP/laNfQnHbUUFelC+w/Thg2GfxV8fJgTH1fhsR7wmCdxWoEM7Xfcnxv0Zcjd1rS93g+e70mKPgRIuNqlKkONADHtXgUr2ZO8TTWUyJ1B",
+      "role": "tool"
+    },
+    {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "provider_specific_fields": {
+            "thought_signature": "CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU="
+          },
+          "function": {
+            "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+            "name": "bash"
+          },
+          "id": "call_df8f8a5eb0cb47919cb85b1bacb4__thought__CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU=",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU="
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "python -m pytest /testbed/tests/test_gemma4_parser_issue.py",
+            "tool_call_id": "call_df8f8a5eb0cb47919cb85b1bacb4__thought__CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU="
+          }
+        ],
+        "response": {
+          "id": "7Pv1apaSB6zk5NoP9_OvKQ",
+          "created": 1794505707,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": null,
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "provider_specific_fields": {
+                      "thought_signature": "CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU="
+                    },
+                    "function": {
+                      "arguments": "{\"command\": \"python -m pytest /testbed/tests/test_gemma4_parser_issue.py\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_df8f8a5eb0cb47919cb85b1bacb4__thought__CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU=",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU="
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 82,
+            "prompt_tokens": 17722,
+            "total_tokens": 17804,
+            "completion_tokens_details": {
+              "reasoning_tokens": 49,
+              "text_tokens": 33
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 17116,
+              "image_tokens": null,
+              "text_tokens": 17722,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 17116,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 17116,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.00090028,
+        "timestamp": 1794505708.7678945
+      }
+    },
+    {
+      "content": "{\n  \"returncode\": 1,\n  \"output\": \"============================= test session starts ==============================\\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\\ncachedir: .pytest_cache\\nrootdir: /testbed\\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\\nplugins: anyio-4.13.0\\ncollecting ... collected 1 item\\n\\ntests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content FAILED [100%]\\n\\n=================================== FAILURES ===================================\\n_______ test_delta_straddling_channel_close_splits_reasoning_and_content _______\\ntests/test_gemma4_parser_issue.py:13: in test_delta_straddling_channel_close_splits_reasoning_and_content\\n    assert msg.reasoning == \\\" final thought\\\"\\nE   AssertionError: assert None == \\u0027 final thought\\u0027\\nE    +  where None = DeltaMessage(role=None, content=\\u0027 final thoughtcontentHello\\u0027, reasoning=None).reasoning\\n=========================== short test summary info ============================\\nFAILED tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content\\n============================== 1 failed in 0.04s ===============================\\n\"\n}",
+      "extra": {
+        "raw_output": "============================= test session starts ==============================\nplatform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- /opt/conda/envs/testbed/bin/python\ncachedir: .pytest_cache\nrootdir: /testbed\nconfigfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)\nplugins: anyio-4.13.0\ncollecting ... collected 1 item\n\ntests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content FAILED [100%]\n\n=================================== FAILURES ===================================\n_______ test_delta_straddling_channel_close_splits_reasoning_and_content _______\ntests/test_gemma4_parser_issue.py:13: in test_delta_straddling_channel_close_splits_reasoning_and_content\n    assert msg.reasoning == \" final thought\"\nE   AssertionError: assert None == ' final thought'\nE    +  where None = DeltaMessage(role=None, content=' final thoughtcontentHello', reasoning=None).reasoning\n=========================== short test summary info ============================\nFAILED tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content\n============================== 1 failed in 0.04s ===============================\n",
+        "returncode": 1,
+        "timestamp": 1794505709.2375512,
+        "exception_info": ""
+      },
+      "tool_call_id": "call_df8f8a5eb0cb47919cb85b1bacb4__thought__CoQCAWkUfROo8SqTuzUf08MVvdcJIzFsFQR2gRQr1O4Vn82X+SY4OhRsUF3lB1DwC9lbOxCE0t3S+IdMQxEvTCABHvvUeu5BGgWsn4IOZT2Se0Iq/Gn095JsqrB8U3ILK/1I5iHBGqsmN/AmxMPCL71rCB3z7AJeOGcPliX8ikwraapgdLOs/PEnOAK+LsG9sZ2Pw6DknbjEZjstD+lDZ58b7wQFD1IANtPj2Lans0pbyPIbzfyhqd+dwStuWGZ1aGf7DwYHGd10RdCM6Ehq9aQJFTK4m/r3cAMKpRd0gtLYzlNUNSDRkpk5pUGKwNnx+6M9YTQyu1XXL+eiODOiJQc3K/gftKU=",
+      "role": "tool"
+    },
+    {
+      "content": "`test_delta_straddling_channel_close_splits_reasoning_and_content` now fails as expected, demonstrating the bug where reasoning content is not correctly parsed and is instead included in the main content or lost. This fulfills criteria (a) and provides a solid basis for a fix. I have also ensured the test file is correctly structured and imports the necessary components.\n\nI am done and will submit my work.",
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "index": 0,
+          "function": {
+            "arguments": "{\"command\": \"echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT\"}",
+            "name": "bash"
+          },
+          "id": "call_a9679bf90c104f26869b5f60f184",
+          "type": "function"
+        }
+      ],
+      "function_call": null,
+      "images": [],
+      "thinking_blocks": [],
+      "provider_specific_fields": {
+        "thought_signatures": [
+          "CpwEAWkUfRPhZGWIEPF/A6c7Nv6Kv6MEz1tqMNkWSch1GUunU5942mUvN7ozbDMun9c2m0o8+r37rxokOWyh11RHBjjHhdYeX/XrvrNAx2a5QQLMbqY9AhauRaBpuOnyrtx0WrpA+Si/o46KySY6NRTmHllYLnNvqrLsihCN72S2hQBnhbYzh7BQG1tKW4/UHWfOovNngIdg669XHOnanwX+pALPIUQQM5G5KGCm+tx/ywsNUAB4mXT1z828m3lFZDL5cMOXBofxhO5Jtf1wdLswnqp4iZIDkJ3Jq3KD5bY0XGeom7+QTC1GXCf+DCNILsK5aSUEZ1sdWuX4MpDhuMmDNkQVGn9CRc6hPUdpaTuUtJHKtmfUz4tcWB3xBNPxNWCgca2H3krQdRsXPzE2krVYmhDjhlKaTyyvw45BEJwFDSWyQhr3K5SL4zwhrZev4yovuiQny1i43HW2DNKkFaPM/q43zjl9Zp9TMSqxCMzZbYxUmLf20Wiu5jhKrFCrF5MhPD40qCB67a+j/ShGLNVv1jhY/ZSaU8MmpwPZTael4A3UP4K4q/vHP58fHpCuuHCCue8TPtgKF6DSmoVAsV0qhsip0smn4uw3WadVETxQldZ9BzcOlNb0rqwy/+b61D07zoUDhOzx71514H4YrZO/+Dq+C0JwYCp/a/Zy5ufhvdJG7XL7w23UTBDpw6tVvxcD3VtfCpLEj4PfvrR/"
+        ]
+      },
+      "extra": {
+        "actions": [
+          {
+            "command": "echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT",
+            "tool_call_id": "call_a9679bf90c104f26869b5f60f184"
+          }
+        ],
+        "response": {
+          "id": "7fv1aquMHKybo_UPqrm7oQc",
+          "created": 1794505709,
+          "model": "gemini-2.5-flash",
+          "object": "chat.completion",
+          "choices": [
+            {
+              "finish_reason": "tool_calls",
+              "index": 0,
+              "message": {
+                "content": "`test_delta_straddling_channel_close_splits_reasoning_and_content` now fails as expected, demonstrating the bug where reasoning content is not correctly parsed and is instead included in the main content or lost. This fulfills criteria (a) and provides a solid basis for a fix. I have also ensured the test file is correctly structured and imports the necessary components.\n\nI am done and will submit my work.",
+                "role": "assistant",
+                "tool_calls": [
+                  {
+                    "index": 0,
+                    "function": {
+                      "arguments": "{\"command\": \"echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT\"}",
+                      "name": "bash"
+                    },
+                    "id": "call_a9679bf90c104f26869b5f60f184",
+                    "type": "function"
+                  }
+                ],
+                "function_call": null,
+                "images": [],
+                "thinking_blocks": [],
+                "provider_specific_fields": {
+                  "thought_signatures": [
+                    "CpwEAWkUfRPhZGWIEPF/A6c7Nv6Kv6MEz1tqMNkWSch1GUunU5942mUvN7ozbDMun9c2m0o8+r37rxokOWyh11RHBjjHhdYeX/XrvrNAx2a5QQLMbqY9AhauRaBpuOnyrtx0WrpA+Si/o46KySY6NRTmHllYLnNvqrLsihCN72S2hQBnhbYzh7BQG1tKW4/UHWfOovNngIdg669XHOnanwX+pALPIUQQM5G5KGCm+tx/ywsNUAB4mXT1z828m3lFZDL5cMOXBofxhO5Jtf1wdLswnqp4iZIDkJ3Jq3KD5bY0XGeom7+QTC1GXCf+DCNILsK5aSUEZ1sdWuX4MpDhuMmDNkQVGn9CRc6hPUdpaTuUtJHKtmfUz4tcWB3xBNPxNWCgca2H3krQdRsXPzE2krVYmhDjhlKaTyyvw45BEJwFDSWyQhr3K5SL4zwhrZev4yovuiQny1i43HW2DNKkFaPM/q43zjl9Zp9TMSqxCMzZbYxUmLf20Wiu5jhKrFCrF5MhPD40qCB67a+j/ShGLNVv1jhY/ZSaU8MmpwPZTael4A3UP4K4q/vHP58fHpCuuHCCue8TPtgKF6DSmoVAsV0qhsip0smn4uw3WadVETxQldZ9BzcOlNb0rqwy/+b61D07zoUDhOzx71514H4YrZO/+Dq+C0JwYCp/a/Zy5ufhvdJG7XL7w23UTBDpw6tVvxcD3VtfCpLEj4PfvrR/"
+                  ]
+                }
+              },
+              "provider_specific_fields": {
+                "native_finish_reason": "STOP"
+              }
+            }
+          ],
+          "usage": {
+            "completion_tokens": 224,
+            "prompt_tokens": 18128,
+            "total_tokens": 18352,
+            "completion_tokens_details": {
+              "reasoning_tokens": 111,
+              "text_tokens": 113
+            },
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 17086,
+              "image_tokens": null,
+              "text_tokens": 18128,
+              "video_tokens": null,
+              "initial_prompt_tokens": null,
+              "cached_tokens_details": {
+                "text_tokens": 17086,
+                "audio_tokens": null,
+                "image_tokens": null
+              }
+            },
+            "cache_read_input_tokens": 17086,
+            "cache_creation_input_tokens": null
+          },
+          "vertex_ai_grounding_metadata": [],
+          "vertex_ai_url_context_metadata": [],
+          "vertex_ai_safety_results": [],
+          "vertex_ai_citation_metadata": [],
+          "service_tier": "default"
+        },
+        "cost": 0.0013851800000000002,
+        "timestamp": 1794505710.8353658
+      }
+    },
+    {
+      "role": "exit",
+      "content": "",
+      "extra": {
+        "exit_status": "Submitted",
+        "submission": ""
+      }
+    }
+  ],
+  "trajectory_format": "mini-swe-agent-1.1"
+}

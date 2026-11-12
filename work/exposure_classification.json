@@ -1,0 +1,158 @@
+{
+ "youssofal__mtplx-21": [
+  [
+   "gold",
+   "ISSUE_TEXT",
+   "if self._START_MARKER.startswith(lowered):"
+  ],
+  [
+   "gold",
+   "ISSUE_TEXT",
+   "lowered = stripped.lower()"
+  ],
+  [
+   "gold",
+   "ISSUE_TEXT",
+   "return [{\"content\": content}]"
+  ],
+  [
+   "gold",
+   "ISSUE_TEXT",
+   "stripped = self._pending.lstrip()"
+  ]
+ ],
+ "raullenchai__rapid-mlx-289": [
+  [
+   "test_patch",
+   "AGENT_AUTHORED",
+   "from vllm_mlx.reasoning.gemma4_parser import Gemma4ReasoningParser"
+  ]
+ ],
+ "python-wheel-build__fromager-1124": [
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "------------------------------"
+  ],
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "req_type: RequirementType | None = None,"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "\"https://pypi.org/simple/test-pkg/\","
+  ],
+  [
+   "test_patch",
+   "AGENT_AUTHORED",
+   "from fromager.requirements_file import RequirementType"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "headers={\"Content-Type\": _PYPI_SIMPLE_JSON_CONTENT_TYPE},"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "json=_cooldown_json_response,"
+  ],
+  [
+   "test_patch",
+   "AGENT_AUTHORED",
+   "req_type=RequirementType.TOP_LEVEL,"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "with requests_mock.Mocker() as r:"
+  ]
+ ],
+ "itsdnns__docsight-437": [
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "\"timestamp\": \"2026-03-01T06:00:00Z\","
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "\"timestamp\": \"2026-03-08T06:00:00Z\","
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "assert delta[\"verdict\"] == \"unchanged\""
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "from app.modules.comparison.routes import _aggregate_period"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "from app.modules.comparison.routes import _aggregate_period, _compute_delta"
+  ]
+ ],
+ "zarr-developers__virtualizarr-979": [
+  [
+   "test_patch",
+   "AGENT_AUTHORED",
+   "parser = KerchunkJSONParser()"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "registry = ObjectStoreRegistry({\"memory://\": memory_store})"
+  ]
+ ],
+ "ultraplot__ultraplot-696": [
+  [
+   "test_patch",
+   "ISSUE_TEXT",
+   "axs[-1].set_visible(False)"
+  ]
+ ],
+ "pyinfra-dev__pyinfra-1665": [
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "host.connector_data[\"su_askpass_path\"] = None"
+  ],
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "host.connector_data[\"sudo_askpass_path\"] = None"
+  ],
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "host.run_shell_command(StringCommand(\"rm\", \"-f\", QuoteString(su_askpass_path)))"
+  ],
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "host.run_shell_command(StringCommand(\"rm\", \"-f\", QuoteString(sudo_askpass_path)))"
+  ],
+  [
+   "test_patch",
+   "REPO_OUTPUT(tool obs)",
+   "remove_any_sudo_askpass_file(host)"
+  ]
+ ],
+ "cs-si__eodag-2176": [
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "+ eodag_queryable_fieldinfo.metadata"
+  ],
+  [
+   "gold",
+   "REPO_OUTPUT(tool obs)",
+   "field_definition[1].metadata"
+  ]
+ ]
+}
