@@ -1,0 +1,16 @@
+diff --git a/ultraplot/axes/cartesian.py b/ultraplot/axes/cartesian.py
+index 696639b..1c79c9d 100644
+--- a/ultraplot/axes/cartesian.py
++++ b/ultraplot/axes/cartesian.py
+@@ -595,9 +595,9 @@ class CartesianAxes(shared._SharedAxes, plot.PlotAxes):
+                     break
+             # When we have a panel, let the panel have
+             # the labels and turn-off for this axis + side.
+-            if has_panel:
+-                continue
+             is_border = self in border_axes.get(border_side, [])
++            if has_panel and not is_border:
++                continue
+             is_panel = (
+                 self in shared_axis._panel_dict[border_side]
+                 and self == shared_axis._panel_dict[border_side][-1]
