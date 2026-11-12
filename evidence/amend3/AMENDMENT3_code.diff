@@ -1,0 +1,249 @@
+diff --git a/PREREGISTRATION_v2.md b/PREREGISTRATION_v2.md
+index e097f3f..d17c9f9 100644
+--- a/PREREGISTRATION_v2.md
++++ b/PREREGISTRATION_v2.md
+@@ -196,3 +196,25 @@ Changes (nothing else changes: prompt, model, caps, mounts, network, rules, metr
+ 5. Before resuming, one end-to-end smoke (preflight -> stage1 -> freeze -> stage2 -> stage3 incl. ground truth) on
+    schemathesis-4087 (no verified non-sample instance exists: all 7 non-sample candidates failed verification). It is NOT
+    a result; evidence in evidence/smoke2/; the instance is re-run from scratch in the real run. Its cost counts toward the cap.
++
++## Amendment 3 (user-approved 18:42; minimal per user principle 18:44; LAST code change before the scored run)
++Root cause (evidence/smoke2_rca/RCA.md, commit 0cec02e): after SMOKE2's legitimate EMPTY_DIFF verdict, an ad-hoc diagnostic
++(operator error) copied the GOLD patch + a fake record into results/patches/<iid>/; the frozen evaluator would evaluate any
++file at that path because it was not bound to the produced artifact (no hash/size/run-ID/base check, no seal).
++Change (integrity binding only; prompts, model, dataset, sample, thresholds, test-file policy unchanged):
++- pipeline.py mints a unique producer run ID per patch run and passes it to stage 2 and stage 3; commits "STAGE2 SEAL" of
++  results/patches/<iid> before stage 3; scans results/ for gold/test_patch bytes before each issue; exit code 4 from stage 2/3
++  = INTEGRITY_FAIL -> halt, recorded and reported, never fixed mid-run.
++- oh_run.py records base_sha and run_id in its result.
++- stage2_patch.py records artifact {path, sha256, bytes, empty, raw_path, raw_sha256, raw_bytes (exact agent output, separate
++  hash), producer_run_id, producer_reported_run_id, base_sha, original_base_commit, produced_at}; makes the artifact dir
++  read-only (0555/0444); refuses to overwrite a sealed artifact.
++- stage3_eval.py verifies identity + content (run ID == expected == producer-reported, path, sha256, byte length, empty
++  status, raw sha/length, base SHA vs stage-1 sanitized base and dataset base_commit, sealed in git, in-memory copy) at
++  start, immediately before ground truth, immediately before the B gate, and before the verdict. Any failure ->
++  results/integrity_fail_<iid>.json, exit 4, no A/B verdict. A legitimate filtered EMPTY_DIFF stays an ordinary outcome.
++- Rule: diagnostics only on scratch copies; never write to results/ or work/runs/; never copy gold patches into production dirs.
++Regression (hermetic, no model calls): original 9-test suite frozen 5 fail / repaired 7 pass + 2 "fail" by PermissionError
++(c, c2: the plain late write is now blocked by the read-only artifact before the evaluator is reached; the same attacks with
++owner chmod are refused by the evaluator in test_v3_c_c2_variants_with_owner_chmod). Amendment-3 suite (13 tests, written
++before the fix): frozen 13/13 fail, repaired 13/13 pass. Outputs: evidence/amend3/.
+diff --git a/lib/pipeline.py b/lib/pipeline.py
+index e8789b4..887025a 100644
+--- a/lib/pipeline.py
++++ b/lib/pipeline.py
+@@ -11,10 +11,16 @@ def log(m):
+ def free_gb(): st = os.statvfs("/"); return st.f_bavail * st.f_frsize / 1e9
+ order = sample()["instance_ids_in_order"]; items = {x["instance_id"]: x for x in sample()["instances"]}
+ lim = int(sys.argv[1]) if len(sys.argv) > 1 else 30
++def gold_scan():  # Amendment 3: no gold patch / test_patch bytes may exist in production dirs
++    import glob as _g
++    bad = {H(open(f, "rb").read()) for f in _g.glob(f"{ROOT}/work/inst/*/gold.diff") + _g.glob(f"{ROOT}/work/inst/*/test.diff")} - {H(b"")}
++    return [f for f in _g.glob(f"{ROOT}/results/**/*", recursive=True) if os.path.isfile(f) and H(open(f, "rb").read()) in bad]
+ for n, iid in enumerate(order[:lim], 1):
+     if os.path.exists(f"{ROOT}/results/eval_{iid}.json"): continue
+     if free_gb() < 20: log(f"STOP: free disk {free_gb():.1f} GB < 20 GB floor"); break
+     if agent.spent() + 0.25 + 0.50 > 25.0: log(f"STOP: budget (spent {agent.spent():.3f})"); break
++    g = gold_scan()
++    if g: log(f"INTEGRITY_FAIL: gold/test_patch bytes in production dirs {g} -> halted"); break
+     img = items[iid]["docker_image"]
+     if sh("docker", "image", "inspect", img).returncode: 
+         r = sh("docker", "pull", "-q", img); log(f"pull {img}: rc={r.returncode}")
+@@ -35,10 +41,15 @@ for n, iid in enumerate(order[:lim], 1):
+     sh("git", "add", f"results/testgen/{iid}"); c = sh("git", "commit", "-qm", f"STAGE1 FREEZE {iid} (generated tests + pre-fix eval, before patch generation)")
+     log(f"stage1 frozen: commit {sh('git','rev-parse','--short','HEAD').stdout.strip()}")
+     log(f"#{n} {iid}: stage2 patch")
+-    r = sh(PY, "lib/stage2_patch.py", iid); log(r.stdout.strip() or r.stderr[-1500:])
++    rid = f"pa-{iid}-{time.strftime('%Y%m%dT%H%M%S')}-{os.urandom(4).hex()}"
++    r = sh(PY, "lib/stage2_patch.py", iid, rid); log(r.stdout.strip() or r.stderr[-1500:])
++    if r.returncode == 4: log("INTEGRITY_FAIL (stage2) -> pipeline halted"); break
+     if r.returncode: log("stage2 crashed; stopping"); break
++    sh("git", "add", f"results/patches/{iid}"); c = sh("git", "commit", "-qm", f"STAGE2 SEAL {iid} run {rid} (artifact sealed before evaluation)")
++    log(f"stage2 sealed: commit {sh('git','rev-parse','--short','HEAD').stdout.strip()} rc={c.returncode} run_id={rid}")
+     log(f"#{n} {iid}: stage3 eval")
+-    r = sh(PY, "lib/stage3_eval.py", iid); log(r.stdout.strip() or r.stderr[-1500:])
++    r = sh(PY, "lib/stage3_eval.py", iid, rid); log(r.stdout.strip() or r.stderr[-1500:])
++    if r.returncode == 4: log("INTEGRITY_FAIL (stage3) -> pipeline halted; no A/B verdict emitted"); break
+     if r.returncode: log("stage3 crashed; stopping"); break
+     open(f"{ROOT}/results/digests.jsonl", "a").write(json.dumps({"instance_id": iid, "image": img, "repo_digest": dig, "scored_at": time.strftime("%FT%T%z")}) + "\n")
+     sh("git", "add", f"results/patches/{iid}", f"results/eval_{iid}.json", "results/digests.jsonl"); sh("git", "commit", "-qm", f"STAGE2+3 {iid}")
+diff --git a/lib/stage2_patch.py b/lib/stage2_patch.py
+index da433c3..d0d109d 100644
+--- a/lib/stage2_patch.py
++++ b/lib/stage2_patch.py
+@@ -5,30 +5,41 @@ sys.path.insert(0, os.path.dirname(__file__))
+ import agent
+ from common2 import ROOT, H, items, strip_tests
+ iid = sys.argv[1]
++RID = sys.argv[2] if len(sys.argv) > 2 else None  # Amendment 3: producer run ID minted by the pipeline
++if not RID: print(iid, "INTEGRITY_FAIL: no producer run ID"); sys.exit(4)
++if os.path.exists(f"{ROOT}/results/patches/{iid}") and not os.access(f"{ROOT}/results/patches/{iid}", os.W_OK):
++    print(iid, "INTEGRITY_FAIL: a sealed artifact already exists; refusing to overwrite"); sys.exit(4)
+ if agent.spent() + 0.50 > agent.BUDGET: print(iid, "BUDGET_STOP"); sys.exit(0)
+ rd = f"{ROOT}/work/runs/patch/{iid}"; shutil.rmtree(rd, ignore_errors=True); os.makedirs(rd)
+-env = dict(os.environ, LC_ROLE="patch-openhands", LC_RUNID=f"pa-{iid}")
++env = dict(os.environ, LC_ROLE="patch-openhands", LC_RUNID=RID)
+ p = subprocess.run(["timeout", "1700", f"{ROOT}/.ohvenv/bin/python", f"{ROOT}/oh/oh_run.py", iid, rd, "0.50", "50", "1200"], env=env, capture_output=True, text=True)
+ open(f"{rd}/oh_stdout.log", "w").write(p.stdout[-50000:] + "\n---stderr---\n" + p.stderr[-50000:])
+ res = json.load(open(f"{rd}/oh_result.json")) if os.path.exists(f"{rd}/oh_result.json") else {"error": f"oh_run exit {p.returncode}", "cost_usd": None}
+ if not os.path.exists(f"{rd}/oh_result.json"):  # crashed before ledger write: record proxy ledger if any
+     lj = f"{rd}/llm_ledger.json"; c = json.load(open(lj))["cost"] if os.path.exists(lj) else 0.0
+-    open(agent.LEDGER, "a").write(json.dumps({"run_id": f"pa-{iid}", "role": "patch-openhands", "cost_usd": c, "note": "oh_run crashed"}) + "\n"); res["cost_usd"] = c
++    open(agent.LEDGER, "a").write(json.dumps({"run_id": RID, "role": "patch-openhands", "cost_usd": c, "note": "oh_run crashed"}) + "\n"); res["cost_usd"] = c
+ raw = open(f"{rd}/patch_raw.diff").read() if os.path.exists(f"{rd}/patch_raw.diff") else ""
++agent_raw = raw  # exact agent output, hashed separately
+ parts = [x for x in re.split(r'(?=^diff --git )', raw, flags=re.M) if x.startswith("diff --git ")]
+ raw = "".join(x for x in parts if not any(b in x.split("\n", 1)[0] for b in agent.BENIGN))
+ src, dropped = strip_tests(raw)
+ last = res.get("final_message", "") or ""
+ UNC = re.compile(r"\b(partial(ly)?|uncertain|not sure|unsure|could not|couldn't|unable|cannot verify|may not|might not|TODO|workaround|not fully)\b", re.I)
+ od = f"{ROOT}/results/patches/{iid}"; shutil.rmtree(od, ignore_errors=True); os.makedirs(od)
+-open(f"{od}/patch_raw.diff", "w").write(raw); open(f"{od}/patch.diff", "w").write(src); open(f"{od}/final_message.txt", "w").write(last)
++open(f"{od}/patch_agent_output.diff", "w").write(agent_raw); open(f"{od}/patch_raw.diff", "w").write(raw); open(f"{od}/patch.diff", "w").write(src); open(f"{od}/final_message.txt", "w").write(last)
+ finished = "FINISHED" in str(res.get("execution_status")) and not res.get("wall_timeout") and not res.get("error") and not res.get("run_error")
+ A = "APPROVE" if (finished and src.strip()) else "REJECT"
+ reason = "" if A == "APPROVE" else ("EMPTY_DIFF" if finished else ("WALL_TIMEOUT" if res.get("wall_timeout") else ("ERROR/LIMIT: " + str(res.get("error") or res.get("run_error") or res.get("execution_status"))[:200])))
+ rec = {"instance_id": iid, "engine": "OpenHands SDK 1.62.0 agent-server (Docker sandbox)", "agent": {k: v for k, v in res.items() if k not in ("final_message",)},
+        "cost_usd": res.get("cost_usd"), "patch_sha256": H(src), "patch_raw_sha256": H(raw), "patch_empty": not src.strip(),
+-       "dropped_test_files": [d for d in dropped], "A_decision": A, "A_reason": reason,
++       "dropped_test_files": [d for d in dropped],
++       "artifact": {"path": f"results/patches/{iid}/patch.diff", "sha256": H(src), "bytes": len(src.encode()), "empty": not src.strip(),
++                    "raw_path": f"results/patches/{iid}/patch_agent_output.diff", "raw_sha256": H(agent_raw), "raw_bytes": len(agent_raw.encode()),
++                    "producer_run_id": RID, "producer_reported_run_id": res.get("run_id"), "base_sha": res.get("base_sha"),
++                    "original_base_commit": items()[iid]["base_commit"], "produced_at": __import__("time").strftime("%FT%T%z")}, "A_decision": A, "A_reason": reason,
+        "final_message_uncertain": bool(UNC.search(last)), "uncertainty_matches": sorted({m.group(0).lower() for m in UNC.finditer(last)})}
+ json.dump(rec, open(f"{od}/record.json", "w"), indent=2, default=str)
++for f in os.listdir(od): os.chmod(f"{od}/{f}", 0o444)
++os.chmod(od, 0o555)  # canonical artifact: read-only from production on
+ shutil.rmtree(f"{rd}/conda", ignore_errors=True); shutil.rmtree(f"{rd}/ws", ignore_errors=True)
+ print(iid, A, reason, res.get("cost_usd"), len(src))
+diff --git a/lib/stage3_eval.py b/lib/stage3_eval.py
+index 9c1f785..d0a1899 100644
+--- a/lib/stage3_eval.py
++++ b/lib/stage3_eval.py
+@@ -1,14 +1,38 @@
+ """STAGE 3 — deterministic evaluation of one issue: gate (B) on pre+patch, and ground truth (hidden dev tests) for scoring only."""
+-import json, os, sys, glob, re, subprocess
++import json, os, sys, glob, re, subprocess, hashlib
+ sys.path.insert(0, os.path.dirname(__file__))
+ import dockrun
+ from common2 import ROOT, items, pytest_cmd, is_testish, split_diff, diff_path
+ iid = sys.argv[1]; it = items()[iid]; img = it["docker_image"]
++EXPECTED_RID = sys.argv[2] if len(sys.argv) > 2 else None
+ tg = f"{ROOT}/results/testgen/{iid}"; pdir = f"{ROOT}/results/patches/{iid}"
+ pre = json.load(open(f"{tg}/pre_eval.json")); prec = json.load(open(f"{pdir}/record.json"))
+-patch = open(f"{pdir}/patch.diff").read()
++# ---- Amendment 3: every evaluation is bound to the exact artifact produced by run EXPECTED_RID ----
++def integrity_fail(msg):
++    json.dump({"instance_id": iid, "status": "INTEGRITY_FAIL", "detail": msg, "expected_run_id": EXPECTED_RID}, open(f"{ROOT}/results/integrity_fail_{iid}.json", "w"), indent=2)
++    print(iid, "INTEGRITY_FAIL", msg); sys.exit(4)
++def verify(where):
++    try: R = json.load(open(f"{pdir}/record.json")); A = R["artifact"]
++    except Exception as e: integrity_fail(f"[{where}] no valid stage-2 artifact record: {e!r}")
++    b = open(f"{pdir}/patch.diff", "rb").read(); rb = open(f"{pdir}/patch_agent_output.diff", "rb").read() if os.path.exists(f"{pdir}/patch_agent_output.diff") else None
++    chk = [("run ID", EXPECTED_RID is not None and A.get("producer_run_id") == EXPECTED_RID == A.get("producer_reported_run_id")),
++           ("path", A.get("path") == os.path.relpath(f"{pdir}/patch.diff", ROOT)),
++           ("sha256", hashlib.sha256(b).hexdigest() == A.get("sha256") == R.get("patch_sha256")),
++           ("byte length", len(b) == A.get("bytes")),
++           ("empty status", bool(A.get("empty")) == bool(R.get("patch_empty")) == (not b.decode(errors="replace").strip())),
++           ("raw sha256/length", rb is not None and hashlib.sha256(rb).hexdigest() == A.get("raw_sha256") and len(rb) == A.get("raw_bytes")),
++           ("base SHA", A.get("original_base_commit") == it["base_commit"] and A.get("base_sha") == json.load(open(f"{tg}/record.json")).get("sanitized_base_sha")),
++           ("in-memory copy", "patch" not in globals() or hashlib.sha256(patch.encode()).hexdigest() == A.get("sha256"))]
++    for f in ("patch.diff", "patch_agent_output.diff", "record.json"):
++        rel = os.path.relpath(f"{pdir}/{f}", ROOT)
++        chk.append((f"sealed {f}", not subprocess.run(["git", "-C", ROOT, "ls-files", "--error-unmatch", rel], capture_output=True).returncode
++                    and not subprocess.run(["git", "-C", ROOT, "diff", "--quiet", "HEAD", "--", rel], capture_output=True).returncode))
++    bad = [n for n, ok in chk if not ok]
++    if bad: integrity_fail(f"[{where}] failed checks: {bad}")
++    return b.decode(), R
++patch, prec = verify("start")
+ tests = {os.path.relpath(f, f"{tg}/tests"): open(f).read() for f in glob.glob(f"{tg}/tests/**/*.py", recursive=True)}
+-out = {"instance_id": iid}
++out = {"instance_id": iid, "evaluated_patch_sha256": prec["artifact"]["sha256"], "evaluated_patch_bytes": prec["artifact"]["bytes"], "producer_run_id": EXPECTED_RID}
+ PASSY = ("PASSED",)
+ def unit_pass(unit, oc):
+     if unit.endswith("::<COLLECTION_ERROR>"):
+@@ -39,6 +63,7 @@ if prec["patch_empty"]:
+     out.update(B_decision="REJECT", B_reason="NO_PATCH", gt_correct=False, gt_note="empty patch")
+ else:
+     # ---------- ground truth (scoring only; never shown to A or B) ----------
++    verify("before ground truth")
+     gt = dockrun.run(img, [patch, open(f"{ROOT}/work/inst/{iid}/test.diff").read()], cmd=it["test_cmd"])
+     f2p_fail = [t for t in it["FAIL_TO_PASS"] if gt["outcomes"].get(t) != "PASSED"]
+     p2p = json.load(open(f"{ROOT}/work/inst/{iid}/meta.json"))["P2P_eff"]
+@@ -52,6 +77,7 @@ else:
+         out.update(B_decision="REJECT", B_reason="REJECT_INSUFFICIENT_EVIDENCE",
+                    B_detail="clarification requested" if os.path.exists(f"{tg}/CLARIFICATION_NEEDED.md") else ("no tests" if not tests else "no generated test fails on pre-fix"))
+     else:
++        verify("before B gate")
+         runs = [dockrun.run(img, [patch], files=tests, cmd=pytest_cmd(tests)) for _ in range(2)]
+         if any(r["apply_fail"] for r in runs):
+             out.update(B_decision="REJECT", B_reason="REJECT_INVALID_PATCH", B_detail="patch does not apply")
+@@ -78,6 +104,7 @@ else:
+             else:
+                 out.update(B_decision="REJECT", B_reason="REJECT_INVALID_PATCH",
+                            B_detail=("discriminating tests fail on patch" if not ok_tests else "") + ("; " if (not ok_tests and not p2p_ok) else "") + ("P2P broken: " + p2p_detail if not p2p_ok else ""))
++verify("before verdict")
+ out["A_decision"] = prec["A_decision"]
+ json.dump(out, open(f"{ROOT}/results/eval_{iid}.json", "w"), indent=2)
+ print(iid, "A", out["A_decision"], "B", out["B_decision"], out.get("B_reason"), "GT", out.get("gt_correct"))
+diff --git a/oh/oh_run.py b/oh/oh_run.py
+index e0a2954..c8c4f2a 100644
+--- a/oh/oh_run.py
++++ b/oh/oh_run.py
+@@ -91,7 +91,7 @@ try:
+         if e.get("source") == "agent" and ("FinishAction" in t or e.get("kind") in ("MessageEvent",)): final_msg = t[:4000]
+ except Exception as e: res["final_msg_error"] = repr(e)
+ res["litellm_accumulated_cost"] = acc; res["proxy_metered_cost"] = (res["llm"] or {}).get("cost", 0.0)
+-res["cost_usd"] = max(acc, res["proxy_metered_cost"]); res["final_message"] = final_msg; res["wall_seconds"] = round(time.time() - t0); res["diff_bytes"] = len(diff)
++res["base_sha"] = base; res["run_id"] = os.environ.get("LC_RUNID"); res["cost_usd"] = max(acc, res["proxy_metered_cost"]); res["final_message"] = final_msg; res["wall_seconds"] = round(time.time() - t0); res["diff_bytes"] = len(diff)
+ json.dump(res, open(f"{out}/oh_result.json", "w"), indent=2, default=str)
+ with open(A.LEDGER, "a") as f: f.write(json.dumps({"run_id": os.environ.get("LC_RUNID", f"oh-feasibility-{iid}"), "role": os.environ.get("LC_ROLE", "oh-feasibility"), "cost_usd": res["cost_usd"], "ts": time.strftime("%FT%T%z")}) + "\n")
+ print(json.dumps({k: res.get(k) for k in ("execution_status", "error", "cost_usd", "wall_seconds", "diff_bytes", "n_events")}))
+diff --git a/tests/regress/test_patch_integrity.py b/tests/regress/test_patch_integrity.py
+index 025361d..8669b6e 100644
+--- a/tests/regress/test_patch_integrity.py
++++ b/tests/regress/test_patch_integrity.py
+@@ -28,7 +28,8 @@ LATE_DIFF = SRC_DIFF.replace("return 2", "return 3")  # e.g. a gold/diagnostic f
+ FAKE_OH = r'''import json, os, sys
+ iid, out = sys.argv[1], sys.argv[2]; os.makedirs(out, exist_ok=True)
+ open(os.path.join(out, "patch_raw.diff"), "w").write(open(os.environ["LC_FAKE_RAW"]).read())
+-json.dump({"execution_status": "ConversationExecutionStatus.FINISHED", "cost_usd": 0.0, "final_message": "done"}, open(os.path.join(out, "oh_result.json"), "w"))
++json.dump({"execution_status": "ConversationExecutionStatus.FINISHED", "cost_usd": 0.0, "final_message": "done",
++           "run_id": os.environ.get("LC_RUNID"), "base_sha": os.environ.get("LC_FAKE_BASE", "b" * 40)}, open(os.path.join(out, "oh_result.json"), "w"))
+ '''
+ FAKE_DOCKRUN = r'''import json, os, hashlib
+ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+@@ -37,6 +38,10 @@ class AllPass(dict):
+ def parse_pytest(s): return {}
+ def run(image, patches=(), files=None, cmd="", timeout=900, mem="3g", label="x"):
+     open(os.path.join(ROOT, "work", "dockrun_calls.jsonl"), "a").write(json.dumps({"patch_sha256": [hashlib.sha256(p.encode()).hexdigest() for p in patches], "n_files": len(files or {})}) + "\n")
++    if os.environ.get("LC_FAKE_TAMPER_AFTER_FIRST_RUN"):
++        import glob, stat
++        for f in glob.glob(os.path.join(ROOT, "results", "patches", "*", "patch.diff")):
++            os.chmod(os.path.dirname(f), 0o755); os.chmod(f, 0o644); open(f, "a").write("+tampered\n")
+     return {"outcomes": AllPass(), "rc": 0, "timeout": False, "apply_fail": False, "test_exit": 0, "log": ""}
+ '''
+ def make_root():
+@@ -53,15 +58,17 @@ def make_root():
+     json.dump({"P2P_eff": ["t::p2p"]}, open(os.path.join(r, "work", "inst", IID, "meta.json"), "w"))
+     open(os.path.join(r, "results", "testgen", IID, "tests", "pkg", "test_gen.py"), "w").write("def test_x():\n    assert True\n")
+     json.dump({"discriminating_units": ["pkg/test_gen.py::test_x"]}, open(os.path.join(r, "results", "testgen", IID, "pre_eval.json"), "w"))
++    json.dump({"instance_id": IID, "sanitized_base_sha": "b" * 40}, open(os.path.join(r, "results", "testgen", IID, "record.json"), "w"))
+     open(os.path.join(r, "work", "cost_ledger.jsonl"), "w").write("")
+     for c in (["init", "-q"], ["add", "-A"], ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "init"]):
+         subprocess.run(["git", "-C", r, *c], capture_output=True)
+     return r
+-def stage2(r, raw):
++RID = "pa-fake__repo-1-test-0001"  # producer run ID minted by the pipeline and passed to stage 2 and stage 3 (frozen code ignores the extra argv)
++def stage2(r, raw, rid=RID, env_extra=None):
+     p = os.path.join(r, "raw_in.diff"); open(p, "w").write(raw)
+-    return subprocess.run([PY, os.path.join(r, "lib", "stage2_patch.py"), IID], cwd=r, capture_output=True, text=True, env=dict(os.environ, LC_FAKE_RAW=p))
+-def stage3(r):
+-    return subprocess.run([PY, os.path.join(r, "lib", "stage3_eval.py"), IID], cwd=r, capture_output=True, text=True)
++    return subprocess.run([PY, os.path.join(r, "lib", "stage2_patch.py"), IID, rid], cwd=r, capture_output=True, text=True, env=dict(os.environ, LC_FAKE_RAW=p, **(env_extra or {})))
++def stage3(r, rid=RID, env_extra=None):
++    return subprocess.run([PY, os.path.join(r, "lib", "stage3_eval.py"), IID, rid], cwd=r, capture_output=True, text=True, env=dict(os.environ, **(env_extra or {})))
+ def seal(r):  # what the pipeline does between stage 2 and stage 3 (Amendment 3 makes this a mandatory, checked seal commit)
+     subprocess.run(["git", "-C", r, "add", "-A"], capture_output=True); subprocess.run(["git", "-C", r, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "seal"], capture_output=True)
+ pdir = lambda r: os.path.join(r, "results", "patches", IID)

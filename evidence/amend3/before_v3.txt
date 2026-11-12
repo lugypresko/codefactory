@@ -1,0 +1,23 @@
+FAIL test_v3_gold_substitution_reproduced_and_refused: AssertionError: fake__repo-1 A n/a (diagnostic) B APPROVE  GT True
+
+FAIL test_v3_changed_bytes_same_length: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_wrong_hash_in_record: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_wrong_size_in_record: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_wrong_run_id: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_empty_flag_mismatch: AssertionError: fake__repo-1 A APPROVE B REJECT NO_PATCH GT False
+
+FAIL test_v3_wrong_base_sha: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_raw_and_filtered_hashes_kept_separately: AssertionError: 
+FAIL test_v3_legit_filtered_empty_diff_is_ordinary_outcome: AssertionError: 
+FAIL test_v3_tamper_between_gt_and_gate_is_caught: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_canonical_artifacts_read_only_after_production: AssertionError: a plain cp/write by a diagnostic must fail
+FAIL test_v3_c_c2_variants_with_owner_chmod: AssertionError: fake__repo-1 A APPROVE B APPROVE  GT True
+
+FAIL test_v3_pipeline_refuses_gold_bytes_in_results: AssertionError: pipeline must scan production dirs for gold/test_patch bytes and halt
+13 failed

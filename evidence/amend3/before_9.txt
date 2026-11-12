@@ -1,0 +1,10 @@
+FAIL test_a_valid_patch_classified_and_bound: AssertionError: eval record must bind the evaluated artifact's sha256 (missing => unbound)
+PASS test_b_empty_patch_classified
+PASS test_b2_truly_empty_raw
+FAIL test_c_late_patch_after_empty_verdict_is_refused: AssertionError: late file was evaluated
+FAIL test_c2_late_overwrite_of_nonempty_patch_is_refused: AssertionError: evaluator evaluated a file that is not the produced artifact
+FAIL test_c3_unsealed_patch_is_refused: AssertionError: evaluation must require the stage-2 seal commit
+PASS test_c4_late_write_in_agent_rundir_ignored
+PASS test_d_stale_previous_artifacts_replaced
+FAIL test_e_pipeline_seals_before_eval: AssertionError: pipeline must commit (seal) results/patches/<iid> between stage 2 and stage 3
+5 failed

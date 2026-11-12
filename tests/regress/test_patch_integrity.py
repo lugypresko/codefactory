@@ -28,7 +28,8 @@ LATE_DIFF = SRC_DIFF.replace("return 2", "return 3")  # e.g. a gold/diagnostic f
 FAKE_OH = r'''import json, os, sys
 iid, out = sys.argv[1], sys.argv[2]; os.makedirs(out, exist_ok=True)
 open(os.path.join(out, "patch_raw.diff"), "w").write(open(os.environ["LC_FAKE_RAW"]).read())
-json.dump({"execution_status": "ConversationExecutionStatus.FINISHED", "cost_usd": 0.0, "final_message": "done"}, open(os.path.join(out, "oh_result.json"), "w"))
+json.dump({"execution_status": "ConversationExecutionStatus.FINISHED", "cost_usd": 0.0, "final_message": "done",
+           "run_id": os.environ.get("LC_RUNID"), "base_sha": os.environ.get("LC_FAKE_BASE", "b" * 40)}, open(os.path.join(out, "oh_result.json"), "w"))
 '''
 FAKE_DOCKRUN = r'''import json, os, hashlib
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,6 +38,10 @@ class AllPass(dict):
 def parse_pytest(s): return {}
 def run(image, patches=(), files=None, cmd="", timeout=900, mem="3g", label="x"):
     open(os.path.join(ROOT, "work", "dockrun_calls.jsonl"), "a").write(json.dumps({"patch_sha256": [hashlib.sha256(p.encode()).hexdigest() for p in patches], "n_files": len(files or {})}) + "\n")
+    if os.environ.get("LC_FAKE_TAMPER_AFTER_FIRST_RUN"):
+        import glob, stat
+        for f in glob.glob(os.path.join(ROOT, "results", "patches", "*", "patch.diff")):
+            os.chmod(os.path.dirname(f), 0o755); os.chmod(f, 0o644); open(f, "a").write("+tampered\n")
     return {"outcomes": AllPass(), "rc": 0, "timeout": False, "apply_fail": False, "test_exit": 0, "log": ""}
 '''
 def make_root():
@@ -53,15 +58,17 @@ def make_root():
     json.dump({"P2P_eff": ["t::p2p"]}, open(os.path.join(r, "work", "inst", IID, "meta.json"), "w"))
     open(os.path.join(r, "results", "testgen", IID, "tests", "pkg", "test_gen.py"), "w").write("def test_x():\n    assert True\n")
     json.dump({"discriminating_units": ["pkg/test_gen.py::test_x"]}, open(os.path.join(r, "results", "testgen", IID, "pre_eval.json"), "w"))
+    json.dump({"instance_id": IID, "sanitized_base_sha": "b" * 40}, open(os.path.join(r, "results", "testgen", IID, "record.json"), "w"))
     open(os.path.join(r, "work", "cost_ledger.jsonl"), "w").write("")
     for c in (["init", "-q"], ["add", "-A"], ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "init"]):
         subprocess.run(["git", "-C", r, *c], capture_output=True)
     return r
-def stage2(r, raw):
+RID = "pa-fake__repo-1-test-0001"  # producer run ID minted by the pipeline and passed to stage 2 and stage 3 (frozen code ignores the extra argv)
+def stage2(r, raw, rid=RID, env_extra=None):
     p = os.path.join(r, "raw_in.diff"); open(p, "w").write(raw)
-    return subprocess.run([PY, os.path.join(r, "lib", "stage2_patch.py"), IID], cwd=r, capture_output=True, text=True, env=dict(os.environ, LC_FAKE_RAW=p))
-def stage3(r):
-    return subprocess.run([PY, os.path.join(r, "lib", "stage3_eval.py"), IID], cwd=r, capture_output=True, text=True)
+    return subprocess.run([PY, os.path.join(r, "lib", "stage2_patch.py"), IID, rid], cwd=r, capture_output=True, text=True, env=dict(os.environ, LC_FAKE_RAW=p, **(env_extra or {})))
+def stage3(r, rid=RID, env_extra=None):
+    return subprocess.run([PY, os.path.join(r, "lib", "stage3_eval.py"), IID, rid], cwd=r, capture_output=True, text=True, env=dict(os.environ, **(env_extra or {})))
 def seal(r):  # what the pipeline does between stage 2 and stage 3 (Amendment 3 makes this a mandatory, checked seal commit)
     subprocess.run(["git", "-C", r, "add", "-A"], capture_output=True); subprocess.run(["git", "-C", r, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "seal"], capture_output=True)
 pdir = lambda r: os.path.join(r, "results", "patches", IID)

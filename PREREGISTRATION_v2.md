@@ -196,3 +196,25 @@ Changes (nothing else changes: prompt, model, caps, mounts, network, rules, metr
 5. Before resuming, one end-to-end smoke (preflight -> stage1 -> freeze -> stage2 -> stage3 incl. ground truth) on
    schemathesis-4087 (no verified non-sample instance exists: all 7 non-sample candidates failed verification). It is NOT
    a result; evidence in evidence/smoke2/; the instance is re-run from scratch in the real run. Its cost counts toward the cap.
+
+## Amendment 3 (user-approved 18:42; minimal per user principle 18:44; LAST code change before the scored run)
+Root cause (evidence/smoke2_rca/RCA.md, commit 0cec02e): after SMOKE2's legitimate EMPTY_DIFF verdict, an ad-hoc diagnostic
+(operator error) copied the GOLD patch + a fake record into results/patches/<iid>/; the frozen evaluator would evaluate any
+file at that path because it was not bound to the produced artifact (no hash/size/run-ID/base check, no seal).
+Change (integrity binding only; prompts, model, dataset, sample, thresholds, test-file policy unchanged):
+- pipeline.py mints a unique producer run ID per patch run and passes it to stage 2 and stage 3; commits "STAGE2 SEAL" of
+  results/patches/<iid> before stage 3; scans results/ for gold/test_patch bytes before each issue; exit code 4 from stage 2/3
+  = INTEGRITY_FAIL -> halt, recorded and reported, never fixed mid-run.
+- oh_run.py records base_sha and run_id in its result.
+- stage2_patch.py records artifact {path, sha256, bytes, empty, raw_path, raw_sha256, raw_bytes (exact agent output, separate
+  hash), producer_run_id, producer_reported_run_id, base_sha, original_base_commit, produced_at}; makes the artifact dir
+  read-only (0555/0444); refuses to overwrite a sealed artifact.
+- stage3_eval.py verifies identity + content (run ID == expected == producer-reported, path, sha256, byte length, empty
+  status, raw sha/length, base SHA vs stage-1 sanitized base and dataset base_commit, sealed in git, in-memory copy) at
+  start, immediately before ground truth, immediately before the B gate, and before the verdict. Any failure ->
+  results/integrity_fail_<iid>.json, exit 4, no A/B verdict. A legitimate filtered EMPTY_DIFF stays an ordinary outcome.
+- Rule: diagnostics only on scratch copies; never write to results/ or work/runs/; never copy gold patches into production dirs.
+Regression (hermetic, no model calls): original 9-test suite frozen 5 fail / repaired 7 pass + 2 "fail" by PermissionError
+(c, c2: the plain late write is now blocked by the read-only artifact before the evaluator is reached; the same attacks with
+owner chmod are refused by the evaluator in test_v3_c_c2_variants_with_owner_chmod). Amendment-3 suite (13 tests, written
+before the fix): frozen 13/13 fail, repaired 13/13 pass. Outputs: evidence/amend3/.

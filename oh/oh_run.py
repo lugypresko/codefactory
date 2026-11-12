@@ -91,7 +91,7 @@ try:
         if e.get("source") == "agent" and ("FinishAction" in t or e.get("kind") in ("MessageEvent",)): final_msg = t[:4000]
 except Exception as e: res["final_msg_error"] = repr(e)
 res["litellm_accumulated_cost"] = acc; res["proxy_metered_cost"] = (res["llm"] or {}).get("cost", 0.0)
-res["cost_usd"] = max(acc, res["proxy_metered_cost"]); res["final_message"] = final_msg; res["wall_seconds"] = round(time.time() - t0); res["diff_bytes"] = len(diff)
+res["base_sha"] = base; res["run_id"] = os.environ.get("LC_RUNID"); res["cost_usd"] = max(acc, res["proxy_metered_cost"]); res["final_message"] = final_msg; res["wall_seconds"] = round(time.time() - t0); res["diff_bytes"] = len(diff)
 json.dump(res, open(f"{out}/oh_result.json", "w"), indent=2, default=str)
 with open(A.LEDGER, "a") as f: f.write(json.dumps({"run_id": os.environ.get("LC_RUNID", f"oh-feasibility-{iid}"), "role": os.environ.get("LC_ROLE", "oh-feasibility"), "cost_usd": res["cost_usd"], "ts": time.strftime("%FT%T%z")}) + "\n")
 print(json.dumps({k: res.get(k) for k in ("execution_status", "error", "cost_usd", "wall_seconds", "diff_bytes", "n_events")}))
