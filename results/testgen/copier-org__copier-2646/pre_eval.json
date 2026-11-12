@@ -1,0 +1,19 @@
+{
+  "instance_id": "copier-org__copier-2646",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_tmp_cleanup.py::<COLLECTION_ERROR>": "ERROR"
+    },
+    {
+      "tests/test_tmp_cleanup.py::<COLLECTION_ERROR>": "ERROR"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_tmp_cleanup.py::<COLLECTION_ERROR>"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

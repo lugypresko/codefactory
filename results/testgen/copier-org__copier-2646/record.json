@@ -1,0 +1,47 @@
+{
+  "instance_id": "copier-org__copier-2646",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/copier-org__copier-2646/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-copier-org__copier-2646",
+    "mini_rc": 0,
+    "wall_seconds": 252,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "LimitsExceeded",
+    "cost_usd": 0.08793545,
+    "api_calls": 40,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "LIMIT_EXCEEDED",
+    "spent_total_after": 1.7149
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "6b674c0cdda7e412575042c630542b23c3eb7a68",
+  "original_base_commit": "e05ddfec08bc580d3e7b6a2a3e7cb18b6c761ba5",
+  "task_sha256": "bedde8cffe184fda57066b3fd592c680bb11008411aedc5f98fabee11dd81e13",
+  "test_files": {
+    "tests/test_tmp_cleanup.py": "10a4632fa3d4a242afa89f0b0a20db3297cfa7685f0d449b05ce051af1f24103"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/copier-org__copier-2646/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.copier-org_1776_copier-2646:latest"
+  }
+}

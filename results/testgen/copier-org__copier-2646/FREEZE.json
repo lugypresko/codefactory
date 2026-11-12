@@ -1,0 +1,12 @@
+{
+ "instance_id": "copier-org__copier-2646",
+ "frozen_at": "2026-11-12T20:47:20+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/copier-org__copier-2646/task.txt": "bedde8cffe184fda57066b3fd592c680bb11008411aedc5f98fabee11dd81e13",
+  "results/testgen/copier-org__copier-2646/record.json": "14800b9d4c5c86aa28074f9c08f43b283a21fbe8d02345a7dd1a96bd408529f8",
+  "results/testgen/copier-org__copier-2646/config.yaml": "0a5b5a0e5be84b8436f748b094b038cded9dbe606510b0d65135dcbccfb0d154",
+  "results/testgen/copier-org__copier-2646/pre_eval.json": "ac94dcb21792fb917d7c2b643076d161f99a5da7becb6c62d27eba4bab7ed755",
+  "results/testgen/copier-org__copier-2646/tests/tests/test_tmp_cleanup.py": "10a4632fa3d4a242afa89f0b0a20db3297cfa7685f0d449b05ce051af1f24103"
+ }
+}
