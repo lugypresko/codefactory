@@ -1,0 +1,26 @@
+{
+  "instance_id": "hkuds__openharness-217",
+  "evaluated_patch_sha256": "aeda1e54ab730ecd24314b3b628c0b8254f626d56a509e41554fb0a25035c63d",
+  "evaluated_patch_bytes": 1360,
+  "producer_run_id": "pa-hkuds__openharness-217-20261112T205541-222468c0",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "0/6",
+  "gt_p2p_failed": "0/2",
+  "gt_correct": true,
+  "gate_units_passed": [
+    3,
+    3
+  ],
+  "gate_units": 3,
+  "gate_deterministic": true,
+  "gate_p2p_files": [],
+  "gate_p2p_stems": [
+    "flows"
+  ],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "no matching existing test files",
+  "B_decision": "APPROVE",
+  "B_reason": "",
+  "A_decision": "APPROVE"
+}
