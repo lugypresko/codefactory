@@ -1,0 +1,47 @@
+{
+  "instance_id": "alibaba__opensandbox-816",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/alibaba__opensandbox-816/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-alibaba__opensandbox-816",
+    "mini_rc": 0,
+    "wall_seconds": 102,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.07450229000000001,
+    "api_calls": 31,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.9372
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "0994cdfb393e5f61dfba9351ce7f4d9824a37775",
+  "original_base_commit": "fb78091f947f62ae2c71a372af42425a764aacee",
+  "task_sha256": "4b4d520f0e4f9e7ef6a7e97524a51b1009968d08040c603a8e0c01560a564041",
+  "test_files": {
+    "server/tests/test_security_symlink_volume.py": "7f2e269ee0601fb35d1153500db61a3ae8b32cef4d1d476a361227f56c98de7c"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/alibaba__opensandbox-816/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.alibaba_1776_opensandbox-816:latest"
+  }
+}

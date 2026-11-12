@@ -1,0 +1,19 @@
+{
+  "instance_id": "alibaba__opensandbox-816",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "server/tests/test_security_symlink_volume.py::test_symlink_bypass_host_volume_validation": "FAILED"
+    },
+    {
+      "server/tests/test_security_symlink_volume.py::test_symlink_bypass_host_volume_validation": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "server/tests/test_security_symlink_volume.py::test_symlink_bypass_host_volume_validation"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}
