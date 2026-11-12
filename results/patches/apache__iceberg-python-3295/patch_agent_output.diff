@@ -1,0 +1,12 @@
+diff --git a/pyiceberg/expressions/__init__.py b/pyiceberg/expressions/__init__.py
+index 3910a14..229f1b6 100644
+--- a/pyiceberg/expressions/__init__.py
++++ b/pyiceberg/expressions/__init__.py
+@@ -433,6 +433,7 @@ class Not(BooleanExpression):
+         return (self.child,)
+ 
+ 
++
+ class AlwaysTrue(BooleanExpression, Singleton, IcebergRootModel[bool]):
+     """TRUE expression."""
+ 
