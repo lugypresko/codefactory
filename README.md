@@ -224,7 +224,14 @@ evidence/hardening-v1.5/  v1.5 adversarial BEFORE (on v1.4.1) / AFTER, recovery 
 evidence/v1.5-rescore/    offline v1.5 re-scoring of the sealed runs + rescore_manifest.json
 lib/rescore.py            offline re-scoring tool
 tests/adversarial/SPEC_v1.5.md   the v1.5 policy text the new attacks were derived from
+broker/gate.py           offline gate: sealed diff + v1.5 policy, before any publish
+broker/publish.py        unused draft-PR interface (no token, no network)
+docs/BROKER.md            how to run the gate, and what publishing is not yet
 ```
+
+## Offline gate
+
+`broker/gate.py verify` admits a diff only when the sealed evidence still matches, the LC-0 verdict is PASS, the base SHA is still the local branch tip, and the v1.5 diff policy accepts the patch. It does not mint a token or open a pull request. See `docs/BROKER.md`.
 
 ## Scope
 LC-0 answers a **feasibility** question: can an agent deliver verified software and get past a development fault
