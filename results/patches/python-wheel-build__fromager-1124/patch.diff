@@ -1,0 +1,116 @@
+diff --git a/src/fromager/resolver.py b/src/fromager/resolver.py
+index d482d42..1f59c9e 100644
+--- a/src/fromager/resolver.py
++++ b/src/fromager/resolver.py
+@@ -86,10 +86,65 @@ def resolve(
+     req_type: RequirementType | None = None,
+     ignore_platform: bool = False,
+ ) -> tuple[str, Version]:
++    # Exempt == version pins from release cooldown enforcement in top-level requirements
++    if req_type == RequirementType.TOP_LEVEL and any(
++        s.operator == "==" for s in req.specifier
++    ):
++        logger.info(
++            f"Exempting {req.name} from release cooldown due to == pin in top-level requirements."
++        )
++        cooldown = None
++    else:
++        per_package_days = ctx.package_build_info(req).resolver_min_release_age
++        global_cooldown = ctx.cooldown
++        if per_package_days is None:
++            cooldown = global_cooldown
++        elif per_package_days == 0:
++            cooldown = None
++        else:
++            # Per-package positive override: inherit bootstrap_time from global so all
++            # resolutions in a single run share the same fixed cutoff point.
++            bootstrap_time = (
++                global_cooldown.bootstrap_time
++                if global_cooldown is not None
++                else datetime.datetime.now(datetime.UTC)
++            )
++            cooldown = Cooldown(
++                min_age=datetime.timedelta(days=per_package_days),
++                bootstrap_time=bootstrap_time,
++            )
+     """Resolve requirement and return the best matching version.
+ 
+     Returns (url, version) tuple for the highest matching version.
+     """
++    # Exempt == version pins from release cooldown enforcement in top-level requirements
++    if req_type == RequirementType.TOP_LEVEL and any(
++        s.operator == "==" for s in req.specifier
++    ):
++        logger.info(
++            f"Exempting {req.name} from release cooldown due to == pin in top-level requirements."
++        )
++        cooldown = None
++    else:
++        per_package_days = ctx.package_build_info(req).resolver_min_release_age
++        global_cooldown = ctx.cooldown
++        if per_package_days is None:
++            cooldown = global_cooldown
++        elif per_package_days == 0:
++            cooldown = None
++        else:
++            # Per-package positive override: inherit bootstrap_time from global so all
++            # resolutions in a single run share the same fixed cutoff point.
++            bootstrap_time = (
++                global_cooldown.bootstrap_time
++                if global_cooldown is not None
++                else datetime.datetime.now(datetime.UTC)
++            )
++            cooldown = Cooldown(
++                min_age=datetime.timedelta(days=per_package_days),
++                bootstrap_time=bootstrap_time,
++            )
++
+     # Create the (reusable) resolver.
+     provider = overrides.find_and_invoke(
+         req.name,
+@@ -103,7 +158,7 @@ def resolve(
+         req_type=req_type,
+         ignore_platform=ignore_platform,
+     )
+-    provider.cooldown = resolve_package_cooldown(ctx, req)
++    provider.cooldown = cooldown
+     max_age_cutoff = _compute_max_age_cutoff(ctx)
+     results = find_all_matching_from_provider(
+         provider, req, max_age_cutoff=max_age_cutoff
+@@ -137,36 +192,7 @@ def default_resolver_provider(
+     )
+ 
+ 
+-def resolve_package_cooldown(
+-    ctx: context.WorkContext,
+-    req: Requirement,
+-) -> Cooldown | None:
+-    """Compute the effective cooldown for a single package.
+-
+-    Args:
+-        ctx: The current work context (provides the global cooldown).
+-        req: The package requirement being resolved.
+ 
+-    Returns:
+-        The cooldown to pass to the provider, or ``None`` if disabled.
+-    """
+-    per_package_days = ctx.package_build_info(req).resolver_min_release_age
+-    global_cooldown = ctx.cooldown
+-    if per_package_days is None:
+-        return global_cooldown
+-    if per_package_days == 0:
+-        return None
+-    # Per-package positive override: inherit bootstrap_time from global so all
+-    # resolutions in a single run share the same fixed cutoff point.
+-    bootstrap_time = (
+-        global_cooldown.bootstrap_time
+-        if global_cooldown is not None
+-        else datetime.datetime.now(datetime.UTC)
+-    )
+-    return Cooldown(
+-        min_age=datetime.timedelta(days=per_package_days),
+-        bootstrap_time=bootstrap_time,
+-    )
+ 
+ 
+ def _compute_max_age_cutoff(
