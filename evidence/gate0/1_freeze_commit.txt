@@ -1,0 +1,17 @@
+frozen_protocol_commit: 2617a58563d54d3d7054bc3e1eeef0070ba0cbd5
+previous freeze commit (prereg+sample, no manifest): fb24a8f08ae57b5d62e1cc76b9e0ba3e63b0ddc2
+
+commit 2617a58563d54d3d7054bc3e1eeef0070ba0cbd5
+Author: lc1a0-harness <lc1a0@local>
+Date:   Thu Nov 12 17:27:22 2026 +0200
+
+    FREEZE PROTOCOL v2 (gate-0): add data/manifest_30.json (dataset rev, image digests, Base/Gold verification for 30 ids) + cost-method restatement; before any of the 30 result-collecting runs
+
+ PREREGISTRATION_v2.md |   5 +
+ data/manifest_30.json | 703 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ lib/manifest30.py     |  25 ++
+ 3 files changed, 733 insertions(+)
+
+PREREGISTRATION_v2.md sha256 @ 2617a58563d54d3d7054bc3e1eeef0070ba0cbd5: a7f7b07a595b457654b4782800b2c12abda6a45e23949f091f3c3ea29e9e0dcf
+sample_v2.json sha256 @ 2617a58563d54d3d7054bc3e1eeef0070ba0cbd5: e94db228a95b47ebebe4084f8f3d2d4c332f8b66c541cc3143c6914e9759f9e2
+data/manifest_30.json sha256 @ 2617a58563d54d3d7054bc3e1eeef0070ba0cbd5: 303a7061cad94a31a5d032457c17685a91003b96aacd060c59bee76ee618ed53
