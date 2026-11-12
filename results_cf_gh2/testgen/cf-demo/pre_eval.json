@@ -1,0 +1,38 @@
+{
+  "instance_id": "cf-demo",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_merge_intervals_acceptance.py::test_empty_input": "PASSED",
+      "tests/test_merge_intervals_acceptance.py::test_single_interval_input": "PASSED",
+      "tests/test_merge_intervals_acceptance.py::test_overlapping_intervals_merge": "PASSED",
+      "tests/test_merge_intervals_acceptance.py::test_touching_intervals_merge": "FAILED",
+      "tests/test_merge_intervals_acceptance.py::test_nested_intervals_merge": "FAILED",
+      "tests/test_merge_intervals_acceptance.py::test_unsorted_intervals_merge": "FAILED",
+      "tests/test_merge_intervals_acceptance.py::test_complex_scenarios": "FAILED"
+    },
+    {
+      "tests/test_merge_intervals_acceptance.py::test_empty_input": "PASSED",
+      "tests/test_merge_intervals_acceptance.py::test_single_interval_input": "PASSED",
+      "tests/test_merge_intervals_acceptance.py::test_overlapping_intervals_merge": "PASSED",
+      "tests/test_merge_intervals_acceptance.py::test_touching_intervals_merge": "FAILED",
+      "tests/test_merge_intervals_acceptance.py::test_nested_intervals_merge": "FAILED",
+      "tests/test_merge_intervals_acceptance.py::test_unsorted_intervals_merge": "FAILED",
+      "tests/test_merge_intervals_acceptance.py::test_complex_scenarios": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_merge_intervals_acceptance.py::test_complex_scenarios",
+    "tests/test_merge_intervals_acceptance.py::test_nested_intervals_merge",
+    "tests/test_merge_intervals_acceptance.py::test_touching_intervals_merge",
+    "tests/test_merge_intervals_acceptance.py::test_unsorted_intervals_merge"
+  ],
+  "non_discriminating_discarded": [
+    "tests/test_merge_intervals_acceptance.py::test_empty_input",
+    "tests/test_merge_intervals_acceptance.py::test_overlapping_intervals_merge",
+    "tests/test_merge_intervals_acceptance.py::test_single_interval_input"
+  ],
+  "no_outcomes": false
+}
