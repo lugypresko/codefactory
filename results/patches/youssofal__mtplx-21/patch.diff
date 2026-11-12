@@ -1,0 +1,89 @@
+diff --git a/mtplx/server/openai.py b/mtplx/server/openai.py
+index 002afe8..4e318cd 100644
+--- a/mtplx/server/openai.py
++++ b/mtplx/server/openai.py
+@@ -1323,8 +1323,7 @@ class _ToolAwareContentStreamTranslator:
+             return []
+         if field != "content" or self._mode == "passthrough":
+             return [{field: text}]
+-        if self._mode == "content":
+-            return [{"content": text}]
++
+         if self._mode == "done":
+             self._trailing += text
+             return []
+@@ -1333,20 +1332,32 @@ class _ToolAwareContentStreamTranslator:
+         if self._mode == "tool":
+             return self._tool_deltas_if_complete(final=False)
+ 
+-        stripped = self._pending.lstrip()
+-        if not stripped:
+-            return []
+-        lowered = stripped.lower()
+-        if lowered.startswith(self._START_MARKER):
+-            self._mode = "tool"
+-            return self._tool_deltas_if_complete(final=False)
+-        if self._START_MARKER.startswith(lowered):
+-            return []
++        start_marker_idx = self._pending.lower().find(self._START_MARKER)
+ 
+-        self._mode = "content"
+-        content = self._pending
+-        self._pending = ""
+-        return [{"content": content}]
++        if start_marker_idx != -1:
++            preamble_content = self._pending[:start_marker_idx]
++            self._pending = self._pending[start_marker_idx:]
++
++            deltas = []
++            if preamble_content:
++                deltas.append({"content": preamble_content})
++            
++            self._mode = "tool"
++            deltas.extend(self._tool_deltas_if_complete(final=False))
++            return deltas
++        
++        if self._mode == "undecided":
++            if self._START_MARKER.startswith(self._pending.lower()):
++                return []
++            else:
++                self._mode = "content"
++        
++        if self._mode == "content":
++            content_to_emit = self._pending
++            self._pending = ""
++            return [{"content": content_to_emit}]
++        
++        return []
+ 
+     def finish(self) -> list[dict[str, Any]]:
+         if self._mode == "tool":
+@@ -1356,10 +1367,24 @@ class _ToolAwareContentStreamTranslator:
+                 raise _tool_protocol_error("text after tool_call block")
+             return []
+         if self._pending:
+-            content = self._pending
+-            self._pending = ""
+-            self._mode = "content"
+-            return [{"content": content}]
++            start_marker_idx = self._pending.lower().find(self._START_MARKER)
++
++            if start_marker_idx != -1:
++                preamble_content = self._pending[:start_marker_idx]
++                self._pending = self._pending[start_marker_idx:]
++
++                deltas = []
++                if preamble_content:
++                    deltas.append({"content": preamble_content})
++                
++                self._mode = "tool"
++                deltas.extend(self._tool_deltas_if_complete(final=True))
++                return deltas
++            else:
++                content = self._pending
++                self._pending = ""
++                self._mode = "content"
++                return [{"content": content}]
+         return []
+ 
+     def _tool_deltas_if_complete(self, *, final: bool) -> list[dict[str, Any]]:
