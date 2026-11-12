@@ -1,0 +1,15 @@
+{
+  "instance_id": "ultraplot__ultraplot-696",
+  "evaluated_patch_sha256": "28c5dd6962ec4d7935b55b5ffcfba1ccf10752d757deb7701051364da95652d0",
+  "evaluated_patch_bytes": 737,
+  "producer_run_id": "pa-ultraplot__ultraplot-696-20261112T213834-98206fd6",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "2/2",
+  "gt_p2p_failed": "0/49",
+  "gt_correct": false,
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INSUFFICIENT_EVIDENCE",
+  "B_detail": "clarification requested",
+  "A_decision": "APPROVE"
+}
