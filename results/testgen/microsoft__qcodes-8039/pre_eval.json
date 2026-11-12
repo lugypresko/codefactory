@@ -1,0 +1,23 @@
+{
+  "instance_id": "microsoft__qcodes-8039",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/utils/test_issue_8024.py::test_another_faulty_property_traceback": "PASSED",
+      "tests/utils/test_issue_8024.py::test_faulty_property_traceback": "FAILED"
+    },
+    {
+      "tests/utils/test_issue_8024.py::test_another_faulty_property_traceback": "PASSED",
+      "tests/utils/test_issue_8024.py::test_faulty_property_traceback": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/utils/test_issue_8024.py::test_faulty_property_traceback"
+  ],
+  "non_discriminating_discarded": [
+    "tests/utils/test_issue_8024.py::test_another_faulty_property_traceback"
+  ],
+  "no_outcomes": false
+}

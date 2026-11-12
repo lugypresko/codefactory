@@ -1,0 +1,47 @@
+{
+  "instance_id": "microsoft__qcodes-8039",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/microsoft__qcodes-8039/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-microsoft__qcodes-8039",
+    "mini_rc": 0,
+    "wall_seconds": 50,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.00885604,
+    "api_calls": 4,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 2.561
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "0f6dcf1962e3f437f51b1516aa65c035bf4dbb4c",
+  "original_base_commit": "fb48ab0c58eb2c144ab634d0b4209e70334c89ab",
+  "task_sha256": "9c580f69507421c5ebea53af6c2a5ee9fecab7a475789db1527d9bdd3491a986",
+  "test_files": {
+    "tests/utils/test_issue_8024.py": "c631174af204e951ed4ef3d3858a76a2bab7f115bf9ac36b36391f6b0aaae976"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/microsoft__qcodes-8039/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.microsoft_1776_qcodes-8039:latest"
+  }
+}

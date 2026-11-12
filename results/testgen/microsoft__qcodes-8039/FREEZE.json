@@ -1,0 +1,12 @@
+{
+ "instance_id": "microsoft__qcodes-8039",
+ "frozen_at": "2026-11-12T22:03:37+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/microsoft__qcodes-8039/task.txt": "9c580f69507421c5ebea53af6c2a5ee9fecab7a475789db1527d9bdd3491a986",
+  "results/testgen/microsoft__qcodes-8039/record.json": "c471ed6ddc3b9a108ee691f3461ee6d886f2d1404f07e824e0d2851024c113e9",
+  "results/testgen/microsoft__qcodes-8039/config.yaml": "829668a72666dc74708b56d76b39f6e736859c7de12c732245e284e04390f264",
+  "results/testgen/microsoft__qcodes-8039/pre_eval.json": "4a17a4d556eecb6ef26690380d6940847d45c35784a2713cbc0824fe79be4ac0",
+  "results/testgen/microsoft__qcodes-8039/tests/tests/utils/test_issue_8024.py": "c631174af204e951ed4ef3d3858a76a2bab7f115bf9ac36b36391f6b0aaae976"
+ }
+}
