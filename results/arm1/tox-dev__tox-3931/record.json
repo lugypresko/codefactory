@@ -1,0 +1,44 @@
+{
+  "arm": "arm1",
+  "instance_id": "tox-dev__tox-3931",
+  "runs": [
+    {
+      "role": "arm1",
+      "run_id": "arm1-tox-dev__tox-3931",
+      "mini_rc": 0,
+      "wall_seconds": 51,
+      "caps": {
+        "cost": 0.3,
+        "steps": 40,
+        "wall": 900
+      },
+      "model_requested": "gemini/gemini-2.5-flash",
+      "exit_status": "Submitted",
+      "cost_usd": 0.024730490000000004,
+      "api_calls": 14,
+      "models_returned": [
+        "gemini-2.5-flash"
+      ],
+      "status": "SUBMITTED",
+      "spent_total_after": 0.0247,
+      "classify": {
+        "tests": [
+          "tests/config/test_deps_array.py",
+          "tests/config/test_tox_schema_deps.py"
+        ],
+        "violations": [],
+        "benign": [],
+        "head_moved": false
+      },
+      "clarification_written": true
+    }
+  ],
+  "cost_usd": 0.024730490000000004,
+  "validity": "VALID",
+  "violations": [],
+  "final_test_files": [
+    "tests/config/test_deps_array.py",
+    "tests/config/test_tox_schema_deps.py"
+  ],
+  "clarification": true
+}
