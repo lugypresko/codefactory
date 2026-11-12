@@ -1,0 +1,49 @@
+{
+  "instance_id": "alibaba__opensandbox-816",
+  "evaluated_patch_sha256": "2d4c5fb4694fed700e561793fc8cf1a1659ebb30a8f70d414ac1747e8b1707c1",
+  "evaluated_patch_bytes": 7013,
+  "producer_run_id": "pa-alibaba__opensandbox-816-20261112T210648-295ff4aa",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "0/1",
+  "gt_p2p_failed": "2/108",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 1,
+  "gate_deterministic": true,
+  "gate_p2p_files": [
+    "server/tests/test_docker_endpoint.py",
+    "server/tests/test_docker_path_fix.py",
+    "server/tests/test_docker_service.py",
+    "server/tests/test_validators.py"
+  ],
+  "gate_p2p_stems": [
+    "docker",
+    "validators"
+  ],
+  "gate_p2p_broken": [
+    "server/tests/test_docker_service.py::TestDockerVolumeValidation::test_host_path_not_found_rejected",
+    "server/tests/test_docker_service.py::TestDockerVolumeValidation::test_host_subpath_auto_created",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_allowed_prefix_exact_match",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_allowed_prefix_match",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_allowed_prefix_match_windows_paths",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_allowed_prefix_match_windows_paths_is_case_insensitive_for_drive",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_partial_prefix_match_raises",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_valid_absolute_path",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_valid_windows_absolute_path",
+    "server/tests/test_validators.py::TestEnsureValidHostPath::test_valid_windows_drive_root",
+    "server/tests/test_validators.py::TestEnsureVolumesValid::test_duplicate_volume_name_raises",
+    "server/tests/test_validators.py::TestEnsureVolumesValid::test_multiple_valid_volumes",
+    "server/tests/test_validators.py::TestEnsureVolumesValid::test_valid_host_volume",
+    "server/tests/test_validators.py::TestEnsureVolumesValid::test_valid_volume_with_subpath"
+  ],
+  "gate_p2p_ok": false,
+  "gate_p2p_detail": "14/196 stable pre-fix passing tests broken",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch; P2P broken: 14/196 stable pre-fix passing tests broken",
+  "A_decision": "APPROVE"
+}
