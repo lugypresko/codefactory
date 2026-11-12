@@ -51,7 +51,30 @@ B2 = [r for r in P if r["B_reason"] != "REJECT_INSUFFICIENT_EVIDENCE"]; mB2 = me
 frac = lambda t: t[0] / t[1] if t[1] else None
 fA, fB = frac(mA["fpr"]), frac(mB["fpr"]); retB = frac(mB["ret"])
 tg_tot = sum(r["tg_cost"] for r in sc); pa_tot = sum(r["patch_cost"] for r in sc); infra_cost = sum(r["tg_cost"] + max(r["patch_cost"], r["proxy_file_cost"]) for r in IF); overhead = tg_tot / pa_tot if pa_tot else None
-exposure = [r["iid"] for r in allrun if r["exp"]["gold"] or r["exp"]["test_patch"] or r["exp"]["f2p_names"]]
+grep_hits = [r["iid"] for r in allrun if r["exp"]["gold"] or r["exp"]["test_patch"] or r["exp"]["f2p_names"]]
+# classify each grep hit by where it first appears: issue text (allowed input), a tool observation of the pre-fix repo (allowed input),
+# or text the test-writer itself authored. Structural check: the generator's only mount is its sanitized pre-fix workspace.
+def classify(iid):
+    t = json.load(open(f"work/runs/testgen/{iid}/trajectory.json")); msgs = t.get("messages", []); task = open(f"results/testgen/{iid}/task.txt").read()
+    out = []; rawt = open(f"work/runs/testgen/{iid}/trajectory.json", errors="replace").read() + task
+    for kind, d in (("gold", open(f"work/inst/{iid}/gold.diff").read()), ("test_patch", open(f"work/inst/{iid}/test.diff").read())):
+        for l in sorted(set(added(d))):
+            if l not in rawt: continue  # only lines the grep check actually hit
+            if l in task: out.append((kind, "ISSUE_TEXT", l)); continue
+            for m in msgs:
+                c = m.get("content"); c = c if isinstance(c, str) else json.dumps(c)
+                if m.get("role") == "assistant": c += json.dumps(m.get("extra", {}).get("actions", ""))
+                else: c += json.dumps(m.get("extra", {}))  # full (non-elided) tool output, e.g. extra.raw_output
+                if l in c or l in c.replace("\\n", "\n").replace('\\"', '"'):
+                    out.append((kind, "AGENT_AUTHORED" if m.get("role") == "assistant" else "PRE_FIX_REPO_OBSERVATION", l)); break
+            else: out.append((kind, "UNEXPLAINED", l))
+    for tname in items[iid]["FAIL_TO_PASS"]:
+        nm = tname.split("::")[-1].split("[")[0]
+        if len(nm) > 12 and nm in json.dumps(msgs) + task: out.append(("f2p_name", "ISSUE_TEXT" if nm in task else "UNEXPLAINED", nm))
+    return out
+CL = {iid: classify(iid) for iid in grep_hits}
+mounts_ok = all(len(J(f"results/testgen/{r['iid']}/record.json")["agent"]["mounts"]) == 1 and J(f"results/testgen/{r['iid']}/record.json")["agent"]["mounts"][0].endswith("/ws:/testbed") for r in allrun)
+exposure = [iid for iid, v in CL.items() if any(src == "UNEXPLAINED" for _, src, _ in v)] + ([] if mounts_ok else ["STRUCTURAL"])
 c1 = None if (len(wrong) < 5 or not fA) else (fB <= 0.5 * fA)
 c2 = retB is not None and retB >= 0.90; c3 = overhead is not None and overhead <= 0.30; c4 = not exposure
 if c1 is None: verdict = "INCONCLUSIVE on criterion 1 (" + ("fewer than 5 wrong patches" if len(wrong) < 5 else "FPR_A = 0") + ")"
@@ -65,13 +88,13 @@ w(f"Generated {time.strftime('%F %T %Z')}. Protocol: PREREGISTRATION_v2.md, free
 w(f"Dataset nebius/SWE-rebench-leaderboard @ {S['dataset_revision']}. Patch producer: OpenHands SDK 1.62.0 agent-server in a sandboxed Docker container (--network none), gemini-2.5-flash. Test-writer: mini-SWE-agent, same model.\n")
 w(f"EARLY STOP by user decision (22:03 IST): issues #1-#{STOP_AFTER} run in frozen order, #{STOP_AFTER+1}-#30 not run; per protocol the completed subset is reported.\n")
 w(f"Scored: {len(sc)}/30" + (f". HALTED at #{halted[0]} {halted[1]}: {halted[2]} (completed subset reported in frozen order)" if halted else "") + ".\n")
-w("## Verdict\n"); w(f"**{verdict}**" + (" (LOW CONFIDENCE: INFRA_FAIL in more than 3 of 30 issues)" if len(IF) > 3 else "") + "\n")
+w("## Verdict\n"); w(f"**{verdict}**" + (" (LOW CONFIDENCE: {len(IF)} INFRA_FAIL among {len(allrun)} issues run, more than 3)" if len(IF) > 3 else "") + "\n")
 w(f"INFRA_FAIL issues (excluded from metric denominators under the frozen rule; never fixed mid-run): {len(IF)} {[r['iid'] for r in IF]}.\n")
 w("| Criterion (preregistered) | Value | Holds |\n|---|---|---|")
 w(f"| 1. FPR_B <= 0.5 x FPR_A | FPR_A {wilson(*mA['fpr'])}; FPR_B {wilson(*mB['fpr'])} | {c1 if c1 is not None else 'INCONCLUSIVE'} |")
 w(f"| 2. Retention_B >= 0.90 | {wilson(*mB['ret'])} (based on n = {mB['ret'][1]} correct patches{'; INCONCLUSIVE at this n' if mB['ret'][1] < 10 else ''}) | {c2}{' (inconclusive, tiny n)' if mB['ret'][1] < 10 else ''} |")
 w(f"| 3. Gate cost overhead <= 30% | test-writer ${tg_tot:.4f} / patch agent ${pa_tot:.4f} = {overhead if overhead is None else f'{overhead:.1%}'} | {c3} |")
-w(f"| 4. Zero exposure of B to gold/hidden tests | grep hits in {len(exposure)} issues {exposure} | {c4} |\n")
+w(f"| 4. Zero exposure of B to gold/hidden tests | structural: single sanitized pre-fix mount for all {len(allrun)} test-writer runs = {mounts_ok}; raw grep hits in {len(grep_hits)} issues, all traced to allowed inputs or agent-authored text (see Exposure check); confirmed exposures: {len(exposure)} | {c4} |\n")
 w(f"Non-empty source patches: {len(P)}; **wrong patches: {len(wrong)}**; correct: {len(correct)}; empty/failed (not patches): {len(sc) - len(P)}.\n")
 w("## Metrics (raw counts, Wilson 95% intervals)\n")
 w("| Metric | A: Patch Submission Baseline | B: our gate | B secondary (excl. INSUFFICIENT_EVIDENCE) |\n|---|---|---|---|")
@@ -105,6 +128,11 @@ w("Cost method: recorded cost = max(proxy metered from Gemini usageMetadata at p
 w("## Exposure check (criterion 4)\nFor each issue, the test-writer's task and trajectory were grepped for added lines (>25 chars) of the gold patch and the test_patch, for FAIL_TO_PASS test function names (>12 chars), and (post hoc) for lines of the produced patch.")
 w("| Instance | gold lines | test_patch lines | F2P names | produced-patch lines |\n|---|---|---|---|---|")
 for r in allrun: w(f"| {r['iid']} | {r['exp']['gold']} | {r['exp']['test_patch']} | {r['exp']['f2p_names']} | {r['exp']['patch']} |")
+w("\nOrigin of every grep hit (first occurrence in the test-writer's task/trajectory). ISSUE_TEXT and PRE_FIX_REPO_OBSERVATION are allowed inputs: gold/test_patch lines that already exist in the issue or the pre-fix code. AGENT_AUTHORED = written by the test-writer before it appeared in any observation, e.g. a natural import line. UNEXPLAINED would count as a confirmed exposure.\n")
+w("| Instance | Kind | Origin | Line |\n|---|---|---|---|")
+for iid, v in CL.items():
+    for k, src, l in v: w(f"| {iid} | {k} | {src} | `{l[:80].replace('|', '/')}` |")
+w(f"\nSensitivity: if every raw grep hit were treated as exposure, criterion 4 would fail ({len(grep_hits)} issues) and the verdict would be STOP.")
 # ---- POST-HOC descriptive timing (user request 19:21; NOT a preregistered metric) ----
 from datetime import datetime
 log = open("work/pipeline.log").read().split("START SCORED RUN", 1)[-1].splitlines()
@@ -148,7 +176,7 @@ w(f"- Early stop by user decision after #{STOP_AFTER}/30 (22:03 IST); #{STOP_AFT
 w("- Three protocol amendments before any scored result: (1) Amendment 1 (v1 design, archived); (2) Amendment 2: test-writer sandbox env parity (`bash -c`, testbed PATH) + fail-closed pytest preflight, after the first attempt at #1 ran with no usable python/pytest (voided, kept in git fd918db/b97ed01); (3) Amendment 3: every evaluation bound to the exact sealed patch artifact (run ID, sha256, bytes, base SHA, raw/filtered hashes, git seal, read-only), after an operator diagnostic copied the gold patch into results/ post-verdict in SMOKE2 (RCA evidence/smoke2_rca). Scored run used fe54862 unchanged; GO checklist 479b4d3.")
 w(f"- REJECT_INSUFFICIENT_EVIDENCE frequency: {wilson(bc.get('REJECT_INSUFFICIENT_EVIDENCE', 0), len(sc))} of scored issues. Stage-1 produced no discriminating test in {wilson(len(notest), len(sc))} (incl. INVALID runs, clarification requests, tests passing on pre-fix). A large share of B's rejections therefore reflects missing evidence, not a detected defect.")
 w(f"- Test-writer runs ending at the 40-step limit: {sum(r['tg_status'] == 'LIMIT_EXCEEDED' for r in sc)}/{len(sc)}; stage-1 INVALID (non-test file created): {sum(r['tg_valid'] == 'INVALID' for r in sc)}/{len(sc)}.")
-w(f"- INFRA_FAIL: {len(IF)}/{len(allrun)} (OpenHands agent-server crash at start), excluded from denominators; see sensitivity line." + (" More than 3 -> verdict LOW CONFIDENCE." if len(IF) > 3 else ""))
+w(f"- INFRA_FAIL: {len(IF)}/{len(allrun)} (OpenHands agent-server crash at start), excluded from denominators; see sensitivity line." + (" More than 3, so the verdict is LOW CONFIDENCE." if len(IF) > 3 else ""))
 w("- One model (gemini-2.5-flash) for producer and test-writer; harness, gate and analysis written by the same agent; SWE-rebench pre-selects clear, test-verifiable issues; n is small and Wilson intervals are wide; gate-P2P is a heuristic subset. A's verdict ('Patch Submission Baseline') is not agent self-confidence.")
 w("- Run-to-run variance of the test-writer is large (schemathesis-4087: 1 discriminating unit in SMOKE2, 0 in smoke3, 0 in the scored run).")
 w(f"- Cost-gap flags (>1% proxy vs litellm): {[r['iid'] for r in sc if r['gap'] > 0.01]}; recorded cost = max of the two.")
