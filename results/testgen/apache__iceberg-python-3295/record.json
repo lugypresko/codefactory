@@ -1,0 +1,47 @@
+{
+  "instance_id": "apache__iceberg-python-3295",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/apache__iceberg-python-3295/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-apache__iceberg-python-3295",
+    "mini_rc": 0,
+    "wall_seconds": 27,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.013167289999999998,
+    "api_calls": 8,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 2.0024
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "3db69e550afdaa57e6094b4b12c67ceeab78679c",
+  "original_base_commit": "b67b7241690e05413f3cfea69287f897b0b2410e",
+  "task_sha256": "9f7ac2561cdb6a70f01a5041a9432545d76018d43c1aade16e3173377862519d",
+  "test_files": {
+    "tests/expressions/test_deepcopy.py": "67c097425bfbe6473b8f9e3bd8b9abef74635106fa447e519f252a884743ba37"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/apache__iceberg-python-3295/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.apache_1776_iceberg-python-3295:latest"
+  }
+}

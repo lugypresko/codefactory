@@ -1,0 +1,12 @@
+{
+ "instance_id": "apache__iceberg-python-3295",
+ "frozen_at": "2026-11-12T21:09:57+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/apache__iceberg-python-3295/task.txt": "9f7ac2561cdb6a70f01a5041a9432545d76018d43c1aade16e3173377862519d",
+  "results/testgen/apache__iceberg-python-3295/record.json": "34e5af55e7e666ce51472458c76352f0e7eff5d5ffc55345b93153bf15c42747",
+  "results/testgen/apache__iceberg-python-3295/config.yaml": "1bab7f314db25f5789b285f89c1cac23ab3e37158c13c6020b1673092b8340f2",
+  "results/testgen/apache__iceberg-python-3295/pre_eval.json": "be6f8e7a0215f608ca3a0a25bd4fac71941053c5249fe9f4939b9084ca55d716",
+  "results/testgen/apache__iceberg-python-3295/tests/tests/expressions/test_deepcopy.py": "67c097425bfbe6473b8f9e3bd8b9abef74635106fa447e519f252a884743ba37"
+ }
+}
