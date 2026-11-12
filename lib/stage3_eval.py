@@ -11,8 +11,12 @@ eval_path = f"{pdir}/eval.json" if os.environ.get("LC_OUT") else f"{ROOT}/result
 fail_path = f"{pdir}/integrity_fail.json" if os.environ.get("LC_OUT") else f"{ROOT}/results/integrity_fail_{iid}.json"
 pre = json.load(open(f"{tg}/pre_eval.json")); prec = json.load(open(f"{pdir}/record.json"))
 # ---- Amendment 3: every evaluation is bound to the exact artifact produced by run EXPECTED_RID ----
+def emit(path, obj):
+    d = os.path.dirname(path) or "."
+    if not os.access(d, os.W_OK): os.chmod(d, os.stat(d).st_mode | 0o200)
+    json.dump(obj, open(path, "w"), indent=2)
 def integrity_fail(msg):
-    json.dump({"instance_id": iid, "status": "INTEGRITY_FAIL", "detail": msg, "expected_run_id": EXPECTED_RID}, open(fail_path, "w"), indent=2)
+    emit(fail_path, {"instance_id": iid, "status": "INTEGRITY_FAIL", "detail": msg, "expected_run_id": EXPECTED_RID})
     print(iid, "INTEGRITY_FAIL", msg); sys.exit(4)
 def verify(where):
     try: R = json.load(open(f"{pdir}/record.json")); A = R["artifact"]
@@ -109,5 +113,5 @@ else:
                            B_detail=("discriminating tests fail on patch" if not ok_tests else "") + ("; " if (not ok_tests and not p2p_ok) else "") + ("P2P broken: " + p2p_detail if not p2p_ok else ""))
 verify("before verdict")
 out["A_decision"] = prec["A_decision"]
-json.dump(out, open(eval_path, "w"), indent=2)
+emit(eval_path, out)
 print(iid, "A", out["A_decision"], "B", out["B_decision"], out.get("B_reason"), "GT", out.get("gt_correct"))

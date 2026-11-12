@@ -57,6 +57,7 @@ def main():
             assert sh("git", "add", od).returncode == 0
             assert sh("git", "commit", "-qm", f"LC-1A.1 SEAL {iid} attempt {k} run {rid} (artifact sealed before evaluation)").returncode == 0
             att["seal_commit"] = sh("git", "rev-parse", "--short", "HEAD").stdout.strip()
+            os.chmod(od, os.stat(od).st_mode | 0o200)
             r = subprocess.run([PY, "lib/stage3_eval.py", iid, rid], env=env, capture_output=True, text=True)
             att["stage3_rc"] = r.returncode; att["stage3_out"] = (r.stdout or r.stderr)[-500:]
             if r.returncode:
