@@ -1,0 +1,12 @@
+{
+ "instance_id": "python-wheel-build__fromager-1124",
+ "frozen_at": "2026-11-12T20:17:18+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/python-wheel-build__fromager-1124/task.txt": "dd32aa6119ef70e8e6e76957e9732b018f81c65109689ba2ce01b107f00915f9",
+  "results/testgen/python-wheel-build__fromager-1124/record.json": "f068d0765994dc8bc1b7d41866edab8a2040b355e43b098f369ddfbd48a23de9",
+  "results/testgen/python-wheel-build__fromager-1124/config.yaml": "c018a48b1fd3ce68e7c5328cca557a78265a71487e6a0b2d51674500bd2f2783",
+  "results/testgen/python-wheel-build__fromager-1124/pre_eval.json": "a91c748c1cac43900d5a9733ec4c6021a1051f800d49b454507629ee302b83fd",
+  "results/testgen/python-wheel-build__fromager-1124/tests/tests/test_cooldown_exemption.py": "701828b46b9b2e68698d7a894ac4f6ee88f3473d6f0a36b44fe5446f40c69053"
+ }
+}

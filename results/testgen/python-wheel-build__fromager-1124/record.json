@@ -1,0 +1,47 @@
+{
+  "instance_id": "python-wheel-build__fromager-1124",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/python-wheel-build__fromager-1124/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-python-wheel-build__fromager-1124",
+    "mini_rc": 0,
+    "wall_seconds": 111,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.07332754999999999,
+    "api_calls": 15,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.4776
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "0cbe3157b24fab6c79f14db65b5cba04f57cb834",
+  "original_base_commit": "5fd5d20ff117279b938f003a5a0de18292fbbb83",
+  "task_sha256": "dd32aa6119ef70e8e6e76957e9732b018f81c65109689ba2ce01b107f00915f9",
+  "test_files": {
+    "tests/test_cooldown_exemption.py": "701828b46b9b2e68698d7a894ac4f6ee88f3473d6f0a36b44fe5446f40c69053"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/python-wheel-build__fromager-1124/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.python-wheel-build_1776_fromager-1124:latest"
+  }
+}

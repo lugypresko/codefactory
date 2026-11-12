@@ -1,0 +1,26 @@
+{
+  "instance_id": "python-wheel-build__fromager-1124",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_cooldown_exemption.py::test_toplevel_range_pin_still_subject_to_cooldown": "PASSED",
+      "tests/test_cooldown_exemption.py::test_transitive_exact_pin_still_subject_to_cooldown": "PASSED",
+      "tests/test_cooldown_exemption.py::test_toplevel_exact_pin_exempts_from_cooldown": "FAILED"
+    },
+    {
+      "tests/test_cooldown_exemption.py::test_toplevel_range_pin_still_subject_to_cooldown": "PASSED",
+      "tests/test_cooldown_exemption.py::test_transitive_exact_pin_still_subject_to_cooldown": "PASSED",
+      "tests/test_cooldown_exemption.py::test_toplevel_exact_pin_exempts_from_cooldown": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_cooldown_exemption.py::test_toplevel_exact_pin_exempts_from_cooldown"
+  ],
+  "non_discriminating_discarded": [
+    "tests/test_cooldown_exemption.py::test_toplevel_range_pin_still_subject_to_cooldown",
+    "tests/test_cooldown_exemption.py::test_transitive_exact_pin_still_subject_to_cooldown"
+  ],
+  "no_outcomes": false
+}
