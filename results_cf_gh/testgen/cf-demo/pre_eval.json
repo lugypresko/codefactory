@@ -1,0 +1,35 @@
+{
+  "instance_id": "cf-demo",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_split_remainder.py::test_split_even_total_is_zero_with_remainder_logic": "PASSED",
+      "tests/test_split_remainder.py::test_split_even_with_remainder_basic": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_with_remainder_another_case": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_total_less_than_n": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_large_remainder": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_one_total_multiple_parts": "FAILED"
+    },
+    {
+      "tests/test_split_remainder.py::test_split_even_total_is_zero_with_remainder_logic": "PASSED",
+      "tests/test_split_remainder.py::test_split_even_with_remainder_basic": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_with_remainder_another_case": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_total_less_than_n": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_large_remainder": "FAILED",
+      "tests/test_split_remainder.py::test_split_even_one_total_multiple_parts": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_split_remainder.py::test_split_even_large_remainder",
+    "tests/test_split_remainder.py::test_split_even_one_total_multiple_parts",
+    "tests/test_split_remainder.py::test_split_even_total_less_than_n",
+    "tests/test_split_remainder.py::test_split_even_with_remainder_another_case",
+    "tests/test_split_remainder.py::test_split_even_with_remainder_basic"
+  ],
+  "non_discriminating_discarded": [
+    "tests/test_split_remainder.py::test_split_even_total_is_zero_with_remainder_logic"
+  ],
+  "no_outcomes": false
+}
