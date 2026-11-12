@@ -4,6 +4,9 @@
 # write to the base, which this check must not have.
 name: evaluator
 
+# Draft pull requests are in scope. The default pull_request activities
+# (opened, synchronize, reopened) run for drafts; this file does not skip
+# github.event.pull_request.draft. Do not switch this to pull_request_target.
 on:
   pull_request:
   merge_group:
