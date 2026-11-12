@@ -9,6 +9,10 @@ rd = f"{ROOT}/work/runs/testgen/{iid}"; shutil.rmtree(rd, ignore_errors=True); o
 ws = f"{rd}/ws"; base = agent.prep_ws(img, ws)
 task = open(f"{ROOT}/prompts/testgen.txt").read().replace("{issue}", issue_text(iid))
 res = agent.run("testgen", f"tg-{iid}", img, task, ws, rd, 0.25, 40, 900)
+if res.get("status") == "INFRA_FAIL":
+    od = f"{ROOT}/results/testgen/{iid}"; os.makedirs(od, exist_ok=True)
+    json.dump({"instance_id": iid, "validity": "INFRA_FAIL", "agent": res}, open(f"{od}/INFRA_FAIL.json", "w"), indent=2)
+    print(iid, "INFRA_FAIL (preflight)", res["preflight"].replace("\n", " | ")[:500]); sys.exit(3)
 cl = agent.classify(ws, base)
 od = f"{ROOT}/results/testgen/{iid}"; shutil.rmtree(od, ignore_errors=True); os.makedirs(od)
 valid = not cl["violations"] and res["status"] != "BUDGET_STOP"

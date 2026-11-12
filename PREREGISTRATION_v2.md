@@ -175,3 +175,24 @@ sample from SWE-rebench, which pre-filters toward clear, test-verifiable issues;
 - `data/manifest_30.json` is part of the frozen protocol: the 30 IDs with dataset `nebius/SWE-rebench-leaderboard` @ revision `34d5a58864acf91613740a09ec5d205228dcfa39`, docker image RepoDigest (all 30 match `sample_v2.json`), and a fresh no-network Base/Gold re-verification (generator `lib/manifest30.py`, no model calls): F2P fail-on-base, F2P pass-on-gold, P2P pass on base/gold (full and effective). Result: 30/30 F2P fail on base and pass on gold; effective P2P passes on both base and gold for all 30; no apply failures or timeouts.
 - Cost method (unchanged, restated): every Gemini call goes through the host proxy `oh/llm_proxy.py`, which reads `usageMetadata` from each response and prices it with the pinned table: $0.30/M uncached input, $0.03/M cached input, $2.50/M output including thinking (litellm `model_cost["gemini/gemini-2.5-flash"]`). Recorded cost = max(proxy-metered, agent-server litellm `accumulated_cost`). Both must be non-zero for any run with LLM calls; disagreement >1% is flagged in the report.
 - Gate-0 smoke run (OpenHands, sandboxed Docker, schemathesis__schemathesis-4087) is infrastructure evidence only, in `evidence/gate0/`. Its patch is NOT used as a result; the instance is re-run from scratch in the 30-issue run. Its cost ($0.0278) counts against the $25 cap.
+
+## Amendment 2 (user-approved 17:38, before any scored result; 0/30 scored)
+Freezes so far: fb24a8f (prereg + sample_v2 + pipeline) and 2617a58 (gate-0: manifest_30 + cost-method restatement).
+Incident (17:28-17:33): first real run, issue #1 schemathesis-4087. The test-writer sandbox (mini-SWE-agent DockerEnvironment)
+ran commands via its default `bash -lc`; the login shell's /etc/profile reset PATH, so `python` was not found and
+/usr/bin/python3 had no pytest. The project lives in the conda env /opt/conda/envs/testbed (all 30 images; pytest only
+there). The generator could not run tests and wrote CLARIFICATION_NEEDED.md; it also created a YAML fixture -> INVALID.
+The OpenHands patch producer had PATH=/opt/conda/envs/testbed/bin first (asymmetric). The same defect is visible in the v1
+aborted smoke (tox-3931, archived) and was missed. Gate-0 and the feasibility runs never exercised the test-writer.
+Changes (nothing else changes: prompt, model, caps, mounts, network, rules, metrics, thresholds unchanged):
+1. Test-writer sandbox: interpreter `bash -c`; env PATH=/opt/conda/envs/testbed/bin:/opt/conda/bin:/usr/local/sbin:
+   /usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin and CONDA_DEFAULT_ENV=testbed (parity with the patch producer).
+2. Fail-closed preflight (lib/preflight.py): before each test-writer run, the exact mini DockerEnvironment config is started
+   and `python -m pytest --version` executed. Failure => INFRA_FAIL: the pipeline halts; never scored as a B rejection.
+   Verified: new config -> /opt/conda/envs/testbed/bin/python, pytest 9.0.3, rc 0; old config -> "python: command not found", rc 127.
+3. Test-file rule unchanged: only new test_*.py files; any other new file => run INVALID (tests discarded).
+4. Issue #1 is re-run from scratch (stage 1 and stage 2). Voided artefacts kept in git: fd918db (stage-1), b97ed01
+   (stage-2, A=APPROVE, $0.10127, unscored), moved to archive/voided_attempt1/. Their cost ($0.0257 + $0.1013) counts toward the cap.
+5. Before resuming, one end-to-end smoke (preflight -> stage1 -> freeze -> stage2 -> stage3 incl. ground truth) on
+   schemathesis-4087 (no verified non-sample instance exists: all 7 non-sample candidates failed verification). It is NOT
+   a result; evidence in evidence/smoke2/; the instance is re-run from scratch in the real run. Its cost counts toward the cap.

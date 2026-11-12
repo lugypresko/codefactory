@@ -22,6 +22,7 @@ for n, iid in enumerate(order[:lim], 1):
     assert dig == items[iid]["image_repo_digest"], f"digest mismatch {dig}"
     log(f"#{n} {iid}: stage1 testgen")
     r = sh(PY, "lib/stage1_testgen.py", iid); log(r.stdout.strip() or r.stderr[-1500:])
+    if r.returncode == 3: log("INFRA_FAIL (preflight) -> pipeline halted; not scored as a B reject"); break
     if r.returncode: log("stage1 crashed; stopping"); break
     r = sh(PY, "lib/stage1b_pre.py", iid); log(r.stdout.strip() or r.stderr[-1500:])
     if r.returncode: log("stage1b crashed; stopping"); break

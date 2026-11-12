@@ -82,13 +82,22 @@ environment:
   cwd: /testbed
   timeout: 120
   forward_env: []
-  env: {{HOME: /tmp, PAGER: cat, MANPAGER: cat, PYTHONDONTWRITEBYTECODE: "1", PIP_NO_INDEX: "1"}}
+  interpreter: ["bash", "-c"]
+  env: {{HOME: /tmp, PAGER: cat, MANPAGER: cat, PYTHONDONTWRITEBYTECODE: "1", PIP_NO_INDEX: "1", CONDA_DEFAULT_ENV: testbed, PATH: "/opt/conda/envs/testbed/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}}
   run_args: ["--rm", "--network", "none", "--user", "{os.getuid()}:{os.getgid()}", "--cap-drop", "ALL",
              "--security-opt", "no-new-privileges", "--memory", "1536m", "--cpus", "1", "--pids-limit", "256",
              "--label", "lc1a0.run={rid}", "-v", "{ws}:/testbed"{''.join(', "-v", "%s"' % m for m in extra_mounts)}]
 """
     open(f"{run_dir}/config.yaml", "w").write(cfg)
     open(f"{run_dir}/task.txt", "w").write(task)
+    # Amendment 2: fail-closed preflight in the exact sandbox (same mini DockerEnvironment config) before any model call
+    pf = subprocess.run(["timeout", "300", f"{VENV}/bin/python", os.path.join(ROOT, "lib", "preflight.py"), f"{run_dir}/config.yaml"],
+                        capture_output=True, text=True)
+    open(f"{run_dir}/preflight.txt", "w").write(f"rc={pf.returncode}\n{pf.stdout}{pf.stderr[-3000:]}")
+    ids = sh("docker", "ps", "-aq", "--filter", f"label=lc1a0.run={rid}").stdout.split()
+    if ids: sh("docker", "rm", "-f", *ids)
+    if pf.returncode != 0:
+        return {"status": "INFRA_FAIL", "cost_usd": 0.0, "preflight": open(f"{run_dir}/preflight.txt").read(), "role": role, "run_id": rid}
     env = dict(os.environ, MSWEA_CONFIGURED="true", MSWEA_SILENT_STARTUP="1",
                MSWEA_GLOBAL_CONFIG_DIR=os.path.join(ROOT, "work", ".mswea"))
     t0 = time.time(); rc = None
