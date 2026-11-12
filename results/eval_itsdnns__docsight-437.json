@@ -1,0 +1,25 @@
+{
+  "instance_id": "itsdnns__docsight-437",
+  "evaluated_patch_sha256": "f68b6abb1635eaa570becac4991e924d59736b59f26fbd5b0aeb0bb130de535c",
+  "evaluated_patch_bytes": 2102,
+  "producer_run_id": "pa-itsdnns__docsight-437-20261112T202356-63a2710f",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "5/5",
+  "gt_p2p_failed": "0/40",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 4,
+  "gate_deterministic": true,
+  "gate_p2p_files": [],
+  "gate_p2p_stems": [],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "no matching existing test files",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch",
+  "A_decision": "APPROVE"
+}
