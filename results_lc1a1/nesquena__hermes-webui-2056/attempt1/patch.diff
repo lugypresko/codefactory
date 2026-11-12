@@ -1,0 +1,36 @@
+diff --git a/api/config.py b/api/config.py
+index 0c241ce..5b9e69c 100644
+--- a/api/config.py
++++ b/api/config.py
+@@ -20,6 +20,7 @@ import threading
+ import time
+ import traceback
+ import uuid
++import re
+ from pathlib import Path
+ from urllib.parse import parse_qs, urlparse
+ 
+@@ -1453,6 +1454,9 @@ def _custom_slug_rest_looks_like_host_port(rest: str) -> bool:
+     if ":" not in rest:
+         return False
+     host, port_s = rest.rsplit(":", 1)
++    # Clean up host and port_s from any surrounding non-standard characters
++    host = re.sub(r'^[^\w\d.]+|[^\w\d.]+$', '', host) # strip non-alphanumeric/dot from ends
++    port_s = re.sub(r'^\D+|\D+$', '', port_s)      # strip non-digits from ends
+     if not host or ":" in host:
+         return False
+     if not port_s.isdigit():
+@@ -1592,7 +1596,12 @@ def resolve_model_provider(model_id: str) -> tuple:
+                     if isinstance(key, str) and key.strip()
+                 )
+             if entry_name and model_id in entry_model_ids:
+-                provider_hint = 'custom:' + entry_name.lower().replace(' ', '-')
++                # Sanitize provider name to create a valid slug:
++                # 1. Convert to lowercase.
++                # 2. Replace any sequence of non-alphanumeric, non-dot, non-hyphen characters with a single hyphen.
++                # 3. Strip leading/trailing hyphens.
++                sanitized_name = re.sub(r'[^a-z0-9.-]+', '-', entry_name.lower()).strip('-')
++                provider_hint = 'custom:' + sanitized_name
+                 return model_id, provider_hint, entry_base_url or None
+ 
+     # @provider:model format — explicit provider hint from the dropdown.
