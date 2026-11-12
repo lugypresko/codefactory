@@ -1,0 +1,72 @@
+{
+  "issues": [
+    {
+      "instance_id": "nesquena__hermes-webui-2056",
+      "converted": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "run_id": "pa-nesquena__hermes-webui-2056-20261113T000752-37f90d7d",
+          "seal_commit": "b52c5a5",
+          "feedback_sent": "2 of 4 discriminating tests failed",
+          "feedback": {
+            "failed_units": [],
+            "p2p_broken": [],
+            "gate_units_passed": [
+              2,
+              2
+            ],
+            "failing_subset_stored": false
+          },
+          "A_decision": "APPROVE",
+          "B_decision": "REJECT",
+          "B_reason": "REJECT_INVALID_PATCH",
+          "gate_units_passed": [
+            2,
+            2
+          ],
+          "gate_p2p_ok": true,
+          "gt_correct": false,
+          "cost_usd": 0.02714332,
+          "wall_seconds": 96,
+          "patch_bytes": 1667,
+          "stage2_rc": 0,
+          "stage3_rc": 0
+        },
+        {
+          "attempt": 2,
+          "run_id": "pa-nesquena__hermes-webui-2056-20261113T001212-d974361f",
+          "seal_commit": "960ebed",
+          "feedback_sent": "2 of 4 discriminating tests failed",
+          "feedback": {
+            "failed_units": [],
+            "p2p_broken": [],
+            "gate_units_passed": [
+              2,
+              2
+            ],
+            "failing_subset_stored": false
+          },
+          "A_decision": "APPROVE",
+          "B_decision": "REJECT",
+          "B_reason": "REJECT_INVALID_PATCH",
+          "gate_units_passed": [
+            0,
+            0
+          ],
+          "gate_p2p_ok": true,
+          "gt_correct": false,
+          "cost_usd": 0.06093433,
+          "wall_seconds": 186,
+          "patch_bytes": 3544,
+          "stage2_rc": 0,
+          "stage3_rc": 0
+        }
+      ]
+    }
+  ],
+  "converted": 0,
+  "false_pass": 0,
+  "integrity_fail": 0,
+  "infra_fail": 0
+}
