@@ -170,3 +170,8 @@ Stage 2 of issue i may coexist in time only with stages of the SAME issue (no pa
 ## Known limitations (stated in advance)
 One model (gemini-2.5-flash) for both producer and test generator; harness and gate written by the same author (this agent);
 sample from SWE-rebench, which pre-filters toward clear, test-verifiable issues; n = 30; gate-P2P is a heuristic subset.
+
+## Gate-0 addendum (17:2x, before any of the 30 result-collecting runs)
+- `data/manifest_30.json` is part of the frozen protocol: the 30 IDs with dataset `nebius/SWE-rebench-leaderboard` @ revision `34d5a58864acf91613740a09ec5d205228dcfa39`, docker image RepoDigest (all 30 match `sample_v2.json`), and a fresh no-network Base/Gold re-verification (generator `lib/manifest30.py`, no model calls): F2P fail-on-base, F2P pass-on-gold, P2P pass on base/gold (full and effective). Result: 30/30 F2P fail on base and pass on gold; effective P2P passes on both base and gold for all 30; no apply failures or timeouts.
+- Cost method (unchanged, restated): every Gemini call goes through the host proxy `oh/llm_proxy.py`, which reads `usageMetadata` from each response and prices it with the pinned table: $0.30/M uncached input, $0.03/M cached input, $2.50/M output including thinking (litellm `model_cost["gemini/gemini-2.5-flash"]`). Recorded cost = max(proxy-metered, agent-server litellm `accumulated_cost`). Both must be non-zero for any run with LLM calls; disagreement >1% is flagged in the report.
+- Gate-0 smoke run (OpenHands, sandboxed Docker, schemathesis__schemathesis-4087) is infrastructure evidence only, in `evidence/gate0/`. Its patch is NOT used as a result; the instance is re-run from scratch in the 30-issue run. Its cost ($0.0278) counts against the $25 cap.
