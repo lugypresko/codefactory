@@ -1,0 +1,47 @@
+{
+  "instance_id": "cs-si__eodag-2176",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/cs-si__eodag-2176/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-cs-si__eodag-2176",
+    "mini_rc": 0,
+    "wall_seconds": 52,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.031367830000000006,
+    "api_calls": 11,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.0048
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "6b26f6e7416faa26659c3d6051b6770139955af6",
+  "original_base_commit": "a058e6c2c7fb082c80bc5015e495dade6c87ae1b",
+  "task_sha256": "9249c0328e6e453079eec3deb16d3483635fb9bab58c2328dfc605c3e3aff0cc",
+  "test_files": {
+    "tests/integration/test_issue_bug_42.py": "f93a4aaaec7766f89465d43796bcf762f1731586ac4010f730341b1f04c18ce5"
+  },
+  "clarification": true,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/cs-si__eodag-2176/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.cs-si_1776_eodag-2176:latest"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "instance_id": "cs-si__eodag-2176",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "eodag.search.qssearch:qssearch.py:1427 Skipping error while fetching collections for planetary_computer StacSearch instance:::<COLLECTION_ERROR>": "ERROR",
+      "eodag.search.qssearch:qssearch.py:1427 Skipping error while fetching queryables for planetary_computer StacSearch instance:::<COLLECTION_ERROR>": "ERROR",
+      "eodag.core:core.py:1928 Error while searching on provider planetary_computer (ignored):::<COLLECTION_ERROR>": "ERROR",
+      "tests/integration/test_issue_bug_42.py::test_sentinel_1_rtc_search_raises_attribute_error": "FAILED"
+    },
+    {
+      "eodag.search.qssearch:qssearch.py:1427 Skipping error while fetching collections for planetary_computer StacSearch instance:::<COLLECTION_ERROR>": "ERROR",
+      "eodag.search.qssearch:qssearch.py:1427 Skipping error while fetching queryables for planetary_computer StacSearch instance:::<COLLECTION_ERROR>": "ERROR",
+      "eodag.core:core.py:1928 Error while searching on provider planetary_computer (ignored):::<COLLECTION_ERROR>": "ERROR",
+      "tests/integration/test_issue_bug_42.py::test_sentinel_1_rtc_search_raises_attribute_error": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "eodag.core:core.py:1928 Error while searching on provider planetary_computer (ignored):::<COLLECTION_ERROR>",
+    "eodag.search.qssearch:qssearch.py:1427 Skipping error while fetching collections for planetary_computer StacSearch instance:::<COLLECTION_ERROR>",
+    "eodag.search.qssearch:qssearch.py:1427 Skipping error while fetching queryables for planetary_computer StacSearch instance:::<COLLECTION_ERROR>",
+    "tests/integration/test_issue_bug_42.py::test_sentinel_1_rtc_search_raises_attribute_error"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

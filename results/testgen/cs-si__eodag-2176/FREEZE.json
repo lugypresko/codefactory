@@ -1,0 +1,13 @@
+{
+ "instance_id": "cs-si__eodag-2176",
+ "frozen_at": "2026-11-12T19:16:34+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/cs-si__eodag-2176/task.txt": "9249c0328e6e453079eec3deb16d3483635fb9bab58c2328dfc605c3e3aff0cc",
+  "results/testgen/cs-si__eodag-2176/CLARIFICATION_NEEDED.md": "b55d22c12632370c7f0117b45c243dd1b1b63317866c1754de97edef75f434da",
+  "results/testgen/cs-si__eodag-2176/record.json": "8e7e0446aafd13ec738f1ba8215725f9ef30b14ffa57a83c46c9e99907f0e058",
+  "results/testgen/cs-si__eodag-2176/config.yaml": "64150d151265a6479f9569cdc16e2f5cc649989170294fcdddac04ec86b41b6b",
+  "results/testgen/cs-si__eodag-2176/pre_eval.json": "d1f6d97946157cd7c637b77ccf42bd3988eba889c5918c0a005877c1f7af1959",
+  "results/testgen/cs-si__eodag-2176/tests/tests/integration/test_issue_bug_42.py": "f93a4aaaec7766f89465d43796bcf762f1731586ac4010f730341b1f04c18ce5"
+ }
+}
