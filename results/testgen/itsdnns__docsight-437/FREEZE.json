@@ -1,0 +1,12 @@
+{
+ "instance_id": "itsdnns__docsight-437",
+ "frozen_at": "2026-11-12T20:23:56+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/itsdnns__docsight-437/task.txt": "e739b1d1484021d664d82b78dc8c2d38180be0061f375068298758cf632e32e0",
+  "results/testgen/itsdnns__docsight-437/record.json": "8417f91f8a13a8e11c036f8e05a3a17a8f20c27c2653d8882731734c7261a058",
+  "results/testgen/itsdnns__docsight-437/config.yaml": "5dabe61112a785ed70faed653a54b05704dd32d907d6ecac52e9b3e014a56c31",
+  "results/testgen/itsdnns__docsight-437/pre_eval.json": "7012aa1f29f82f6f7fbe3027557af9e39e3f1088a7a573fe65be84bc53b8410c",
+  "results/testgen/itsdnns__docsight-437/tests/tests/test_comparison_error_handling.py": "2bef60a263255d26bfd37d267d9ef13d1c904e6daee7d58d39dcb2ad5810f3aa"
+ }
+}

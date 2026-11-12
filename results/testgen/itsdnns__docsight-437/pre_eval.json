@@ -1,0 +1,28 @@
+{
+  "instance_id": "itsdnns__docsight-437",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_unsupported_errors_not_shown_as_zero_in_api_response": "FAILED",
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_zero_errors_displayed_correctly": "FAILED",
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_supported_errors_displayed_normally": "FAILED",
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_mixed_error_support_one_unsupported": "FAILED"
+    },
+    {
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_unsupported_errors_not_shown_as_zero_in_api_response": "FAILED",
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_zero_errors_displayed_correctly": "FAILED",
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_supported_errors_displayed_normally": "FAILED",
+      "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_mixed_error_support_one_unsupported": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_mixed_error_support_one_unsupported",
+    "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_supported_errors_displayed_normally",
+    "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_unsupported_errors_not_shown_as_zero_in_api_response",
+    "tests/test_comparison_error_handling.py::TestComparisonErrorHandling::test_zero_errors_displayed_correctly"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

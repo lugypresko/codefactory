@@ -1,0 +1,47 @@
+{
+  "instance_id": "itsdnns__docsight-437",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/itsdnns__docsight-437/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-itsdnns__docsight-437",
+    "mini_rc": 0,
+    "wall_seconds": 46,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.030212340000000004,
+    "api_calls": 7,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.5425
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "39d1ffb54c652d9c881f089610d15072af076297",
+  "original_base_commit": "f478c6eeded6e97b3b1dafc55108522b6c693c3b",
+  "task_sha256": "e739b1d1484021d664d82b78dc8c2d38180be0061f375068298758cf632e32e0",
+  "test_files": {
+    "tests/test_comparison_error_handling.py": "2bef60a263255d26bfd37d267d9ef13d1c904e6daee7d58d39dcb2ad5810f3aa"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/itsdnns__docsight-437/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.itsdnns_1776_docsight-437:latest"
+  }
+}
