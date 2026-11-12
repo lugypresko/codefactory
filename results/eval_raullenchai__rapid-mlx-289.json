@@ -1,0 +1,11 @@
+{
+  "instance_id": "raullenchai__rapid-mlx-289",
+  "evaluated_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evaluated_patch_bytes": 0,
+  "producer_run_id": "pa-raullenchai__rapid-mlx-289-20261112T194833-a2b5598f",
+  "B_decision": "REJECT",
+  "B_reason": "NO_PATCH",
+  "gt_correct": false,
+  "gt_note": "empty patch",
+  "A_decision": "REJECT"
+}
