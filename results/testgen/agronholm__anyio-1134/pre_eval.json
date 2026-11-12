@@ -1,0 +1,19 @@
+{
+  "instance_id": "agronholm__anyio-1134",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_issue_main_module.py::test_main_module_in_worker_process": "FAILED"
+    },
+    {
+      "tests/test_issue_main_module.py::test_main_module_in_worker_process": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_issue_main_module.py::test_main_module_in_worker_process"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

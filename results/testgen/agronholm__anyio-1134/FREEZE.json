@@ -1,0 +1,13 @@
+{
+ "instance_id": "agronholm__anyio-1134",
+ "frozen_at": "2026-11-12T20:27:46+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/agronholm__anyio-1134/task.txt": "8423f0da784328b834503119c528b37637740abf48ac55cd29572cf8357825ef",
+  "results/testgen/agronholm__anyio-1134/CLARIFICATION_NEEDED.md": "2b0c733f7fb2925a088c832366a4762204b989dfdc32d724e2c22c653703d324",
+  "results/testgen/agronholm__anyio-1134/record.json": "7ffcae16a60b9a60ea0bce3beb9e4e38d5c5970e40139627fe2a0b4c2dd1eb8d",
+  "results/testgen/agronholm__anyio-1134/config.yaml": "933e934b75f0b3bf30b02f27ff4f5e7578f49c87a0c829c09e4de40ebe33df81",
+  "results/testgen/agronholm__anyio-1134/pre_eval.json": "39d813cd02f3c3f81348313c6a322e0f94127ca5a44528d42afb33592601263a",
+  "results/testgen/agronholm__anyio-1134/tests/tests/test_issue_main_module.py": "727ecc359d2395e5f5ca0190b9d74992341f9a17669658e5820d202b3b72ae1c"
+ }
+}
