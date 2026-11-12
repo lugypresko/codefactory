@@ -1,0 +1,15 @@
+{
+  "instance_id": "tox-dev__tox-3931",
+  "evaluated_patch_sha256": "d3c36d8524674a5a74f653af75f807291d54a83fe0dea8c9217e6671860be787",
+  "evaluated_patch_bytes": 652,
+  "producer_run_id": "pa-tox-dev__tox-3931-20261112T204142-4275ebcd",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "1/1",
+  "gt_p2p_failed": "1/2",
+  "gt_correct": false,
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INSUFFICIENT_EVIDENCE",
+  "B_detail": "clarification requested",
+  "A_decision": "APPROVE"
+}
