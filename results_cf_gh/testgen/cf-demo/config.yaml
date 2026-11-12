@@ -1,0 +1,16 @@
+agent:
+  step_limit: 40
+  cost_limit: 0.25
+  wall_time_limit_seconds: 900
+environment:
+  environment_class: docker
+  image: cf-demo:local
+  executable: docker
+  cwd: /testbed
+  timeout: 120
+  forward_env: []
+  interpreter: ["bash", "-c"]
+  env: {HOME: /tmp, PAGER: cat, MANPAGER: cat, PYTHONDONTWRITEBYTECODE: "1", PIP_NO_INDEX: "1", CONDA_DEFAULT_ENV: testbed, PATH: "/opt/conda/envs/testbed/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}
+  run_args: ["--rm", "--network", "none", "--user", "1000:1000", "--cap-drop", "ALL",
+             "--security-opt", "no-new-privileges", "--memory", "1536m", "--cpus", "1", "--pids-limit", "256",
+             "--label", "lc1a0.run=tg-cf-demo", "-v", "/workspace/lc1a0/results_cf_gh/runs/testgen/cf-demo/ws:/testbed"]
