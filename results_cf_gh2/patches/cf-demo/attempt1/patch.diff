@@ -1,0 +1,20 @@
+diff --git a/src/cfdemo/intervals.py b/src/cfdemo/intervals.py
+index ab84bab..6429afc 100644
+--- a/src/cfdemo/intervals.py
++++ b/src/cfdemo/intervals.py
+@@ -8,11 +8,12 @@ def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:
+     """
+     if not intervals:
+         return []
++    intervals.sort()
+     merged = [list(intervals[0])]
+     for start, end in intervals[1:]:
+-        last = merged[-1]
+-        if start < last[1]:
+-            last[1] = max(last[1], end)
++        last_start, last_end = merged[-1]
++        if start <= last_end:  # Overlap or touch
++            merged[-1][1] = max(last_end, end)
+         else:
+             merged.append([start, end])
+     return merged
