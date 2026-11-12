@@ -1,0 +1,92 @@
+# LC-1A evaluator.
+# Triggered only by pull_request and merge_group. Never pull_request_target:
+# that event runs the workflow from the base branch with a token that can
+# write to the base, which this check must not have.
+name: evaluator
+
+on:
+  pull_request:
+  merge_group:
+
+# GITHUB_TOKEN can read the repo it checked out. It cannot write contents,
+# and this workflow references no secrets.
+permissions:
+  contents: read
+
+jobs:
+  evaluator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Bootstrap
+        run: ./bootstrap.sh
+
+      - name: Self-test (offline, no LLM)
+        run: ./selftest.sh
+
+      # The toy-task base commit is missing the requested feature, so the
+      # hidden tests must FAIL. Exit 1 + decision FAIL is the only success.
+      # ERROR (exit 3), ESCALATE (4), PASS (0), usage (2), a missing or
+      # unreadable report, or any other exit fails the job.
+      - name: Evaluate toy-task base commit (expect FAIL)
+        run: |
+          base_sha="$(sed -n 's/^base_commit_sha=//p' VERSIONS)"
+          if [[ -z "${base_sha}" ]]; then
+            echo "ERROR: VERSIONS has no base_commit_sha"
+            exit 1
+          fi
+          echo "base_sha=${base_sha}"
+          mkdir -p reports
+          set +e
+          ./evaluate.sh "${base_sha}" reports/eval-base.json
+          rc=$?
+          set -e
+          python3 - "${rc}" reports/eval-base.json <<'PY'
+          import json, os, sys
+
+          rc = int(sys.argv[1])
+          path = sys.argv[2]
+          print(f"evaluate.sh exit={rc}")
+          try:
+              report = json.load(open(path))
+          except FileNotFoundError:
+              print("ERROR: evaluator did not write a JSON report")
+              sys.exit(1)
+          except json.JSONDecodeError as exc:
+              print(f"ERROR: evaluator report is not valid JSON: {exc}")
+              sys.exit(1)
+          decision = report.get("decision")
+          print(f"decision={decision!r} reason={report.get('reason')!r}")
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a") as fh:
+                  fh.write("### Evaluator sanity\n\n")
+                  fh.write(f"- requested base SHA: `{report.get('requested_sha')}`\n")
+                  fh.write(f"- resolved SHA: `{report.get('sha')}`\n")
+                  fh.write(f"- exit: `{rc}`\n")
+                  fh.write(f"- decision: `{decision}`\n")
+                  fh.write(f"- reason: `{report.get('reason')}`\n")
+          if rc == 1 and decision == "FAIL":
+              sys.exit(0)
+          print("fail closed: expected exit 1 and decision FAIL")
+          sys.exit(1)
+          PY
+
+      - name: Upload JSON reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluator-reports
+          path: reports/eval-base.json
+          if-no-files-found: error
+          retention-days: 14
