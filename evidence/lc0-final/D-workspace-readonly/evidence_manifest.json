@@ -1,0 +1,23 @@
+{
+  "run_id": "D-workspace-readonly",
+  "inputs_sealed_at": "2026-11-12T13:48:59+02:00",
+  "outputs_sealed_at": "2026-11-12T13:49:01+02:00",
+  "inputs": {
+    "run/trajectory.json": "132f5eb4d755535c0c766ee00fd4ab71251dc870aa8edd145f46c278fce5ce38",
+    "run/config.yaml": "2e6f5a1e08c6ec54a8a32790c5db43c57eae881dafaf7f2fb95e949dae71379c",
+    "run/agent_result.json": "312aa5d613541338bf80166fc705eabb7352d7874da7db9afbfa2d5fdf10b06c",
+    "run/final.diff": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run/fault.json": "11ba951cef2e795ecc1efb5c34c2f9458ba66d6a0d50938bf4c297388518feed",
+    "run/agent_stdout.log": "def5f44e7aa9d1a27f0a27c0177097524fddec033b62e10ae6f58adf70a12139"
+  },
+  "outputs": {
+    "run/report.json": "dc54adebcab313dd02a38681368796e6edb0b1d4bb6d7d2b1d062d7bfbefc0c5",
+    "run/report.md": "0786b85e7b918be913ad75ea584aa91a80e1523062047535da96e0cdc1201354",
+    "evals/baseline.json": "3b6994718e6d297c4640cd58364667c1bdde680e5b943b565d9e2103358b82b2"
+  },
+  "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "final_sha": null,
+  "workspace_sha": null,
+  "git_diff_base_final_sha256": null,
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c"
+}

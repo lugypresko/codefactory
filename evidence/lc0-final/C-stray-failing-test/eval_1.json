@@ -1,9 +1,9 @@
 {
   "requested_sha": "f4419e8930591cc7542f799eb1de0a52d14004eb",
-  "decision": "PASS",
-  "reason": "all expected tests present and passed",
-  "evaluated_at": "2026-11-12T13:22:40+02:00",
-  "duration_s": 2,
+  "decision": "ESCALATE",
+  "reason": "tests passed but diff policy violated (see diff_policy.violations)",
+  "evaluated_at": "2026-11-12T13:48:58+02:00",
+  "duration_s": 1,
   "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
   "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
   "test_hashes_verified_before": true,
@@ -13,8 +13,10 @@
   "harness_sensitive_files": [],
   "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
   "diff_policy": {
-    "result": "OK",
-    "violations": [],
+    "result": "ESCALATE",
+    "violations": [
+      "pre-existing test file modified: tests/test_cart.py"
+    ],
     "info": {
       "changed_files": [
         {

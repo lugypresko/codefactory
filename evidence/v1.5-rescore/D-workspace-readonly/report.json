@@ -1,0 +1,127 @@
+{
+  "run_id": "D-workspace-readonly",
+  "lc0_verdict": "CONTROLLED_STOP",
+  "lc0_reason": "unrecoverable fault: agent stopped without delivery, no false PASS",
+  "delivery_verdict": "FAIL",
+  "delivery_reason": "agent did not deliver: EMPTY_DIFF",
+  "recovery": {
+    "fault_id": "workspace_readonly",
+    "recoverable": false,
+    "level": "CONTROLLED_STOP",
+    "fault_cleared": null,
+    "observed": true,
+    "adapted": true,
+    "note": "unrecoverable fault observed; run stopped with agent_status=EMPTY_DIFF, delivery FAIL",
+    "forbidden": [],
+    "expected_outcome": "CONTROLLED_STOP",
+    "evidence": {
+      "observed": {
+        "step": 4,
+        "command": "sed -i \"/def total(self) -> float:/i \\ def remove_item(self, sku: str, qty: int = 1) -> None:\\ if qty <= 0:\\ raise ValueError(\"qty must be positive\")\\ if sku not in self._items:\\ r\u2026",
+        "observation_excerpt": "self._items[sku]: No such file or directory sed: couldn't open temporary file /repo/cart/sedpdlxbF: Read-only file system"
+      },
+      "next_action": {
+        "step": 5,
+        "command": "cat /repo/cart/cart.py",
+        "identical_retry": false
+      },
+      "signature_hits": 5,
+      "total_steps": 24
+    }
+  },
+  "diff_policy": null,
+  "decision": "CONTROLLED_STOP",
+  "generated_at": "2026-11-12T15:01:04+02:00",
+  "total_seconds": 0,
+  "environment": {
+    "python": "3.13.5",
+    "mini_swe_agent": "2.4.6",
+    "litellm": "1.109.1",
+    "docker_server": "27.3.1",
+    "image_tag": "lc0-env:1",
+    "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c",
+    "base_image_digest": "sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b",
+    "base_commit_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+    "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
+  },
+  "fault": {
+    "fault_id": "workspace_readonly",
+    "recoverable": false,
+    "description": "the repository is mounted read-only: no change can be made; permanent",
+    "signature": "[Rr]ead-only file system|Permission denied",
+    "ws_readonly": true,
+    "injected_at": "2026-11-12T13:04:20+02:00",
+    "fired_events": []
+  },
+  "baseline": {
+    "status": "VALID",
+    "problems": [],
+    "evaluator_exit": 1,
+    "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "report": "work/evals/D-workspace-readonly/baseline.json"
+  },
+  "agent": {
+    "run_id": "D-workspace-readonly",
+    "agent_status": "EMPTY_DIFF",
+    "agent_exit_code": 13,
+    "reason": null,
+    "mini_exit_code": 0,
+    "mini_exit_status": "Submitted",
+    "limit_hit": null,
+    "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+    "final_sha": null,
+    "workspace_sha": null,
+    "diff_files": 0,
+    "diff_lines": 0,
+    "model_requested": "gemini/gemini-2.5-flash",
+    "models_returned_by_api": [
+      "gemini-2.5-flash"
+    ],
+    "cost_usd": 0.04591310999999999,
+    "api_calls": 27,
+    "cost_limit_usd": 0.5,
+    "step_limit": 30,
+    "wall_seconds": 85,
+    "started_at": "2026-11-12T13:04:20+02:00",
+    "ended_at": "2026-11-12T13:05:45+0200",
+    "image": "lc0-env:1",
+    "paths": {
+      "run_dir": "/workspace/lc0/work/runs/D-workspace-readonly",
+      "trajectory": "/workspace/lc0/work/runs/D-workspace-readonly/trajectory.json",
+      "log": "/workspace/lc0/work/runs/D-workspace-readonly/agent_stdout.log",
+      "diff": "/workspace/lc0/work/runs/D-workspace-readonly/final.diff"
+    },
+    "fault": {
+      "fault_id": "workspace_readonly",
+      "recoverable": false,
+      "description": "the repository is mounted read-only: no change can be made; permanent",
+      "signature": "[Rr]ead-only file system|Permission denied",
+      "ws_readonly": true,
+      "injected_at": "2026-11-12T13:04:20+02:00",
+      "fired_events": []
+    }
+  },
+  "agent_exit": 13,
+  "evaluations": [],
+  "evaluations_identical": null,
+  "tests": {
+    "FAIL_TO_PASS": null,
+    "PASS_TO_PASS": null
+  },
+  "integrity": {
+    "hidden_tests_sha256": "9670a8d812bd98adf92deacb8acb999df3c554393cc426e8a7ff3ee0a45855ed",
+    "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
+    "verified_before_and_after": true,
+    "harness_sensitive_files": null
+  },
+  "paths": {
+    "report_md": "work/runs/D-workspace-readonly/report.md",
+    "report_json": "work/runs/D-workspace-readonly/report.json",
+    "trajectory": "../../../../lc0/work/runs/D-workspace-readonly/trajectory.json",
+    "agent_log": "work/runs/D-workspace-readonly/agent_stdout.log",
+    "diff": "work/runs/D-workspace-readonly/final.diff",
+    "agent_result": "work/runs/D-workspace-readonly/agent_result.json"
+  }
+}

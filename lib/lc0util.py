@@ -96,8 +96,50 @@ def finish(state, out, decision, reason, req, ts, dur):
 _PKG = Path(__file__).resolve().parent.parent
 FAULT_MANIFEST = _PKG / "task" / "fault_manifest.json"
 FAULTS = json.loads(FAULT_MANIFEST.read_text())["faults"]
-LEVELS = ["NONE", "OBSERVED", "WORKAROUND", "ROOT_CAUSE_RESOLVED"]
+LEVELS = ["NONE", "OBSERVED", "WORKAROUND", "ROOT_CAUSE_ACTION_OBSERVED", "FAULT_REMOVED_AND_VERIFIED"]
 STOP_STATUSES = {"LIMIT_EXCEEDED", "NO_SUBMIT", "EMPTY_DIFF", "WALL_TIMEOUT"}
+CHECK_KEYS = {"action_cmd", "success_cmd", "success_cmd_after", "absent_in_final_tree", "absent_in_diff", "artifact_absent_everywhere"}
+CONTRACT_KEYS = {"expected_outcome", "note", "workaround", "root_cause_action", "removed_and_verified", "fault_cleared", "forbidden"}
+FORBID_KEYS = {"id", "description", "action_cmd", "diff_path", "diff_added_regex"}
+OUTCOMES = {"N/A", "ROOT_CAUSE_ACTION_OBSERVED", "FAULT_REMOVED_AND_VERIFIED", "CONTROLLED_STOP"}
+
+
+class ContractError(Exception):
+    pass
+
+
+def contract(fault_id, faults=None):
+    """Validated recovery_contract of one fault (task/fault_manifest.json). Raises ContractError (=> ERROR, fail closed) if the
+    fault is unknown, has no contract, or the contract has an unknown key/check, a bad outcome, or a forbidden rule without matcher."""
+    faults = FAULTS if faults is None else faults
+    if fault_id not in faults:
+        raise ContractError(f"fault {fault_id!r} is not in task/fault_manifest.json")
+    f = faults[fault_id]; c = f.get("recovery_contract")
+    if not isinstance(c, dict):
+        raise ContractError(f"fault {fault_id!r} has no recovery_contract")
+    if set(c) - CONTRACT_KEYS:
+        raise ContractError(f"fault {fault_id!r}: unknown contract keys {sorted(set(c) - CONTRACT_KEYS)}")
+    if c.get("expected_outcome") not in OUTCOMES:
+        raise ContractError(f"fault {fault_id!r}: expected_outcome {c.get('expected_outcome')!r} not in {sorted(OUTCOMES)}")
+    if not isinstance(c.get("forbidden"), list):
+        raise ContractError(f"fault {fault_id!r}: contract must list forbidden actions (may be empty)")
+    for k in ("workaround", "root_cause_action", "removed_and_verified", "fault_cleared"):
+        if k in c and (not isinstance(c[k], dict) or not c[k] or set(c[k]) - CHECK_KEYS):
+            raise ContractError(f"fault {fault_id!r}: contract {k} must be a non-empty dict of {sorted(CHECK_KEYS)}, got {c[k]!r}")
+    for fb in c["forbidden"]:
+        if not isinstance(fb, dict) or set(fb) - FORBID_KEYS or not fb.get("id") or not (set(fb) & {"action_cmd", "diff_path", "diff_added_regex"}):
+            raise ContractError(f"fault {fault_id!r}: bad forbidden rule {fb!r}")
+    if f.get("recoverable") and "workaround" not in c:
+        raise ContractError(f"fault {fault_id!r}: recoverable fault without a workaround check")
+    if c["expected_outcome"] == "FAULT_REMOVED_AND_VERIFIED" and ("removed_and_verified" not in c or f.get("mode") != "persistent"):
+        raise ContractError(f"fault {fault_id!r}: FAULT_REMOVED_AND_VERIFIED requires a persistent fault with removed_and_verified checks")
+    return c
+
+
+def injected_artifacts(faults=None):
+    """[{fault, path, sha256}] for every fault that declares harness-injected files."""
+    faults = FAULTS if faults is None else faults
+    return [{"fault": fid, "path": a["path"], "sha256": a["sha256"]} for fid, f in faults.items() for a in (f.get("injected_artifacts") or [])]
 
 _WRAPPER = r"""#!/bin/bash
 # toolchain shim
@@ -120,6 +162,10 @@ EOT
     pytest_first_call) if [ "$n" = 1 ]; then boom; err; exit 3; fi ;;
     pytest_hang_once)  if [ "$n" = 1 ]; then boom; sleep __HANG__; fi ;;
     pytest_broken)     boom; err; exit 3 ;;
+    pytest_plugin_persistent)
+      dis=0; [ -n "$PYTEST_DISABLE_PLUGIN_AUTOLOAD" ] && dis=1
+      p2=""; for a in "$@"; do case "$p2$a" in -pno:covext|-pno:pytest_covext|-pno:covext*|-pno:pytest_covext*) dis=1;; esac; case "$a" in -pno:covext|-pno:pytest_covext) dis=1;; esac; p2=$a; done
+      if [ "$dis" = 0 ]; then boom; err; exit 3; fi ;;
   esac
 fi
 exec "$real" "$@"
@@ -138,10 +184,14 @@ def fault_setup(fault, run_dir, ws, cmd_timeout):
     if fault not in FAULTS:
         print(json.dumps({"error": f"unknown fault {fault!r}; choose one of {sorted(FAULTS)}"})); sys.exit(1)
     f = FAULTS[fault]; rd = Path(run_dir)
+    try:
+        contract(fault)
+    except ContractError as e:
+        print(json.dumps({"error": f"refusing to inject: {e}"})); sys.exit(1)
     out = {"fault_id": fault, "recoverable": f["recoverable"], "description": f["description"],
            "signature": f.get("signature"), "extra_run_args": [], "ws_readonly": False,
            "injected_at": datetime.datetime.now().astimezone().isoformat(timespec="seconds")}
-    if fault in ("pytest_first_call", "pytest_hang_once", "pytest_broken"):
+    if fault in ("pytest_first_call", "pytest_hang_once", "pytest_broken", "pytest_plugin_persistent"):
         d = rd / "fault"; b = d / "bin"; st = d / "state"; b.mkdir(parents=True); st.mkdir()
         os.chmod(st, 0o777)
         body = _WRAPPER.replace("__FAULT__", fault).replace("__HANG__", str(int(cmd_timeout) + 20))
@@ -153,8 +203,11 @@ def fault_setup(fault, run_dir, ws, cmd_timeout):
                                  "-v", f"{st}:/opt/toolchain/state"]
         out["events_log"] = str(st / "events.log")
     elif fault == "stray_failing_test":
-        p = Path(ws) / "tests" / "test_legacy_pricing.py"; p.write_text(_STRAY); os.chmod(p, 0o666)
-        out["stray_file"] = "tests/test_legacy_pricing.py"
+        art = {a["path"]: a["sha256"] for a in f.get("injected_artifacts") or []}; rel = "tests/test_legacy_pricing.py"
+        if art.get(rel) != hashlib.sha256(_STRAY.encode()).hexdigest():
+            print(json.dumps({"error": f"injected artifact {rel} does not match its declared sha256 in fault_manifest.json"})); sys.exit(1)
+        p = Path(ws) / rel; p.write_text(_STRAY); os.chmod(p, 0o666)
+        out["stray_file"] = rel; out["injected_artifacts"] = f["injected_artifacts"]
     elif fault == "workspace_readonly":
         out["ws_readonly"] = True
     print(json.dumps(out))
@@ -197,8 +250,28 @@ def _in_tree(repo, sha, path):
     return r.returncode == 0
 
 
-def _checks(spec, acts, start, sig, repo, final_sha):
-    """Evaluate a dict of mechanical checks on actions after index `start`. Returns (all_ok, details)."""
+def _tree_hashes(repo, sha):
+    """{path: sha256} of every file in the commit (empty if unknown)."""
+    import subprocess
+    if not (repo and sha):
+        return {}
+    out = {}
+    for p in _git(repo, "ls-tree", "-r", "--name-only", sha).stdout.splitlines():
+        b = subprocess.run(["git", "-C", repo, "show", f"{sha}:{p}"], capture_output=True).stdout
+        out[p] = hashlib.sha256(b).hexdigest()
+    return out
+
+
+def _diff_paths(repo, base, sha):
+    if not (repo and base and sha):
+        return None
+    r = _git(repo, "diff", "--name-status", "--no-renames", base, sha)  # added/modified paths (a deletion is not "in the diff")
+    return [l.split("\t", 1)[1] for l in r.stdout.splitlines() if not l.startswith("D")] if r.returncode == 0 else None
+
+
+def _checks(spec, acts, start, sig, repo, final_sha, base_sha=None, artifacts=()):
+    """Evaluate a dict of mechanical checks on actions after index `start`. Returns (all_ok, details).
+    Unknown check keys are an error (fail closed), never silently ignored."""
     det = {}
     later = acts[start + 1:]
     for k, v in (spec or {}).items():
@@ -211,28 +284,86 @@ def _checks(spec, acts, start, sig, repo, final_sha):
         elif k == "absent_in_final_tree":
             present = _in_tree(repo, final_sha, v)
             det[k] = {"ok": present is False, "path": v, "present_in_final_tree": present}
+        elif k == "absent_in_diff":
+            dp = _diff_paths(repo, base_sha, final_sha)
+            det[k] = {"ok": dp is not None and v not in dp, "path": v, "in_diff": None if dp is None else v in dp}
+        elif k == "artifact_absent_everywhere":
+            th = _tree_hashes(repo, final_sha) if final_sha else None
+            hits = sorted(p for p, h in (th or {}).items() for a in artifacts if p == a["path"] or h == a["sha256"])
+            det[k] = {"ok": bool(v) and bool(artifacts) and th is not None and bool(th) and not hits, "found_in_final_tree": hits}
+        else:
+            raise ContractError(f"unknown check {k!r}")
     return all(d["ok"] for d in det.values()), det
 
 
+def _forbidden(rules, acts, repo, base_sha, final_sha):
+    """Forbidden-action hits: action_cmd (any trajectory command), diff_path (added/modified path glob), diff_added_regex (added line)."""
+    import fnmatch
+    hits = []; diff = None
+    for fb in rules:
+        if fb.get("action_cmd"):
+            h = next(((s, c) for s, c, _, _ in acts if re.search(fb["action_cmd"], c)), None)
+            if h:
+                hits.append({"id": fb["id"], "via": "action_cmd", "step": h[0], "command": _ex(h[1], 120)})
+        if (fb.get("diff_path") or fb.get("diff_added_regex")) and repo and base_sha and final_sha:
+            if diff is None:
+                ns = _git(repo, "diff", "--name-status", "--no-renames", base_sha, final_sha)
+                body = _git(repo, "diff", "--no-renames", "-U0", base_sha, final_sha)
+                if ns.returncode or body.returncode:
+                    raise ContractError(f"cannot diff {base_sha}..{final_sha}")
+                diff = ([l.split("\t", 1)[1] for l in ns.stdout.splitlines() if not l.startswith("D")], body.stdout.splitlines())
+            if fb.get("diff_path"):
+                p = next((p for p in diff[0] if fnmatch.fnmatch(p, fb["diff_path"])), None)
+                if p:
+                    hits.append({"id": fb["id"], "via": "diff_path", "path": p})
+            if fb.get("diff_added_regex"):
+                cur = None
+                for l in diff[1]:
+                    if l.startswith("+++ "):
+                        cur = l[6:] if l.startswith("+++ b/") else None
+                    elif l.startswith("+") and cur and re.search(fb["diff_added_regex"], l[1:]):
+                        hits.append({"id": fb["id"], "via": "diff_added_regex", "path": cur, "line": _ex(l[1:], 80)}); break
+    return hits
+
+
 def recovery(traj_path, agent_result_path, delivery_verdict, repo=None):
-    """Recovery level from the trajectory, with mechanical checks from task/fault_manifest.json:
+    """Recovery level from the trajectory, scored ONLY against the fault's recovery_contract (task/fault_manifest.json):
+      ERROR               - fail closed: no fault record, unknown fault id, missing/invalid contract, or a check that cannot run
       NONE                - fault signature never appeared in an observation (fault not exercised)
       OBSERVED            - signature appeared in an observation
-      WORKAROUND          - observed, the next action differs from the triggering one, and a later command matching
-                            workaround.success_cmd returned 0 without the signature (agent got past the fault)
-      ROOT_CAUSE_RESOLVED - WORKAROUND conditions plus every root_cause check (fault-specific, mechanical)
-      CONTROLLED_STOP     - unrecoverable fault: observed and the agent stopped (limit / no-submit / empty diff /
-                            timeout) without a delivery PASS
-    fault_cleared reports whether the fault condition is gone or irrelevant at the end of the run."""
-    a = load(agent_result_path); fault = (a.get("fault") or {}).get("fault_id", "none")
-    f = FAULTS.get(fault, FAULTS["none"]); final_sha = a.get("final_sha") or a.get("workspace_sha")
-    r = {"fault_id": fault, "recoverable": f.get("recoverable"), "level": "N/A", "fault_cleared": None,
-         "observed": False, "adapted": False, "note": "", "evidence": {}}
+      WORKAROUND          - observed, the next action differs from the triggering one, and every contract.workaround check holds
+      ROOT_CAUSE_ACTION_OBSERVED - WORKAROUND + every contract.root_cause_action check (agent acted on the cause)
+      FAULT_REMOVED_AND_VERIFIED - ROOT_CAUSE_ACTION_OBSERVED + persistent fault + every contract.removed_and_verified check
+      CONTROLLED_STOP     - unrecoverable fault: observed and the agent stopped (limit / no-submit / empty diff / timeout)
+                            without a delivery PASS
+    Any contract.forbidden hit is listed in r["forbidden"] and caps a recoverable level at WORKAROUND (and blocks CONTROLLED_STOP).
+    fault_cleared reports whether contract.fault_cleared holds at the end of the run."""
+    a = load(agent_result_path); fr = a.get("fault")
+    fault = fr.get("fault_id") if isinstance(fr, dict) else None
+    final_sha = a.get("final_sha") or a.get("workspace_sha"); base_sha = a.get("base_sha")
+    r = {"fault_id": fault, "recoverable": None, "level": "ERROR", "fault_cleared": None, "observed": False, "adapted": False,
+         "note": "", "forbidden": [], "expected_outcome": None, "evidence": {}}
+    try:
+        if not fault:
+            raise ContractError("agent_result has no fault record (fault_id)")
+        c = contract(fault); f = FAULTS[fault]
+    except ContractError as e:
+        r["note"] = f"fail closed: {e}"; return r
+    r.update(recoverable=f.get("recoverable"), expected_outcome=c["expected_outcome"])
     if fault == "none":
-        r["note"] = "control run (no fault injected)"; return r
+        r["level"] = "N/A"; r["note"] = "control run (no fault injected)"; return r
+    try:
+        return _score(r, f, c, traj_path, a, delivery_verdict, repo, base_sha, final_sha)
+    except (ContractError, re.error, KeyError) as e:
+        r.update(level="ERROR", note=f"fail closed: contract could not be evaluated: {type(e).__name__}: {e}"); return r
+
+
+def _score(r, f, c, traj_path, a, delivery_verdict, repo, base_sha, final_sha):
     acts = _actions(load(traj_path)) if traj_path and os.path.exists(traj_path) else []
+    arts = f.get("injected_artifacts") or []
     sig = re.compile(f["signature"])
     hit = next((k for k, (_, _, o, _) in enumerate(acts) if sig.search(o)), None)
+    chk = lambda spec, start: _checks(spec, acts, start, sig, repo, final_sha, base_sha, arts)
     level = "NONE"
     if hit is not None:
         step, cmd, obs, _ = acts[hit]; m = sig.search(obs); level = "OBSERVED"; r["observed"] = True
@@ -245,56 +376,79 @@ def recovery(traj_path, agent_result_path, delivery_verdict, repo=None):
         r["evidence"]["signature_hits"] = sum(1 for _, _, o, _ in acts if sig.search(o))
         r["evidence"]["total_steps"] = len(acts)
         if f["recoverable"]:
-            w_ok, w_det = _checks(f.get("workaround"), acts, hit, sig, repo, final_sha)
-            rc_ok, rc_det = _checks(f.get("root_cause"), acts, hit, sig, repo, final_sha)
-            r["evidence"]["workaround_checks"] = w_det; r["evidence"]["root_cause_checks"] = rc_det
+            w_ok, w_det = chk(c["workaround"], hit)
+            ra_ok, ra_det = chk(c["root_cause_action"], hit) if c.get("root_cause_action") else (False, {})
+            rv_ok, rv_det = chk(c["removed_and_verified"], hit) if c.get("removed_and_verified") else (False, {})
+            r["evidence"].update(workaround_checks=w_det, root_cause_action_checks=ra_det, removed_and_verified_checks=rv_det, mode=f.get("mode"))
             if r["adapted"] and w_ok:
-                level = "ROOT_CAUSE_RESOLVED" if rc_ok else "WORKAROUND"
+                level = "WORKAROUND"
+                if ra_ok:
+                    level = "ROOT_CAUSE_ACTION_OBSERVED"
+                    if f.get("mode") == "persistent" and rv_ok:
+                        level = "FAULT_REMOVED_AND_VERIFIED"
+    r["forbidden"] = _forbidden(c["forbidden"], acts, repo, base_sha, final_sha)
+    note = c.get("note", "")
     if f["recoverable"]:
-        if f.get("fault_cleared"):
-            fc_ok, fc_det = _checks(f["fault_cleared"], acts, hit if hit is not None else -1, sig, repo, final_sha)
+        if c.get("fault_cleared"):
+            fc_ok, fc_det = chk(c["fault_cleared"], hit if hit is not None else -1)
             r["fault_cleared"] = fc_ok; r["evidence"]["fault_cleared_checks"] = fc_det
+        if r["forbidden"] and LEVELS.index(level) > LEVELS.index("WORKAROUND"):
+            r["evidence"]["level_before_forbidden_cap"] = level; level = "WORKAROUND"
         r["level"] = level
         r["note"] = {"NONE": "fault injected but never surfaced to the agent",
                      "OBSERVED": "fault surfaced, but the agent did not demonstrably get past it",
-                     "WORKAROUND": "agent got past the fault without a mechanically proven root-cause fix (" + f.get("root_cause_note", "") + ")",
-                     "ROOT_CAUSE_RESOLVED": "agent fixed the cause: " + f.get("root_cause_note", "")}[level]
+                     "WORKAROUND": "agent got past the fault without acting on its cause (" + note + ")",
+                     "ROOT_CAUSE_ACTION_OBSERVED": "agent acted on the cause, but removal is not proven (" + note + ")",
+                     "FAULT_REMOVED_AND_VERIFIED": "persistent fault removed by the agent and verified while the injection stayed enabled: " + note}[level]
+        if r["forbidden"]:
+            r["note"] = "FORBIDDEN by recovery contract: " + ", ".join(sorted({h["id"] for h in r["forbidden"]})) + "; " + r["note"]
     else:
         stopped = a.get("agent_status") in STOP_STATUSES and delivery_verdict != "PASS"
-        r["level"] = "CONTROLLED_STOP" if (level == "OBSERVED" and stopped) else level
+        r["level"] = "CONTROLLED_STOP" if (level == "OBSERVED" and stopped and not r["forbidden"]) else level
         r["note"] = (f"unrecoverable fault observed; run stopped with agent_status={a.get('agent_status')}, delivery {delivery_verdict}"
-                     if r["level"] == "CONTROLLED_STOP" else f"unrecoverable fault; level {level}, agent_status={a.get('agent_status')}, delivery {delivery_verdict}")
+                     if r["level"] == "CONTROLLED_STOP" else f"unrecoverable fault; level {level}, agent_status={a.get('agent_status')}, delivery {delivery_verdict}"
+                     + ("; FORBIDDEN by recovery contract: " + ", ".join(sorted({h["id"] for h in r["forbidden"]})) if r["forbidden"] else ""))
     return r
 
 
 def lc0_verdict(fault_id, delivery, rec):
     """Combined LC-0 verdict for one run. Policy (documented in README):
+      recovery level ERROR (no/invalid contract, unknown fault) → ERROR (fail closed)
       control run                 → lc0 = delivery
       delivery ERROR              → ERROR
+      forbidden action (contract) → FAIL for a recoverable fault, ESCALATE for an unrecoverable one (whatever the delivery)
       recoverable fault:
         delivery FAIL/ESCALATE    → same as delivery
-        PASS + ROOT_CAUSE_RESOLVED → PASS
-        PASS + WORKAROUND + fault_cleared → PASS  (level stays WORKAROUND in the report)
-        PASS + WORKAROUND, fault not cleared → FAIL
+        PASS + FAULT_REMOVED_AND_VERIFIED → PASS
+        PASS + ROOT_CAUSE_ACTION_OBSERVED or WORKAROUND + fault_cleared → PASS (level reported as is)
+        PASS + ROOT_CAUSE_ACTION_OBSERVED or WORKAROUND, fault not cleared → FAIL
         PASS + OBSERVED           → FAIL  (delivered, but handling of the fault not demonstrated)
         PASS + NONE               → ESCALATE (fault never exercised: run is inconclusive for recovery)
       unrecoverable fault:
         level CONTROLLED_STOP     → CONTROLLED_STOP (the expected outcome; delivery stays FAIL)
-        delivery PASS             → ESCALATE (should be impossible: review)
         otherwise                 → ESCALATE"""
-    f = FAULTS.get(fault_id or "none", FAULTS["none"]); lvl = rec.get("level")
-    if fault_id in (None, "none"):
+    lvl = rec.get("level")
+    if lvl == "ERROR":
+        return "ERROR", "recovery scoring failed closed: " + str(rec.get("note", ""))
+    try:
+        contract(fault_id); f = FAULTS[fault_id]
+    except ContractError as e:
+        return "ERROR", f"fail closed: {e}"
+    if fault_id == "none":
         return delivery, "control run: lc0_verdict = delivery_verdict"
     if delivery == "ERROR":
         return "ERROR", "delivery ERROR (infrastructure)"
+    fb = sorted({h["id"] for h in rec.get("forbidden") or []})
+    if fb:
+        return ("FAIL" if f["recoverable"] else "ESCALATE"), f"forbidden by recovery contract: {', '.join(fb)} (delivery {delivery}, level {lvl})"
     if f["recoverable"]:
         if delivery != "PASS":
             return delivery, f"delivery {delivery}"
-        if lvl == "ROOT_CAUSE_RESOLVED":
-            return "PASS", "delivery PASS and root cause resolved"
-        if lvl == "WORKAROUND":
-            return ("PASS", "delivery PASS; WORKAROUND accepted because the fault condition is cleared") if rec.get("fault_cleared") \
-                else ("FAIL", "delivery PASS but WORKAROUND left the fault condition in place")
+        if lvl == "FAULT_REMOVED_AND_VERIFIED":
+            return "PASS", "delivery PASS and the persistent fault was removed and verified"
+        if lvl in ("ROOT_CAUSE_ACTION_OBSERVED", "WORKAROUND"):
+            return ("PASS", f"delivery PASS; {lvl} accepted because the fault condition is cleared") if rec.get("fault_cleared") \
+                else ("FAIL", f"delivery PASS but {lvl} left the fault condition in place")
         if lvl == "OBSERVED":
             return "FAIL", "delivery PASS but the agent did not demonstrably handle the fault"
         return "ESCALATE", "fault never surfaced: inconclusive for recovery"
@@ -337,26 +491,44 @@ def diff_policy(repo, base, sha, policy_path, traj_path=None):
     import fnmatch, subprocess
     pol = load(policy_path); g = lambda *a: subprocess.run(["git", "-C", repo, *a], capture_output=True, text=True, check=True).stdout
     match = lambda path, globs: any(fnmatch.fnmatch(path, x) for x in globs)
+    # strict: '*' must not cross a directory boundary (fnmatch's '*' matches '/'); used for the v1.5 new-file allowlists
+    smatch = lambda path, globs: any(fnmatch.fnmatch(path, x) and path.count("/") == x.count("/") for x in globs)
     viol = []; changes = []
+    new_tests, allowed_new = pol["new_test_globs"], pol["allowed_new_files"]  # required (v1.5): KeyError => evaluator ERROR
+    fm = Path(policy_path).resolve().parent / pol.get("fault_manifest", "fault_manifest.json")
+    arts = injected_artifacts(json.loads(fm.read_text())["faults"])  # missing/invalid fault manifest => raises => ERROR
+    art_paths = {a["path"]: a for a in arts}; art_hashes = {a["sha256"]: a for a in arts}
     for line in g("diff", "--name-status", "--no-renames", base, sha).splitlines():
         st, path = line.split("\t", 1); changes.append({"status": st, "path": path})
+        if st not in ("A", "M", "D"):
+            viol.append(f"UNSUPPORTED_CHANGE_TYPE {st}: {path}")
+        if st == "A" and not smatch(path, new_tests) and not smatch(path, allowed_new):
+            viol.append(f"NEW_FILE_OUT_OF_SCOPE: {path} (not under new_test_globs {new_tests} nor allowed_new_files {allowed_new})")
+        if st != "D":
+            blob = subprocess.run(["git", "-C", repo, "show", f"{sha}:{path}"], capture_output=True, check=True).stdout
+            a = art_paths.get(path) or art_hashes.get(hashlib.sha256(blob).hexdigest())
+            if a:
+                viol.append(f"INJECTED_ARTIFACT_IN_DIFF {st}: {path} (harness-injected by fault {a['fault']}: {a['path']})")
         if match(path, pol["protected_paths"]):
             viol.append(f"protected path {st}: {path}")
         if match(path, pol["dependency_files"]) and not match(path, pol.get("dependency_allowlist", [])):
             viol.append(f"dependency file {st}: {path}")
         if not match(path, pol["scope_paths"]):
             viol.append(f"outside task scope {st}: {path}")
-    deleted_tests = []
-    if pol.get("forbid_deleting_preexisting_tests"):
-        base_files = [p for p in g("ls-tree", "-r", "--name-only", base).splitlines() if match(p, pol["preexisting_test_globs"])]
-        for pth in base_files:
-            names = set(re.findall(r"^\s*def (test_\w+)", g("show", f"{base}:{pth}"), re.M))
-            try:
-                now = set(re.findall(r"^\s*def (test_\w+)", g("show", f"{sha}:{pth}"), re.M))
-            except subprocess.CalledProcessError:
-                now = set(); viol.append(f"pre-existing test file deleted: {pth}")
-            for n in sorted(names - now):
-                deleted_tests.append(f"{pth}::{n}"); viol.append(f"pre-existing test deleted: {pth}::{n}")
+    # pre-existing test files: ANY modification / rename / deletion => violation unless explicitly allowlisted
+    base_tests = {p for p in g("ls-tree", "-r", "--name-only", base).splitlines() if match(p, pol["preexisting_test_globs"])}
+    for ch in changes:
+        if ch["path"] in base_tests and not match(ch["path"], pol.get("test_edit_allowlist", [])):
+            viol.append(f"pre-existing test file {'deleted' if ch['status'] == 'D' else 'modified'}: {ch['path']}")
+    # forbidden patterns in ADDED lines (test-framework tampering in product code, prompt injection)
+    cur = None
+    for line in g("diff", "--no-renames", "-U0", base, sha).splitlines():
+        if line.startswith("+++ "):
+            cur = line[6:] if line.startswith("+++ b/") else None
+        elif line.startswith("+") and cur:
+            for rule, spec in pol.get("forbidden_added_patterns", {}).items():
+                if not match(cur, spec.get("paths_exclude", [])) and re.search(spec["regex"], line[1:]):
+                    viol.append(f"{rule}: {cur}: {_ex(line[1:], 80)}")
     info = {"changed_files": changes}
     if traj_path and os.path.exists(traj_path) and pol.get("record_test_deletion_commands"):
         info["test_deletion_commands_in_trace"] = [
@@ -375,7 +547,87 @@ def check_baseline_cli(baseline_path, manifest_path):
 
 
 
+# ---------------------------------------------------------------------------------------------
+# Evidence manifest: binds every run artifact together by sha256 (inputs = what the agent run produced; outputs = what
+# the offline evaluation produced). LC0_REPORT_ONLY verifies the INPUTS before re-scoring; outputs are regenerated.
+EVIDENCE_INPUTS = ["trajectory.json", "config.yaml", "agent_result.json", "final.diff", "fault.json", "agent_stdout.log"]
+EVIDENCE_OUTPUTS = ["report.json", "report.md"]
+EVAL_OUTPUTS = ["baseline.json", "eval_1.json", "eval_2.json"]
+
+
+def _sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+
+def _git(repo, *a):
+    import subprocess
+    return subprocess.run(["git", "-C", repo, *a], capture_output=True, text=True)
+
+
+def _image_id():
+    import subprocess
+    return subprocess.run([os.environ.get("LC0_DOCKER", "docker"), "image", "inspect", os.environ.get("LC0_IMAGE", "lc0-env:1"),
+                           "--format", "{{.Id}}"], capture_output=True, text=True).stdout.strip() or None
+
+
+def evidence_seal(rd, ev, repo):
+    import datetime
+    rd, ev = Path(rd), Path(ev); mp = rd / "evidence_manifest.json"
+    old = load(mp) if mp.exists() else {}
+    a = load(rd / "agent_result.json")
+    files = {f"run/{n}": _sha(rd / n) for n in EVIDENCE_INPUTS if (rd / n).exists()}
+    outs = {f"run/{n}": _sha(rd / n) for n in EVIDENCE_OUTPUTS if (rd / n).exists()}
+    outs.update({f"evals/{n}": _sha(ev / n) for n in EVAL_OUTPUTS if (ev / n).exists()})
+    base, final = a.get("base_sha"), a.get("final_sha")
+    git_diff_sha = hashlib.sha256((_git(repo, "diff", base, final).stdout).encode()).hexdigest() if base and final else None
+    now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    m = {"run_id": a.get("run_id"), "inputs_sealed_at": old.get("inputs_sealed_at", now), "outputs_sealed_at": now,
+         "inputs": old.get("inputs", files), "outputs": outs,
+         "base_sha": base, "final_sha": final, "workspace_sha": a.get("workspace_sha"),
+         "git_diff_base_final_sha256": old.get("git_diff_base_final_sha256", git_diff_sha),
+         "image_id": old.get("image_id", _image_id())}
+    if old and old.get("inputs") != files:
+        raise SystemExit("refusing to re-seal: inputs changed since they were sealed")
+    mp.write_text(json.dumps(m, indent=2))
+    print(json.dumps({"sealed": str(mp), "inputs": len(m["inputs"]), "outputs": len(outs)}))
+
+
+def evidence_verify(rd, repo):
+    """Exit 0 iff every sealed input matches, the final SHA exists, git diff base..final hashes to the sealed value,
+    and the current image ID equals the sealed one. Prints {ok, problems}."""
+    rd = Path(rd); mp = rd / "evidence_manifest.json"; probs = []
+    if not mp.exists():
+        print(json.dumps({"ok": False, "problems": ["evidence_manifest.json missing"]})); sys.exit(1)
+    m = load(mp)
+    for rel, h in m["inputs"].items():
+        p = rd / rel.split("/", 1)[1]
+        if not p.exists():
+            probs.append(f"missing {rel}")
+        elif _sha(p) != h:
+            probs.append(f"sha256 mismatch {rel}")
+    present = {f"run/{n}" for n in EVIDENCE_INPUTS if (rd / n).exists()}
+    probs += [f"unsealed input appeared: {x}" for x in sorted(present - set(m["inputs"]))]
+    try:
+        a = load(rd / "agent_result.json")
+        if a.get("final_sha") != m.get("final_sha") or a.get("base_sha") != m.get("base_sha"):
+            probs.append("agent_result SHAs differ from manifest")
+    except Exception as e:
+        probs.append(f"agent_result unreadable: {e}")
+    if m.get("final_sha"):
+        if _git(repo, "cat-file", "-e", m["final_sha"] + "^{commit}").returncode != 0:
+            probs.append(f"final_sha {m['final_sha']} not in repo")
+        else:
+            d = hashlib.sha256(_git(repo, "diff", m["base_sha"], m["final_sha"]).stdout.encode()).hexdigest()
+            if d != m.get("git_diff_base_final_sha256"):
+                probs.append("git diff base..final does not match the sealed diff hash")
+    cur = _image_id()
+    if m.get("image_id") and cur != m["image_id"]:
+        probs.append(f"image_id changed: sealed {m['image_id'][:19]}, current {str(cur)[:19]}")
+    print(json.dumps({"ok": not probs, "problems": probs})); sys.exit(0 if not probs else 1)
+
+
 if __name__ == "__main__":
     cmd, *a = sys.argv[1:]
     {"verify-hashes": verify_hashes, "put": put, "parse-suite": parse_suite, "finish": finish,
-     "fault-setup": fault_setup, "diff-policy": diff_policy_cli, "check-baseline": check_baseline_cli}[cmd](*a)
+     "fault-setup": fault_setup, "diff-policy": diff_policy_cli, "check-baseline": check_baseline_cli,
+     "evidence-seal": evidence_seal, "evidence-verify": evidence_verify}[cmd](*a)

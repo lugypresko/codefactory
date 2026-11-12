@@ -1,0 +1,11 @@
+Warning: Input is not a terminal (fd=0).
+Building agent config from specs: ['/workspace/lc0/mini.yaml', 
+'/workspace/lc0/work/runs/A2-control/config.yaml']
+minisweagent.environment: DEBUG: Starting container with command: docker run -d 
+--name minisweagent-c3278f84 -w /repo --rm --network none --user 1000:1000      
+--cap-drop ALL --security-opt no-new-privileges --memory 1g --cpus 1            
+--pids-limit 256 --label lc0.run=A2-control -v                                  
+/workspace/lc0/work/runs/A2-control/ws:/repo lc0-env:1 sleep 2h                 
+minisweagent.environment: INFO: Started container minisweagent-c3278f84 with ID 
+19ab3bcf53464ed8c96686bdd9cfe74b624d22496346f322dac59cf4d606567f                
+Saved trajectory to '/workspace/lc0/work/runs/A2-control/trajectory.json'

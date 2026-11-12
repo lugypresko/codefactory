@@ -1,0 +1,5 @@
+[15:01:04] (a) baseline check on base 9f6b7382fdf736da3260b5df56beb3acc96ec40e
+[15:01:06]     evidence manifest verified: {"ok": true, "problems": []}
+[15:01:06] (b) REPORT_ONLY: reusing saved agent run (no LLM calls)
+[15:01:06] (c) evaluating final SHA 6a194896fd2f77b24154c52fc8aaebf334e9524f twice
+[15:01:09] LC0 VERDICT: PASS (delivery PASS, recovery N/A) — report: /workspace/lc0-v15-work/tmp/lc0-rescore-vi4k07_j/pkg/work/runs/A2-control/report.md

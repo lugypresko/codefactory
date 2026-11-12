@@ -1,9 +1,9 @@
 {
   "run_id": "A-control",
-  "lc0_verdict": "PASS",
+  "lc0_verdict": "ESCALATE",
   "lc0_reason": "control run: lc0_verdict = delivery_verdict",
-  "delivery_verdict": "PASS",
-  "delivery_reason": "baseline valid; agent submitted; F2P+P2P all passed; diff policy OK; 2 identical evaluations",
+  "delivery_verdict": "ESCALATE",
+  "delivery_reason": "tests passed but diff policy violated (see diff_policy.violations)",
   "recovery": {
     "fault_id": "none",
     "recoverable": null,
@@ -15,8 +15,10 @@
     "evidence": {}
   },
   "diff_policy": {
-    "result": "OK",
-    "violations": [],
+    "result": "ESCALATE",
+    "violations": [
+      "pre-existing test file modified: tests/test_cart.py"
+    ],
     "info": {
       "changed_files": [
         {
@@ -32,8 +34,8 @@
       "note": ""
     }
   },
-  "decision": "PASS",
-  "generated_at": "2026-11-12T13:22:33+02:00",
+  "decision": "ESCALATE",
+  "generated_at": "2026-11-12T13:48:51+02:00",
   "total_seconds": 77,
   "environment": {
     "python": "3.13.5",
@@ -108,15 +110,15 @@
   "agent_exit": 0,
   "evaluations": [
     {
-      "exit": 0,
-      "decision": "PASS",
-      "reason": "all expected tests present and passed",
+      "exit": 4,
+      "decision": "ESCALATE",
+      "reason": "tests passed but diff policy violated (see diff_policy.violations)",
       "report": "work/evals/A-control/eval_1.json"
     },
     {
-      "exit": 0,
-      "decision": "PASS",
-      "reason": "all expected tests present and passed",
+      "exit": 4,
+      "decision": "ESCALATE",
+      "reason": "tests passed but diff policy violated (see diff_policy.violations)",
       "report": "work/evals/A-control/eval_2.json"
     }
   ],

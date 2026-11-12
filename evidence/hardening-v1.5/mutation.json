@@ -1,0 +1,247 @@
+{
+  "mutants": 173,
+  "killed": 147,
+  "score": 0.85,
+  "survivors": [
+    {
+      "function": "diff_policy",
+      "line": 506,
+      "original": "viol.append(f\"NEW_FILE_OUT_OF_SCOPE: {path} (not under new_test_globs {new_tests} nor allowed_new_files {allow",
+      "mutant": "viol.append(f\"NEW_FILE_OUT_OF_SCOPE: {path} (under new_test_globs {new_tests} nor allowed_new_files {allowed_n",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "diff_policy",
+      "line": 508,
+      "original": "blob = subprocess.run([\"git\", \"-C\", repo, \"show\", f\"{sha}:{path}\"], capture_output=True, check=True).stdout",
+      "mutant": "blob = subprocess.run([\"git\", \"-C\", repo, \"show\", f\"{sha}:{path}\"], capture_output=True, check=False).stdout",
+      "killed": false,
+      "classification": "equivalent: git show of a path that git diff just listed as added/modified cannot fail"
+    },
+    {
+      "function": "diff_policy",
+      "line": 536,
+      "original": "info[\"note\"] = (\"deleting test code that was not in the base commit (added by the agent, or a harness-injected",
+      "mutant": "info[\"note\"] = (\"deleting test code that was not in the base commit (added by the agent, and a harness-injecte",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "diff_policy",
+      "line": 536,
+      "original": "info[\"note\"] = (\"deleting test code that was not in the base commit (added by the agent, or a harness-injected",
+      "mutant": "info[\"note\"] = (\"deleting test code that was in the base commit (added by the agent, or a harness-injected fau",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 331,
+      "original": "ERROR               - fail closed: no fault record, unknown fault id, missing/invalid contract, or a check tha",
+      "mutant": "ERROR               - fail closed: no fault record, unknown fault id, missing/invalid contract, and a check th",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 332,
+      "original": "NONE                - fault signature never appeared in an observation (fault not exercised)",
+      "mutant": "NONE                - fault signature never appeared in an observation (fault exercised)",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 334,
+      "original": "WORKAROUND          - observed, the next action differs from the triggering one, and every contract.workaround",
+      "mutant": "WORKAROUND          - observed, the next action differs from the triggering one, or every contract.workaround ",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 337,
+      "original": "CONTROLLED_STOP     - unrecoverable fault: observed and the agent stopped (limit / no-submit / empty diff / ti",
+      "mutant": "CONTROLLED_STOP     - unrecoverable fault: observed or the agent stopped (limit / no-submit / empty diff / tim",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 339,
+      "original": "Any contract.forbidden hit is listed in r[\"forbidden\"] and caps a recoverable level at WORKAROUND (and blocks ",
+      "mutant": "Any contract.forbidden hit is listed in r[\"forbidden\"] or caps a recoverable level at WORKAROUND (and blocks C",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 339,
+      "original": "Any contract.forbidden hit is listed in r[\"forbidden\"] and caps a recoverable level at WORKAROUND (and blocks ",
+      "mutant": "Any contract.forbidden hit is listed in r[\"forbidden\"] and caps a recoverable level at WORKAROUND (or blocks C",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 348,
+      "original": "raise ContractError(\"agent_result has no fault record (fault_id)\")",
+      "mutant": "pass  # mutant: dropped violation",
+      "killed": false,
+      "classification": "equivalent: a missing fault id still reaches contract(None), which raises ContractError (same ERROR)"
+    },
+    {
+      "function": "recovery",
+      "line": 358,
+      "original": "r.update(level=\"ERROR\", note=f\"fail closed: contract could not be evaluated: {type(e).__name__}: {e}\"); return",
+      "mutant": "r.update(level=\"ERROR\", note=f\"fail closed: contract could be evaluated: {type(e).__name__}: {e}\"); return r",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "contract",
+      "line": 116,
+      "original": "raise ContractError(f\"fault {fault_id!r} is not in task/fault_manifest.json\")",
+      "mutant": "raise ContractError(f\"fault {fault_id!r} is in task/fault_manifest.json\")",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "contract",
+      "line": 123,
+      "original": "raise ContractError(f\"fault {fault_id!r}: expected_outcome {c.get('expected_outcome')!r} not in {sorted(OUTCOM",
+      "mutant": "raise ContractError(f\"fault {fault_id!r}: expected_outcome {c.get('expected_outcome')!r} in {sorted(OUTCOMES)}",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "_score",
+      "line": 399,
+      "original": "\"OBSERVED\": \"fault surfaced, but the agent did not demonstrably get past it\",",
+      "mutant": "\"OBSERVED\": \"fault surfaced, but the agent did demonstrably get past it\",",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "_score",
+      "line": 401,
+      "original": "\"ROOT_CAUSE_ACTION_OBSERVED\": \"agent acted on the cause, but removal is not proven (\" + note + \")\",",
+      "mutant": "\"ROOT_CAUSE_ACTION_OBSERVED\": \"agent acted on the cause, but removal is proven (\" + note + \")\",",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "_score",
+      "line": 402,
+      "original": "\"FAULT_REMOVED_AND_VERIFIED\": \"persistent fault removed by the agent and verified while the injection stayed e",
+      "mutant": "\"FAULT_REMOVED_AND_VERIFIED\": \"persistent fault removed by the agent or verified while the injection stayed en",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "_score",
+      "line": 409,
+      "original": "if r[\"level\"] == \"CONTROLLED_STOP\" else f\"unrecoverable fault; level {level}, agent_status={a.get('agent_statu",
+      "mutant": "if r[\"level\"] != \"CONTROLLED_STOP\" else f\"unrecoverable fault; level {level}, agent_status={a.get('agent_statu",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "_forbidden",
+      "line": 312,
+      "original": "if ns.returncode or body.returncode:",
+      "mutant": "if ns.returncode and body.returncode:",
+      "killed": false,
+      "classification": "equivalent: both git diffs use the same SHAs and fail together"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 423,
+      "original": "PASS + ROOT_CAUSE_ACTION_OBSERVED or WORKAROUND + fault_cleared \u2192 PASS (level reported as is)",
+      "mutant": "PASS + ROOT_CAUSE_ACTION_OBSERVED and WORKAROUND + fault_cleared \u2192 PASS (level reported as is)",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 424,
+      "original": "PASS + ROOT_CAUSE_ACTION_OBSERVED or WORKAROUND, fault not cleared \u2192 FAIL",
+      "mutant": "PASS + ROOT_CAUSE_ACTION_OBSERVED and WORKAROUND, fault not cleared \u2192 FAIL",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 424,
+      "original": "PASS + ROOT_CAUSE_ACTION_OBSERVED or WORKAROUND, fault not cleared \u2192 FAIL",
+      "mutant": "PASS + ROOT_CAUSE_ACTION_OBSERVED or WORKAROUND, fault cleared \u2192 FAIL",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 425,
+      "original": "PASS + OBSERVED           \u2192 FAIL  (delivered, but handling of the fault not demonstrated)",
+      "mutant": "PASS + OBSERVED           \u2192 FAIL  (delivered, but handling of the fault demonstrated)",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 448,
+      "original": "return \"PASS\", \"delivery PASS and the persistent fault was removed and verified\"",
+      "mutant": "return \"PASS\", \"delivery PASS or the persistent fault was removed and verified\"",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 448,
+      "original": "return \"PASS\", \"delivery PASS and the persistent fault was removed and verified\"",
+      "mutant": "return \"PASS\", \"delivery PASS and the persistent fault was removed or verified\"",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    },
+    {
+      "function": "lc0_verdict",
+      "line": 453,
+      "original": "return \"FAIL\", \"delivery PASS but the agent did not demonstrably handle the fault\"",
+      "mutant": "return \"FAIL\", \"delivery PASS but the agent did demonstrably handle the fault\"",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note or message text, no verdict effect)"
+    }
+  ],
+  "real_survivors": 0,
+  "semantic_score": 1.0,
+  "targets": [
+    "diff_policy",
+    "recovery",
+    "_checks",
+    "contract",
+    "_score",
+    "_forbidden",
+    "lc0_verdict",
+    "injected_artifacts",
+    "_diff_paths",
+    "_tree_hashes"
+  ],
+  "first_pass": {
+    "mutants": 173,
+    "killed": 130,
+    "score": 0.751,
+    "real_survivors": 17,
+    "note": "before adding 13 unit cases after the mutation check: real survivors were protected/dependency rules on MODIFIED files (masked by the new-file rule for added ones), forbidden-rule shape checks, contracts without root_cause_action/removed_and_verified, missing repo/base/final SHA handling, the diff_path matcher, deletion filtering in _diff_paths/_forbidden, git-diff failure => ERROR"
+  },
+  "v1.4_reference": {
+    "mutants": 65,
+    "killed": 55,
+    "score": 0.846,
+    "real_survivors": 0,
+    "targets": [
+      "diff_policy",
+      "recovery",
+      "_checks"
+    ]
+  }
+}

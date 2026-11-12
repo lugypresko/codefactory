@@ -1,9 +1,9 @@
 {
   "run_id": "B-pytest-first-call",
-  "lc0_verdict": "PASS",
-  "lc0_reason": "delivery PASS; WORKAROUND accepted because the fault condition is cleared",
-  "delivery_verdict": "PASS",
-  "delivery_reason": "baseline valid; agent submitted; F2P+P2P all passed; diff policy OK; 2 identical evaluations",
+  "lc0_verdict": "ESCALATE",
+  "lc0_reason": "delivery ESCALATE",
+  "delivery_verdict": "ESCALATE",
+  "delivery_reason": "tests passed but diff policy violated (see diff_policy.violations)",
   "recovery": {
     "fault_id": "pytest_first_call",
     "recoverable": true,
@@ -11,7 +11,7 @@
     "fault_cleared": true,
     "observed": true,
     "adapted": true,
-    "note": "agent got past the fault without a mechanically proven root-cause fix (agent must inspect the test toolchain/environment (plugins, site-packages, pytest version or plugin autoload) and then run pytest successfully; just re-running pytest later is WORKAROUND)",
+    "note": "agent got past the fault without acting on its cause (transient: inspecting the toolchain (pip list, pytest --version, -p no:...) is a root-cause ACTION; it cannot prove removal because the fault clears itself, so the level is capped at ROOT_CAUSE_ACTION_OBSERVED)",
     "evidence": {
       "observed": {
         "step": 10,
@@ -32,18 +32,15 @@
           "command": "cd /repo && python verify_cart.py"
         }
       },
-      "root_cause_checks": {
+      "root_cause_action_checks": {
         "action_cmd": {
           "ok": false,
           "step": null,
           "command": null
-        },
-        "success_cmd_after": {
-          "ok": true,
-          "step": 26,
-          "command": "cd /repo && python -m pytest -q"
         }
       },
+      "removed_and_verified_checks": {},
+      "mode": "transient",
       "fault_cleared_checks": {
         "success_cmd_after": {
           "ok": true,
@@ -54,8 +51,10 @@
     }
   },
   "diff_policy": {
-    "result": "OK",
-    "violations": [],
+    "result": "ESCALATE",
+    "violations": [
+      "pre-existing test file modified: tests/test_cart.py"
+    ],
     "info": {
       "changed_files": [
         {
@@ -76,8 +75,8 @@
       "note": "deleting test code that was not in the base commit (added by the agent, or a harness-injected fault file) is allowed; such commands are recorded here for review"
     }
   },
-  "decision": "PASS",
-  "generated_at": "2026-11-12T13:22:37+02:00",
+  "decision": "ESCALATE",
+  "generated_at": "2026-11-12T13:48:55+02:00",
   "total_seconds": 63,
   "environment": {
     "python": "3.13.5",
@@ -156,15 +155,15 @@
   "agent_exit": 0,
   "evaluations": [
     {
-      "exit": 0,
-      "decision": "PASS",
-      "reason": "all expected tests present and passed",
+      "exit": 4,
+      "decision": "ESCALATE",
+      "reason": "tests passed but diff policy violated (see diff_policy.violations)",
       "report": "work/evals/B-pytest-first-call/eval_1.json"
     },
     {
-      "exit": 0,
-      "decision": "PASS",
-      "reason": "all expected tests present and passed",
+      "exit": 4,
+      "decision": "ESCALATE",
+      "reason": "tests passed but diff policy violated (see diff_policy.violations)",
       "report": "work/evals/B-pytest-first-call/eval_2.json"
     }
   ],

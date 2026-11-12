@@ -1,44 +1,40 @@
 {
-  "run_id": "B-pytest-first-call",
-  "decision": "PASS",
-  "reason": "baseline valid; agent submitted; F2P+P2P all passed; 2 identical evaluations",
-  "fault": {
-    "fault_id": "pytest_first_call",
-    "recoverable": true,
-    "description": "first pytest invocation dies with a misleading plugin ImportError (exit 3); later calls work",
-    "signature": "pytest_covext",
-    "ws_readonly": false,
-    "injected_at": "2026-11-12T13:02:16+02:00",
-    "fired_events": [
-      "2026-11-12T11:02:40+00:00 fired pytest_first_call pytest_call=1"
-    ]
-  },
+  "run_id": "A-control",
+  "lc0_verdict": "PASS",
+  "lc0_reason": "control run: lc0_verdict = delivery_verdict",
+  "delivery_verdict": "PASS",
+  "delivery_reason": "baseline valid; agent submitted; F2P+P2P all passed; diff policy OK; 2 identical evaluations",
   "recovery": {
-    "fault_id": "pytest_first_call",
-    "recoverable": true,
-    "definition": "observed=fault signature in an observation; adapted=next action differs from the triggering one; completed=SUBMITTED and decision PASS",
-    "observed": true,
-    "adapted": true,
-    "completed": true,
-    "verdict": "RECOVERED",
-    "note": "fault observed, agent changed its action, task completed and independently verified",
-    "evidence": {
-      "observed": {
-        "step": 10,
-        "command": "cd /repo && python -m pytest -q",
-        "observation_excerpt": "lugin = ep.load() ImportError: cannot import name 'covext_hooks' from partially initialized module 'pytest_covext' (most likely due to a circular import) (/usr/local/lib/pyt"
-      },
-      "next_action": {
-        "step": 11,
-        "command": "cat /repo/cart/cart.py",
-        "identical_retry": false
-      },
-      "signature_hits": 1,
-      "total_steps": 27
+    "fault_id": "none",
+    "recoverable": null,
+    "level": "N/A",
+    "fault_cleared": null,
+    "observed": false,
+    "adapted": false,
+    "note": "control run (no fault injected)",
+    "evidence": {}
+  },
+  "diff_policy": {
+    "result": "OK",
+    "violations": [],
+    "info": {
+      "changed_files": [
+        {
+          "status": "M",
+          "path": "cart/cart.py"
+        },
+        {
+          "status": "M",
+          "path": "tests/test_cart.py"
+        }
+      ],
+      "test_deletion_commands_in_trace": [],
+      "note": ""
     }
   },
-  "generated_at": "2026-11-12T13:06:24+02:00",
-  "total_seconds": 63,
+  "decision": "PASS",
+  "generated_at": "2026-11-12T13:22:33+02:00",
+  "total_seconds": 77,
   "environment": {
     "python": "3.13.5",
     "mini_swe_agent": "2.4.6",
@@ -52,15 +48,24 @@
     "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
     "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
   },
+  "fault": {
+    "fault_id": "none",
+    "recoverable": null,
+    "description": "control run, no fault",
+    "signature": null,
+    "ws_readonly": false,
+    "injected_at": "2026-11-12T13:00:55+02:00",
+    "fired_events": []
+  },
   "baseline": {
     "status": "VALID",
-    "detail": "F2P passed on base: 0/9 (must be 0); P2P: passed 5/5",
+    "problems": [],
     "evaluator_exit": 1,
     "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
-    "report": "work/evals/B-pytest-first-call/baseline.json"
+    "report": "work/evals/A-control/baseline.json"
   },
   "agent": {
-    "run_id": "B-pytest-first-call",
+    "run_id": "A-control",
     "agent_status": "SUBMITTED",
     "agent_exit_code": 0,
     "reason": null,
@@ -68,38 +73,36 @@
     "mini_exit_status": "Submitted",
     "limit_hit": null,
     "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
-    "final_sha": "dc33613749ebf01c58fc706390f168e20b7509d6",
+    "final_sha": "9e2500f90a1c28b9f5b5ffe3e68d875ebfb9bf1e",
     "workspace_sha": null,
     "diff_files": 2,
-    "diff_lines": 158,
+    "diff_lines": 150,
     "model_requested": "gemini/gemini-2.5-flash",
     "models_returned_by_api": [
       "gemini-2.5-flash"
     ],
-    "cost_usd": 0.03190237000000001,
-    "api_calls": 29,
+    "cost_usd": 0.0208864,
+    "api_calls": 20,
     "cost_limit_usd": 0.5,
     "step_limit": 30,
-    "wall_seconds": 59,
-    "started_at": "2026-11-12T13:02:16+02:00",
-    "ended_at": "2026-11-12T13:03:15+0200",
+    "wall_seconds": 73,
+    "started_at": "2026-11-12T13:00:55+02:00",
+    "ended_at": "2026-11-12T13:02:08+0200",
     "image": "lc0-env:1",
     "paths": {
-      "run_dir": "/workspace/lc0/work/runs/B-pytest-first-call",
-      "trajectory": "/workspace/lc0/work/runs/B-pytest-first-call/trajectory.json",
-      "log": "/workspace/lc0/work/runs/B-pytest-first-call/agent_stdout.log",
-      "diff": "/workspace/lc0/work/runs/B-pytest-first-call/final.diff"
+      "run_dir": "/workspace/lc0/work/runs/A-control",
+      "trajectory": "/workspace/lc0/work/runs/A-control/trajectory.json",
+      "log": "/workspace/lc0/work/runs/A-control/agent_stdout.log",
+      "diff": "/workspace/lc0/work/runs/A-control/final.diff"
     },
     "fault": {
-      "fault_id": "pytest_first_call",
-      "recoverable": true,
-      "description": "first pytest invocation dies with a misleading plugin ImportError (exit 3); later calls work",
-      "signature": "pytest_covext",
+      "fault_id": "none",
+      "recoverable": null,
+      "description": "control run, no fault",
+      "signature": null,
       "ws_readonly": false,
-      "injected_at": "2026-11-12T13:02:16+02:00",
-      "fired_events": [
-        "2026-11-12T11:02:40+00:00 fired pytest_first_call pytest_call=1"
-      ]
+      "injected_at": "2026-11-12T13:00:55+02:00",
+      "fired_events": []
     }
   },
   "agent_exit": 0,
@@ -108,13 +111,13 @@
       "exit": 0,
       "decision": "PASS",
       "reason": "all expected tests present and passed",
-      "report": "work/evals/B-pytest-first-call/eval_1.json"
+      "report": "work/evals/A-control/eval_1.json"
     },
     {
       "exit": 0,
       "decision": "PASS",
       "reason": "all expected tests present and passed",
-      "report": "work/evals/B-pytest-first-call/eval_2.json"
+      "report": "work/evals/A-control/eval_2.json"
     }
   ],
   "evaluations_identical": true,
@@ -137,6 +140,7 @@
         "test_acceptance.py::test_discount_case_insensitive": "passed",
         "test_acceptance.py::test_discount_applies_after_cart_changes": "passed"
       },
+      "messages": {},
       "log_tail": ""
     },
     "PASS_TO_PASS": {
@@ -153,6 +157,7 @@
         "test_cart.py::test_invalid_qty": "passed",
         "test_cart.py::test_invalid_price": "passed"
       },
+      "messages": {},
       "log_tail": ""
     }
   },
@@ -163,11 +168,11 @@
     "harness_sensitive_files": []
   },
   "paths": {
-    "report_md": "work/runs/B-pytest-first-call/report.md",
-    "report_json": "work/runs/B-pytest-first-call/report.json",
-    "trajectory": "work/runs/B-pytest-first-call/trajectory.json",
-    "agent_log": "work/runs/B-pytest-first-call/agent_stdout.log",
-    "diff": "work/runs/B-pytest-first-call/final.diff",
-    "agent_result": "work/runs/B-pytest-first-call/agent_result.json"
+    "report_md": "work/runs/A-control/report.md",
+    "report_json": "work/runs/A-control/report.json",
+    "trajectory": "work/runs/A-control/trajectory.json",
+    "agent_log": "work/runs/A-control/agent_stdout.log",
+    "diff": "work/runs/A-control/final.diff",
+    "agent_result": "work/runs/A-control/agent_result.json"
   }
 }

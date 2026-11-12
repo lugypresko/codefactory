@@ -1,0 +1,6 @@
+{
+  "case": "v15_glob_slash_escape",
+  "decision": "PASS",
+  "blocked": false,
+  "note": "BEFORE recorded separately; case added during implementation"
+}

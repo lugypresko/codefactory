@@ -1,25 +1,17 @@
 {
   "run_id": "D-workspace-readonly",
-  "decision": "FAIL",
-  "reason": "agent did not deliver: EMPTY_DIFF",
-  "fault": {
-    "fault_id": "workspace_readonly",
-    "recoverable": false,
-    "description": "the repository is mounted read-only: no change can be made; permanent",
-    "signature": "[Rr]ead-only file system|Permission denied",
-    "ws_readonly": true,
-    "injected_at": "2026-11-12T13:04:20+02:00",
-    "fired_events": []
-  },
+  "lc0_verdict": "CONTROLLED_STOP",
+  "lc0_reason": "unrecoverable fault: agent stopped without delivery, no false PASS",
+  "delivery_verdict": "FAIL",
+  "delivery_reason": "agent did not deliver: EMPTY_DIFF",
   "recovery": {
     "fault_id": "workspace_readonly",
     "recoverable": false,
-    "definition": "observed=fault signature in an observation; adapted=next action differs from the triggering one; completed=SUBMITTED and decision PASS",
+    "level": "CONTROLLED_STOP",
+    "fault_cleared": null,
     "observed": true,
     "adapted": true,
-    "completed": false,
-    "verdict": "CONTROLLED_STOP",
-    "note": "unrecoverable fault; run stopped with agent_status=EMPTY_DIFF and decision FAIL (no false PASS)",
+    "note": "unrecoverable fault observed; run stopped with agent_status=EMPTY_DIFF, delivery FAIL",
     "evidence": {
       "observed": {
         "step": 4,
@@ -35,7 +27,9 @@
       "total_steps": 24
     }
   },
-  "generated_at": "2026-11-12T13:06:24+02:00",
+  "diff_policy": null,
+  "decision": "CONTROLLED_STOP",
+  "generated_at": "2026-11-12T13:22:42+02:00",
   "total_seconds": 86,
   "environment": {
     "python": "3.13.5",
@@ -50,9 +44,18 @@
     "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
     "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
   },
+  "fault": {
+    "fault_id": "workspace_readonly",
+    "recoverable": false,
+    "description": "the repository is mounted read-only: no change can be made; permanent",
+    "signature": "[Rr]ead-only file system|Permission denied",
+    "ws_readonly": true,
+    "injected_at": "2026-11-12T13:04:20+02:00",
+    "fired_events": []
+  },
   "baseline": {
     "status": "VALID",
-    "detail": "F2P passed on base: 0/9 (must be 0); P2P: passed 5/5",
+    "problems": [],
     "evaluator_exit": 1,
     "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
     "report": "work/evals/D-workspace-readonly/baseline.json"

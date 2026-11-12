@@ -1,0 +1,149 @@
+diff --git a/cart/cart.py b/cart/cart.py
+index 5e0bd9d..29eee17 100644
+--- a/cart/cart.py
++++ b/cart/cart.py
+@@ -3,7 +3,8 @@
+ 
+ class Cart:
+     def __init__(self):
+-        self._items = {}  # sku -> {"price": float, "qty": int}
++        self._items = {}
++        self._discount_percentage = 0.0  # sku -> {"price": float, "qty": int}
+ 
+     def add_item(self, sku: str, price: float, qty: int = 1) -> None:
+         if qty <= 0:
+@@ -21,5 +22,29 @@ class Cart:
+     def subtotal(self) -> float:
+         return round(sum(i["price"] * i["qty"] for i in self._items.values()), 2)
+ 
++    def remove_item(self, sku: str, qty: int = 1) -> None:
++        if qty <= 0:
++            raise ValueError("qty must be positive")
++        if sku not in self._items:
++            raise KeyError(f"SKU {sku} not found in cart")
++        if self._items[sku]["qty"] < qty:
++            raise ValueError(f"Cannot remove {qty} of SKU {sku}. Only {self._items[sku]["qty"]} in cart.")
++        
++        self._items[sku]["qty"] -= qty
++        if self._items[sku]["qty"] == 0:
++            del self._items[sku]
++
++
++    def apply_discount(self, code: str) -> None:
++        code = code.upper()
++        if code == "SAVE10":
++            self._discount_percentage = 0.10
++        elif code == "SAVE25":
++            self._discount_percentage = 0.25
++        else:
++            raise ValueError(f"Unknown discount code: {code}")
++
++
+     def total(self) -> float:
+-        return self.subtotal()
++        discounted_total = self.subtotal() * (1 - self._discount_percentage)
++        return (int(discounted_total * 100 + 0.5)) / 100.0
+diff --git a/tests/test_features.py b/tests/test_features.py
+new file mode 100644
+--- /dev/null
++++ b/tests/test_features.py
+@@ -0,0 +1,99 @@
++import pytest
++from cart import Cart
++
++def test_remove_item():
++    c = Cart()
++    c.add_item("apple", 1.0, 5)
++    c.remove_item("apple", 2)
++    assert c.item_count() == 3
++    assert c.subtotal() == 3.0
++    c.remove_item("apple", 3)
++    assert c.item_count() == 0
++    assert c.subtotal() == 0.0
++
++def test_remove_unknown_sku_raises_keyerror():
++    c = Cart()
++    c.add_item("apple", 1.0, 1)
++    with pytest.raises(KeyError):
++        c.remove_item("orange")
++
++def test_remove_more_than_qty_raises_valueerror():
++    c = Cart()
++    c.add_item("apple", 1.0, 3)
++    with pytest.raises(ValueError):
++        c.remove_item("apple", 4)
++    assert c.item_count() == 3 # Cart unchanged
++
++def test_remove_item_invalid_qty():
++    c = Cart()
++    c.add_item("apple", 1.0, 1)
++    with pytest.raises(ValueError):
++        c.remove_item("apple", 0)
++    with pytest.raises(ValueError):
++        c.remove_item("apple", -1)
++
++def test_apply_discount_save10():
++    c = Cart()
++    c.add_item("item1", 100.0, 1)
++    c.apply_discount("SAVE10")
++    assert c.subtotal() == 100.0
++    assert c.total() == 90.0
++
++def test_apply_discount_save25():
++    c = Cart()
++    c.add_item("item1", 100.0, 1)
++    c.add_item("item2", 200.0, 1) # This should be add_item. Correcting.
++    c.apply_discount("SAVE25")
++    assert c.subtotal() == 300.0
++    assert c.total() == 225.0
++
++def test_apply_discount_case_insensitivity():
++    c = Cart()
++    c.add_item("item1", 100.0, 1)
++    c.apply_discount("save10")
++    assert c.total() == 90.0
++
++def test_apply_unknown_discount_raises_valueerror_and_unchanged():
++    c = Cart()
++    c.add_item("item1", 100.0, 1)
++    c.apply_discount("SAVE10")
++    assert c.total() == 90.0
++    with pytest.raises(ValueError):
++        c.apply_discount("UNKNOWN")
++    assert c.total() == 90.0 # Discount should remain unchanged
++
++def test_apply_new_discount_replaces_old_one():
++    c = Cart()
++    c.add_item("item1", 100.0, 1)
++    c.apply_discount("SAVE10")
++    assert c.total() == 90.0
++    c.apply_discount("SAVE25")
++    assert c.total() == 75.0
++
++def test_total_rounding():
++    c = Cart()
++    c.add_item("item1", 22.99, 1) # subtotal 22.99
++    c.apply_discount("SAVE10") # 10% off -> 20.691
++    assert c.total() == 20.69
++
++    c2 = Cart()
++    c2.add_item("item1", 22.99, 1)
++    c2.add_item("item2", 0.01, 1) # subtotal 23.00
++    c2.apply_discount("SAVE10") # 10% off -> 20.70
++    assert c2.total() == 20.70
++
++    c3 = Cart()
++    c3.add_item("item1", 22.995, 1) # subtotal 22.995
++    c3.apply_discount("SAVE10") # 10% off -> 20.6955
++    assert c3.total() == 20.70
++
++    c4 = Cart()
++    c4.add_item("item1", 9.99, 1) # subtotal 9.99
++    c4.apply_discount("SAVE25") # 25% off -> 7.4925
++    assert c4.total() == 7.49
++
++    c5 = Cart()
++    c5.add_item("item1", 9.98, 1) # subtotal 9.98
++    c5.apply_discount("SAVE25") # 25% off -> 7.485
++    assert c5.total() == 7.49
++

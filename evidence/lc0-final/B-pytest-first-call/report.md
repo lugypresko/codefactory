@@ -1,23 +1,23 @@
-# LC-0 run `B-pytest-first-call` — LC-0 verdict **PASS**
+# LC-0 run `B-pytest-first-call` — LC-0 verdict **ESCALATE**
 
 | verdict | value | why |
 |---|---|---|
-| delivery | **PASS** | baseline valid; agent submitted; F2P+P2P all passed; diff policy OK; 2 identical evaluations |
-| recovery | **WORKAROUND** (fault_cleared=True) | agent got past the fault without a mechanically proven root-cause fix (agent must inspect the test toolchain/environment (plugins, site-packages, pytest version or plugin autoload) and then run pytest successfully; just re-running pytest later is WORKAROUND) |
-| diff policy | **OK** | no violations |
-| **LC-0** | **PASS** | delivery PASS; WORKAROUND accepted because the fault condition is cleared |
+| delivery | **ESCALATE** | tests passed but diff policy violated (see diff_policy.violations) |
+| recovery | **WORKAROUND** (fault_cleared=True) | agent got past the fault without acting on its cause (transient: inspecting the toolchain (pip list, pytest --version, -p no:...) is a root-cause ACTION; it cannot prove removal because the fault clears itself, so the level is capped at ROOT_CAUSE_ACTION_OBSERVED) |
+| diff policy | **ESCALATE** | pre-existing test file modified: tests/test_cart.py |
+| **LC-0** | **ESCALATE** | delivery ESCALATE |
 
-Generated 2026-11-12T13:22:37+02:00 · total 63s
+Generated 2026-11-12T13:48:55+02:00 · total 63s
 
 ## Fault injection and recovery evidence
 - fault: `pytest_first_call` — first pytest invocation dies with a misleading plugin ImportError (exit 3); later calls work
 - injected_at: 2026-11-12T13:02:16+02:00 · fired events: ['2026-11-12T11:02:40+00:00 fired pytest_first_call pytest_call=1']
 - observed=True · adapted=True · level=WORKAROUND · fault_cleared=True
-- evidence: `{"observed": {"step": 10, "command": "cd /repo && python -m pytest -q", "observation_excerpt": "lugin = ep.load() ImportError: cannot import name 'covext_hooks' from partially initialized module 'pytest_covext' (most likely due to a circular import) (/usr/local/lib/pyt"}, "next_action": {"step": 11, "command": "cat /repo/cart/cart.py", "identical_retry": false}, "signature_hits": 1, "total_steps": 27, "workaround_checks": {"success_cmd": {"ok": true, "step": 20, "command": "cd /repo && python verify_cart.py"}}, "root_cause_checks": {"action_cmd": {"ok": false, "step": null, "command": null}, "success_cmd_after": {"ok": true, "step": 26, "command": "cd /repo && python -m pytest -q"}}, "fault_cleared_checks": {"success_cmd_after": {"ok": true, "step": 26, "command": "cd /repo && python -m pytest -q"}}}`
+- evidence: `{"observed": {"step": 10, "command": "cd /repo && python -m pytest -q", "observation_excerpt": "lugin = ep.load() ImportError: cannot import name 'covext_hooks' from partially initialized module 'pytest_covext' (most likely due to a circular import) (/usr/local/lib/pyt"}, "next_action": {"step": 11, "command": "cat /repo/cart/cart.py", "identical_retry": false}, "signature_hits": 1, "total_steps": 27, "workaround_checks": {"success_cmd": {"ok": true, "step": 20, "command": "cd /repo && python verify_cart.py"}}, "root_cause_action_checks": {"action_cmd": {"ok": false, "step": null, "command": null}}, "removed_and_verified_checks": {}, "mode": "transient", "fault_cleared_checks": {"success_cmd_after": {"ok": true, "step": 26, "command": "cd /repo && python -m pytest -q"}}}`
 
 ## Diff policy
-- result: OK
-- violations: []
+- result: ESCALATE
+- violations: ['pre-existing test file modified: tests/test_cart.py']
 - info: `{"changed_files": [{"status": "M", "path": "cart/cart.py"}, {"status": "M", "path": "tests/test_cart.py"}], "test_deletion_commands_in_trace": [{"step": 25, "command": "sed -i '118,131d' /repo/tests/test_cart.py"}], "note": "deleting test code that was not in the base commit (added by the agent, or a harness-injected fault file) is allowed; such commands are recorded here for review"}`
 
 ## Steps
@@ -25,8 +25,8 @@ Generated 2026-11-12T13:22:37+02:00 · total 63s
 |---|---|---|
 | (a) baseline on `9f6b7382fdf7` | VALID | every F2P test fails with its declared failure; P2P passes |
 | (b) agent | SUBMITTED (exit 0) | mini exit_status=`Submitted`, model requested `gemini/gemini-2.5-flash`, returned ['gemini-2.5-flash'], cost $0.0319 / $0.5, steps 29 / 30, wall 59s, diff 2 files |
-| (c) evaluation 1 on `dc33613749eb` | PASS (exit 0) | all expected tests present and passed |
-| (c) evaluation 2 on `dc33613749eb` | PASS (exit 0) | all expected tests present and passed |
+| (c) evaluation 1 on `dc33613749eb` | ESCALATE (exit 4) | tests passed but diff policy violated (see diff_policy.violations) |
+| (c) evaluation 2 on `dc33613749eb` | ESCALATE (exit 4) | tests passed but diff policy violated (see diff_policy.violations) |
 
 Evaluations identical: **True**
 

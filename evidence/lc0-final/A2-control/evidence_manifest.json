@@ -1,0 +1,25 @@
+{
+  "run_id": "A2-control",
+  "inputs_sealed_at": "2026-11-12T14:07:22+02:00",
+  "outputs_sealed_at": "2026-11-12T14:07:22+02:00",
+  "inputs": {
+    "run/trajectory.json": "d02e003d87e1b49a95bc452bef898aa46630bb8ebe99b29e853ae6f54451613c",
+    "run/config.yaml": "d1ec0fc87d8604327414d64dfec5bc2c18a040f002dc54f4b1cb262902617afa",
+    "run/agent_result.json": "37707059e84ed9ef09f050f467cdc98b551f9c5603d7af65a53fea1e55dd6ab2",
+    "run/final.diff": "b245898589aae97f2efc5973aa53300a1c15817530c1f528ac1ae006a938bcfa",
+    "run/fault.json": "c82e84e044cd76e6578fb8931a56eec46bac7c27901087e62961b8a7d99c77e0",
+    "run/agent_stdout.log": "85159939dcdec9752057eec456d4e17b930f74edc1b96a7db403a9bd32e4fabd"
+  },
+  "outputs": {
+    "run/report.json": "d50adc8c7bdc4be630090795660d9c2694777c9a21b47e26475de87590afcd02",
+    "run/report.md": "d125f9789458ac858b5fcdb336cc3559ea65dfe8d7d0fe44d4d7228b9d006013",
+    "evals/baseline.json": "8e6653ea04a191f9db7990d860f5ef1f41ac6b279a1bc7c18adb191787530e0f",
+    "evals/eval_1.json": "ae79dbb82e76e0d6532e87aaa0b1b94c773e0ffed2f3a39053f3186950b30c8d",
+    "evals/eval_2.json": "5eb3a41897eac93f53a9c9783e5174f20d1aa4310f9fa5ef85416ddd0c6b3706"
+  },
+  "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "final_sha": "6a194896fd2f77b24154c52fc8aaebf334e9524f",
+  "workspace_sha": null,
+  "git_diff_base_final_sha256": "b245898589aae97f2efc5973aa53300a1c15817530c1f528ac1ae006a938bcfa",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c"
+}
