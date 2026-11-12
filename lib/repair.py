@@ -13,16 +13,26 @@ def resolve(name):
     assert len(hits) == 1, f"unknown/ambiguous iid {name!r}: {hits}"
     return hits[0]
 def feedback(pre_path, ev_path):
-    """Test names only, from gate_* fields. NEVER read gt_* (frozen eval stores gate_units_passed as counts, not names)."""
+    """gate_* only; NEVER read gt_*. Names only when every run passed 0 units; mixed counts: 'N of M' with no names."""
     ev, pre = json.load(open(ev_path)), json.load(open(pre_path))
     gate = {k: ev[k] for k in ev if k.startswith("gate_")}
     assert all(not k.startswith("gt_") for k in gate)
     units = list(pre["discriminating_units"])
     passed, n = gate.get("gate_units_passed"), gate.get("gate_units", len(units))
-    failed = [] if (passed and all(c == n for c in passed)) else units  # mixed counts: names of the failing subset are not stored
     broken = gate.get("gate_p2p_broken") or []
-    lines = (["Failing discriminating tests:"] + [f"- {u}" for u in failed] if failed else []) + (["P2P tests broken by the patch:"] + [f"- {u}" for u in broken] if broken else [])
-    exact = isinstance(passed, list) and all(c in (0, n) for c in passed)
+    failed, exact, lines = [], False, []
+    if isinstance(passed, list) and n is not None:
+        if all(c == 0 for c in passed):
+            failed, exact = units, True
+            lines += ["Failing discriminating tests:"] + [f"- {u}" for u in failed]
+        elif all(c == n for c in passed):
+            exact = True
+        elif len(set(passed)) == 1:
+            lines.append(f"{n - passed[0]} of {n} discriminating tests failed")
+        else:
+            lines.append(f"discriminating tests failed (passed {passed} of {n} across two runs)")
+    if broken:
+        lines += ["P2P tests broken by the patch:"] + [f"- {u}" for u in broken]
     return "\n".join(lines), {"failed_units": failed, "p2p_broken": broken, "gate_units_passed": passed, "failing_subset_stored": exact}
 def main():
     iids = [resolve(x) for x in (sys.argv[1:] or DEFAULTS)]
