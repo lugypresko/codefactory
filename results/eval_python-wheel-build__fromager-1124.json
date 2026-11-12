@@ -1,0 +1,27 @@
+{
+  "instance_id": "python-wheel-build__fromager-1124",
+  "evaluated_patch_sha256": "806c20ee6518af54213c10699538ffbe29e5103539a0c188455b7a233da4b1c0",
+  "evaluated_patch_bytes": 4446,
+  "producer_run_id": "pa-python-wheel-build__fromager-1124-20261112T201718-10584d63",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "6/7",
+  "gt_p2p_failed": "7/28",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 1,
+  "gate_deterministic": true,
+  "gate_p2p_files": [],
+  "gate_p2p_stems": [
+    "resolver"
+  ],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "no matching existing test files",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch",
+  "A_decision": "APPROVE"
+}
