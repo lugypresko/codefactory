@@ -1,0 +1,27 @@
+{
+  "instance_id": "microsoft__qcodes-8039",
+  "evaluated_patch_sha256": "08a702bdde405b3f75de73e5da2acd1886ba36ae0961b899f14e825b3c9a625e",
+  "evaluated_patch_bytes": 866,
+  "producer_run_id": "pa-microsoft__qcodes-8039-20261112T220337-8f681b88",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "2/2",
+  "gt_p2p_failed": "1/6",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 1,
+  "gate_deterministic": true,
+  "gate_p2p_files": [],
+  "gate_p2p_stems": [
+    "attribute_helpers"
+  ],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "no matching existing test files",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch",
+  "A_decision": "APPROVE"
+}
