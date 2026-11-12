@@ -388,7 +388,8 @@ def run_real(repo, issue_file, budget, create_pr, issue_ref, repo_slug=None):
          "detail": f"used_repair={used_repair}\nB_detail={ev.get('B_detail')}\ngate_units_passed={ev.get('gate_units_passed')}/{ev.get('gate_units')}\ngate_p2p_files={ev.get('gate_p2p_files')}\ngate_p2p_detail={ev.get('gate_p2p_detail')}\n"}
     if ok:
         path = write_report(f"{OUT}/PR_DRAFT.md", "draft PR body", pr_body(d))
-        title = "fix: split_even should preserve the remainder (cf-demo)"
+        first = open(issue_file).readline().lstrip("# ").strip()
+        title = first if first else f"fix: {issue_ref}"
         maybe_create_pr(create_pr, path, title, repo_slug, repo_path=repo, patch=patch,
                         issue_number=issue_number)
     else:
