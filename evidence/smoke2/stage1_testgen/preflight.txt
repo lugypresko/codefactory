@@ -1,0 +1,16 @@
+rc=0
+This is mini-swe-agent version 2.4.6.
+Check the v2 migration guide at https://klieret.short.gy/mini-v2-migration
+Loading global config from '/home/box/.config/mini-swe-agent/.env'
+minisweagent.environment: DEBUG: Starting container with command: docker run -d 
+--name minisweagent-cb23ed5f -w /testbed --rm --network none --user 1000:1000   
+--cap-drop ALL --security-opt no-new-privileges --memory 1536m --cpus 1         
+--pids-limit 256 --label lc1a0.run=tg-schemathesis__schemathesis-4087 -v        
+/workspace/lc1a0/work/runs/testgen/schemathesis__schemathesis-4087/ws:/testbed  
+swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087:latest sleep 2h 
+minisweagent.environment: INFO: Started container minisweagent-cb23ed5f with ID 
+7cc24e6874073eb124718f2a86f9f44e0b92cbf91639ad29dfc4541acd97f833                
+interpreter: ['bash', '-c']
+/opt/conda/envs/testbed/bin/python
+pytest 9.0.3
+returncode: 0

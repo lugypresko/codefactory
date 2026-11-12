@@ -1,0 +1,8 @@
+{
+  "instance_id": "schemathesis__schemathesis-4087",
+  "B_decision": "REJECT",
+  "B_reason": "NO_PATCH",
+  "gt_correct": false,
+  "gt_note": "empty patch",
+  "A_decision": "REJECT"
+}

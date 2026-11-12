@@ -1,0 +1,23 @@
+---
+pid: 376695
+cwd: "/workspace/lc1a0"
+command: "cd /workspace/lc1a0 && I=schemathesis__schemathesis-4087 && E=evidence/smoke2 && mkdir -p $E/diagnostic && cp -r results/testgen/$I $E/stage1_testgen && cp -r results/patches/$I $E/stage2_patch && cp results/eval_$I.json $E/stage3_eval.json && cp work/runs/testgen/$I/{trajectory.json,preflight.txt,agent_stdout.log} $E/stage1_testgen/ && cp work/runs/patch/$I/{events.json,server.log,oh_result.json,llm_ledger.json,oh_stdout.log} $E/stage2_patch/ 2>&1; cp work/smoke2.log $E/; ls work/runs/patch/$I/\nmv results/patches/$I /tmp/smoke2_patchdir && mv results/eval_$I.json /tmp/smoke2_eval.json\nfor name in gold voided_attempt1_oh gate0_oh; do\n  case $name in gold) P=work/inst/$I/gold.diff;; voided_attempt1_oh) P=archive/voided_attempt1/patches_$I/patch.diff;; gate0_oh) P=evidence/gate0/3_smoke/patch.diff;; esac\n  mkdir -p results/patches/$I && cp $P results/patches/$I/patch.diff && echo '{\"patch_empty\": false, \"A_decision\": \"n/a (diagnostic)\"}' > results/patches/$I/record.json\n  .venv/bin/python lib/stage3_eval.py $I; mv results/eval_$I.json $E/diagnostic/eval_$name.json; echo \"$name patch sha256 $(sha256sum $P|cut -c1-64)\" >> $E/diagnostic/patches.txt; rm -rf results/patches/$I\ndone\nmv /tmp/smoke2_patchdir results/patches/$I && mv /tmp/smoke2_eval.json results/eval_$I.json; cat $E/diagnostic/patches.txt; for f in $E/diagnostic/eval_*.json; do echo == $f; python3 -c \"import json;d=json.load(open('$f'));print({k:d.get(k) for k in ['B_decision','B_reason','B_detail','gate_units_passed','gate_units','gate_deterministic','gate_p2p_detail','gt_correct','gt_f2p_failed','gt_p2p_failed']})\"; done"
+title: "Save smoke2 evidence, diagnostic gate runs"
+status: failed   
+started_at: 2026-11-12T15:44:43.660Z
+running_for_ms: 906917   
+---
+events.json
+llm_ledger.json
+llm_ledger.json.paths
+oh_result.json
+oh_stdout.log
+patch_raw.diff
+server.log
+sock
+
+---
+exit_code: unknown
+elapsed_ms: 906917
+ended_at: 2026-11-12T15:59:50.578Z
+---

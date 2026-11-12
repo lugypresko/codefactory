@@ -1,0 +1,8 @@
+[2026-11-12 17:28:27] START full run per frozen protocol 2617a58 (user approval 17:28)
+[2026-11-12 17:28:28] #1 schemathesis__schemathesis-4087: stage1 testgen
+[2026-11-12 17:29:38] schemathesis__schemathesis-4087 INVALID SUBMITTED 0.0256975 [] True
+[2026-11-12 17:29:38] schemathesis__schemathesis-4087 0 disc: 0 det: None
+[2026-11-12 17:29:38] stage1 frozen: commit fd918db
+[2026-11-12 17:29:38] #1 schemathesis__schemathesis-4087: stage2 patch
+[2026-11-12 17:35:06] PAUSED by user (17:33) after #1 stage2: testgen sandbox infra defect (bash -lc login shell drops conda testbed PATH; python/pytest unavailable to generator). #1 stage3 NOT run; 0/30 scored. Stage2 #1 recorded as-is: A=APPROVE, cost 0.10127.
+[2026-11-12 17:39:14] AMENDMENT 2 committed 9fc8e38; #1 attempt voided (infra). 0/30 scored.

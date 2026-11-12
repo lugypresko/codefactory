@@ -1,0 +1,12 @@
+[2026-11-12 17:39:22] SMOKE2 start (not a result)
+schemathesis__schemathesis-4087 VALID LIMIT_EXCEEDED 0.12295393999999997 ['test/specs/openapi/test_additional_query_properties.py'] False
+stage1 rc=0
+schemathesis__schemathesis-4087 1 disc: 1 det: True
+stage1b rc=0
+freeze patch_exists: False
+stage1 frozen 1723d17274dbed109df16d9ae36d0eaa63ca5a43
+schemathesis__schemathesis-4087 REJECT EMPTY_DIFF 0.03152687 0
+stage2 rc=0
+schemathesis__schemathesis-4087 A REJECT B REJECT NO_PATCH GT False
+stage3 rc=0
+[2026-11-12 17:44:19] SMOKE2 end

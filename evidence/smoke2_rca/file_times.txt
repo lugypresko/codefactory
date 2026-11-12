@@ -1,0 +1,28 @@
+-rw-r--r-- 1 box box  183 2026-11-12 17:44:19.106425298 +0200 results/eval_schemathesis__schemathesis-4087.json
+
+results/patches/schemathesis__schemathesis-4087:
+total 20
+drwxr-xr-x 2 box box 4096 2026-11-12 17:44:17.774440292 +0200 .
+drwxr-xr-x 3 box box 4096 2026-11-12 18:00:30.551490579 +0200 ..
+-rw-r--r-- 1 box box 4000 2026-11-12 17:44:17.770440336 +0200 final_message.txt
+-rw-r--r-- 1 box box    0 2026-11-12 17:44:17.770440336 +0200 patch.diff
+-rw-r--r-- 1 box box  434 2026-11-12 17:44:17.770440336 +0200 patch_raw.diff
+-rw-r--r-- 1 box box 2322 2026-11-12 17:44:17.774440292 +0200 record.json
+
+work/runs/patch/schemathesis__schemathesis-4087:
+total 464
+drwxr-xr-x 3 box box   4096 2026-11-12 17:44:19.046425974 +0200 .
+drwxr-xr-x 3 box box   4096 2026-11-12 17:42:37.907564407 +0200 ..
+-rw-r--r-- 1 box box 347532 2026-11-12 17:44:10.722519669 +0200 events.json
+-rw-r--r-- 1 box box    245 2026-11-12 17:44:10.674520209 +0200 llm_ledger.json
+-rw-r--r-- 1 box box    492 2026-11-12 17:44:07.138560010 +0200 llm_ledger.json.paths
+-rw-r--r-- 1 box box   5757 2026-11-12 17:44:16.418455554 +0200 oh_result.json
+-rw-r--r-- 1 box box  53930 2026-11-12 17:44:17.770440336 +0200 oh_stdout.log
+-rw-r--r-- 1 box box    434 2026-11-12 17:44:16.414455600 +0200 patch_raw.diff
+-rw-r--r-- 1 box box  32810 2026-11-12 17:44:15.926461092 +0200 server.log
+drwxrwxrwx 2 box box   4096 2026-11-12 17:42:49.707431586 +0200 sock
+total 16
+drwxr-xr-x 2 box box 4096 2026-11-12 18:00:30.531490804 +0200 .
+drwxr-xr-x 3 box box 4096 2026-11-12 18:02:31.938124234 +0200 ..
+-rw-r--r-- 1 box box 2171 2026-11-12 17:44:43.702148445 +0200 patch.diff
+-rw-r--r-- 1 box box   57 2026-11-12 17:44:43.702148445 +0200 record.json

@@ -1,0 +1,46 @@
+--- a/lib/stage3_eval.py	2026-11-12 16:55:26.935430218 +0200
++++ lib/stage3_eval.py	2026-11-12 18:02:13.770328734 +0200
+@@ -1,14 +1,26 @@
+ """STAGE 3 — deterministic evaluation of one issue: gate (B) on pre+patch, and ground truth (hidden dev tests) for scoring only."""
+-import json, os, sys, glob, re, subprocess
++import json, os, sys, glob, re, subprocess, hashlib
+ sys.path.insert(0, os.path.dirname(__file__))
+ import dockrun
+ from common2 import ROOT, items, pytest_cmd, is_testish, split_diff, diff_path
+ iid = sys.argv[1]; it = items()[iid]; img = it["docker_image"]
+ tg = f"{ROOT}/results/testgen/{iid}"; pdir = f"{ROOT}/results/patches/{iid}"
+ pre = json.load(open(f"{tg}/pre_eval.json")); prec = json.load(open(f"{pdir}/record.json"))
+-patch = open(f"{pdir}/patch.diff").read()
++# --- Amendment 3: evaluate ONLY the sealed stage-2 artifact (sha256 bound at production time, checked here) ---
++def integrity_fail(msg):
++    json.dump({"instance_id": iid, "status": "EVAL_INTEGRITY_FAIL", "detail": msg}, open(f"{ROOT}/results/integrity_fail_{iid}.json", "w"), indent=2)
++    print(iid, "EVAL_INTEGRITY_FAIL", msg); sys.exit(4)
++_pb = open(f"{pdir}/patch.diff", "rb").read(); patch = _pb.decode()
++if not prec.get("patch_sha256"): integrity_fail("record.json has no patch_sha256 (not a stage-2 record)")
++if hashlib.sha256(_pb).hexdigest() != prec["patch_sha256"]: integrity_fail("patch.diff sha256 != sha256 recorded by stage 2")
++if bool(prec.get("patch_empty")) != (not patch.strip()): integrity_fail("patch_empty flag disagrees with patch.diff content")
++for _f in (f"{pdir}/patch.diff", f"{pdir}/record.json"):
++    _rel = os.path.relpath(_f, ROOT)
++    if subprocess.run(["git", "-C", ROOT, "ls-files", "--error-unmatch", _rel], capture_output=True).returncode or \
++       subprocess.run(["git", "-C", ROOT, "diff", "--quiet", "HEAD", "--", _rel], capture_output=True).returncode:
++        integrity_fail(f"{_rel} is not sealed (uncommitted or modified after the stage-2 seal commit)")
+ tests = {os.path.relpath(f, f"{tg}/tests"): open(f).read() for f in glob.glob(f"{tg}/tests/**/*.py", recursive=True)}
+-out = {"instance_id": iid}
++out = {"instance_id": iid, "evaluated_patch_sha256": prec["patch_sha256"], "evaluated_patch_path": os.path.relpath(f"{pdir}/patch.diff", ROOT)}
+ PASSY = ("PASSED",)
+ def unit_pass(unit, oc):
+     if unit.endswith("::<COLLECTION_ERROR>"):
+--- a/lib/pipeline.py	2026-11-12 17:38:43.326204886 +0200
++++ lib/pipeline.py	2026-11-12 18:02:13.770328734 +0200
+@@ -37,8 +37,11 @@
+     log(f"#{n} {iid}: stage2 patch")
+     r = sh(PY, "lib/stage2_patch.py", iid); log(r.stdout.strip() or r.stderr[-1500:])
+     if r.returncode: log("stage2 crashed; stopping"); break
++    sh("git", "add", f"results/patches/{iid}"); c = sh("git", "commit", "-qm", f"STAGE2 SEAL {iid} (patch artifact sealed before evaluation)")
++    log(f"stage2 sealed: commit {sh('git','rev-parse','--short','HEAD').stdout.strip()} rc={c.returncode}")
+     log(f"#{n} {iid}: stage3 eval")
+     r = sh(PY, "lib/stage3_eval.py", iid); log(r.stdout.strip() or r.stderr[-1500:])
++    if r.returncode == 4: log("EVAL_INTEGRITY_FAIL -> pipeline halted"); break
+     if r.returncode: log("stage3 crashed; stopping"); break
+     open(f"{ROOT}/results/digests.jsonl", "a").write(json.dumps({"instance_id": iid, "image": img, "repo_digest": dig, "scored_at": time.strftime("%FT%T%z")}) + "\n")
+     sh("git", "add", f"results/patches/{iid}", f"results/eval_{iid}.json", "results/digests.jsonl"); sh("git", "commit", "-qm", f"STAGE2+3 {iid}")

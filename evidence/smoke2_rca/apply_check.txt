@@ -1,0 +1,2 @@
+gold apply-check rc=0
+raw apply-check rc=0
