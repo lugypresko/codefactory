@@ -1,0 +1,114 @@
+diff --git a/src/lsdb/catalog/catalog.py b/src/lsdb/catalog/catalog.py
+index dc7752f..6de005f 100644
+--- a/src/lsdb/catalog/catalog.py
++++ b/src/lsdb/catalog/catalog.py
+@@ -1559,6 +1559,8 @@ class Catalog(HealpixDataset):
+                 tqdm_kwargs=tqdm_kwargs,
+                 error_if_empty=error_if_empty,
+                 create_thumbnail=create_thumbnail,
++                npix_suffix=kwargs.pop("npix_suffix", None),
++                pixel_filename=kwargs.pop("pixel_filename", None),
+                 **kwargs,
+             )
+         else:
+diff --git a/src/lsdb/io/to_collection.py b/src/lsdb/io/to_collection.py
+index f81a983..8d62b15 100644
+--- a/src/lsdb/io/to_collection.py
++++ b/src/lsdb/io/to_collection.py
+@@ -19,6 +19,8 @@ def to_collection(
+     progress_bar: bool = True,
+     tqdm_kwargs: dict | None = None,
+     error_if_empty: bool = True,
++    npix_suffix: str | None = None,
++    pixel_filename: str | None = None,
+     **kwargs,
+ ):
+     """Saves the catalog collection to disk in the HATS format.
+@@ -66,6 +68,8 @@ def to_collection(
+         progress_bar=progress_bar,
+         tqdm_kwargs=tqdm_kwargs,
+         error_if_empty=error_if_empty,
++        npix_suffix=npix_suffix,
++        pixel_filename=pixel_filename,
+         **kwargs,
+     )
+ 
+@@ -82,6 +86,8 @@ def to_collection(
+             overwrite=overwrite,
+             resume=resume,
+             error_if_empty=False,
++            npix_suffix=npix_suffix,
++            pixel_filename=pixel_filename,
+             **kwargs,
+         )
+         properties = properties | {"all_margins": margin_name, "default_margin": margin_name}
+diff --git a/src/lsdb/io/to_hats.py b/src/lsdb/io/to_hats.py
+index b29c58d..df5e071 100644
+--- a/src/lsdb/io/to_hats.py
++++ b/src/lsdb/io/to_hats.py
+@@ -32,6 +32,7 @@ def perform_write(
+     hp_pixel: HealpixPixel,
+     base_catalog_dir: UPath,
+     histogram_order: int,
++    hc_structure_properties: dict[str, Any],
+     **kwargs,
+ ) -> tuple[int, SparseHistogram]:
+     """Writes a pandas dataframe to a single parquet file and returns the total count
+@@ -60,7 +61,12 @@ def perform_write(
+         return 0, SparseHistogram([], [], histogram_order)
+     pixel_dir = hc.io.pixel_directory(base_catalog_dir, hp_pixel.order, hp_pixel.pixel)
+     hc.io.file_io.make_directory(pixel_dir, exist_ok=True)
+-    pixel_path = hc.io.paths.pixel_catalog_file(base_catalog_dir, hp_pixel)
++    pixel_path = hc.io.paths.pixel_catalog_file(
++        base_catalog_dir,
++        hp_pixel,
++        hc_structure_properties=hc_structure_properties,
++        file_name=hc_structure_properties.get("pixel_filename"),
++    )
+     df.to_parquet(pixel_path.path, filesystem=pixel_path.fs, **kwargs)
+     histogram = calculate_histogram(df, histogram_order)
+     write_histogram(histogram, base_catalog_dir, hp_pixel)
+@@ -236,6 +242,8 @@ def to_hats(
+     create_thumbnail: bool = False,
+     skymap_alt_orders: list[int] | None = None,
+     addl_hats_properties: dict | None = None,
++    npix_suffix: str | None = None,
++    pixel_filename: str | None = None,
+     error_if_empty: bool = True,
+     **kwargs,
+ ):
+@@ -324,6 +332,7 @@ def to_hats(
+             base_catalog_dir_fp=base_catalog_path,
+             histogram_order=histogram_order,
+             existing_pixels=existing_pixels,
++            hc_structure_properties=new_hc_structure.catalog_info.properties,
+             **kwargs,
+         )
+         pixels = existing_pixels + new_pixels
+@@ -349,6 +358,10 @@ def to_hats(
+ 
+     if not addl_hats_properties:
+         addl_hats_properties = {}
++    if npix_suffix:
++        addl_hats_properties["npix_suffix"] = npix_suffix
++    if pixel_filename:
++        addl_hats_properties["pixel_filename"] = pixel_filename
+ 
+     if catalog.hc_structure.catalog_info.catalog_type in (CatalogType.OBJECT, CatalogType.SOURCE):
+         addl_hats_properties = addl_hats_properties | {
+@@ -464,6 +477,7 @@ def write_partitions(
+     base_catalog_dir_fp: str | Path | UPath,
+     histogram_order: int,
+     existing_pixels: list[HealpixPixel] | None = None,
++    hc_structure_properties: dict[str, Any] | None = None,
+     **kwargs,
+ ) -> tuple[list[HealpixPixel], list[int], list[SparseHistogram]]:
+     """Saves catalog partitions as parquet to disk and computes the sparse
+@@ -501,6 +515,7 @@ def write_partitions(
+                 pixel,
+                 base_catalog_dir_fp,
+                 histogram_order,
++                hc_structure_properties,
+                 **kwargs,
+             )
+         )
