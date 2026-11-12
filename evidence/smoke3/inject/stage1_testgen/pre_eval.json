@@ -1,0 +1,19 @@
+{
+  "instance_id": "schemathesis__schemathesis-4087",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "test/specs/openapi/test_additional_query_properties.py::test_additional_query_properties_are_not_flagged_as_errors": "FAILED"
+    },
+    {
+      "test/specs/openapi/test_additional_query_properties.py::test_additional_query_properties_are_not_flagged_as_errors": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "test/specs/openapi/test_additional_query_properties.py::test_additional_query_properties_are_not_flagged_as_errors"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

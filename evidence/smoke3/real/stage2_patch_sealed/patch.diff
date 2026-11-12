@@ -1,0 +1,13 @@
+diff --git a/src/schemathesis/specs/openapi/adapter/parameters.py b/src/schemathesis/specs/openapi/adapter/parameters.py
+index 9c42788..b60badc 100644
+--- a/src/schemathesis/specs/openapi/adapter/parameters.py
++++ b/src/schemathesis/specs/openapi/adapter/parameters.py
+@@ -1528,7 +1528,7 @@ def _merge_parameters_to_object_schema(
+ 
+     merged = {
+         "properties": properties,
+-        "additionalProperties": False,
++        "additionalProperties": location == ParameterLocation.QUERY,
+         "type": "object",
+     }
+     if required:

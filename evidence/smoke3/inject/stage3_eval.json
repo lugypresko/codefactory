@@ -1,0 +1,39 @@
+{
+  "instance_id": "schemathesis__schemathesis-4087",
+  "evaluated_patch_sha256": "a2d19478f47e4b05ae07a5b8c411efd54e560be0b239f647b936ca8459fcf9a6",
+  "evaluated_patch_bytes": 684,
+  "producer_run_id": "pa-schemathesis__schemathesis-4087-20261112T184802-45b22ef1",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "2/2",
+  "gt_p2p_failed": "0/104",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 1,
+  "gate_deterministic": true,
+  "gate_p2p_files": [
+    "test/code_samples/test_curl.py",
+    "test/core/error_feedback/test_field_inference.py",
+    "test/coverage/test_combinations.py",
+    "test/coverage/test_phase.py",
+    "test/python/test_case_metadata.py",
+    "test/python/test_models.py",
+    "test/specs/graphql/test_basic.py",
+    "test/specs/openapi/negative/test_component_mutation_targets.py",
+    "test/specs/openapi/negative/test_exclude_headers.py",
+    "test/specs/openapi/negative/test_value_channel.py"
+  ],
+  "gate_p2p_stems": [
+    "parameters"
+  ],
+  "gate_p2p_broken": [],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "0/663 stable pre-fix passing tests broken",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch",
+  "A_decision": "APPROVE"
+}

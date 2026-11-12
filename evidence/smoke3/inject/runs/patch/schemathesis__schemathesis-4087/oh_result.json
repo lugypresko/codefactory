@@ -1,0 +1,1 @@
+{"execution_status": "ConversationExecutionStatus.FINISHED", "cost_usd": 0.0, "final_message": "injected known patch", "run_id": "pa-schemathesis__schemathesis-4087-20261112T184802-45b22ef1", "base_sha": "9ed8b8b5946ae814f9894fd13526bf03e1c03dba", "inject_apply_rc": 0, "injected": true}

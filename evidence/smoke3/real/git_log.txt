@@ -1,0 +1,5 @@
+7a6d1ca6819386e63f8198cf50d225f9b785bcfc 2026-11-12 19:07:08 +0200 STAGE2 SEAL schemathesis__schemathesis-4087 run pa-schemathesis__schemathesis-4087-20261112T190247-55d42e99
+75b3f8bba1885115a0de126f3eb7f1054c680113 2026-11-12 19:02:47 +0200 SMOKE STAGE1 FREEZE schemathesis__schemathesis-4087
+fe548622d06dc1b2416a41b38b7971297f3850a6 2026-11-12 18:46:06 +0200 AMENDMENT 3 FREEZE (user-approved 18:42): bind every evaluation to the exact produced artifact (run ID, sha256, bytes, base, raw/filtered hashes, seal, read-only); INTEGRITY_FAIL halts; regression before/after. Last code change before scored run.
+0cec02ec647f922393266f5b300236894bf5eff5 2026-11-12 18:03:02 +0200 SMOKE2 RCA: provenance/timing/content/consistency, regression tests (5/9 fail on frozen code), Amendment 3 proposed (not applied); smoke2 artefacts moved out of results/
+1723d17274dbed109df16d9ae36d0eaa63ca5a43 2026-11-12 17:42:37 +0200 SMOKE2 (not a result) STAGE1 FREEZE schemathesis__schemathesis-4087 before patch generation

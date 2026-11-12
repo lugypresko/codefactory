@@ -1,0 +1,25 @@
+{
+  "base_config": "/workspace/lc1a0_smoke_real/mini_base.yaml",
+  "mounts": [
+    "/workspace/lc1a0_smoke_real/work/runs/testgen/schemathesis__schemathesis-4087/ws:/testbed"
+  ],
+  "network": "none (container); LLM calls from host process only",
+  "role": "testgen",
+  "run_id": "tg-schemathesis__schemathesis-4087",
+  "mini_rc": 0,
+  "wall_seconds": 594,
+  "caps": {
+    "cost": 0.25,
+    "steps": 40,
+    "wall": 900
+  },
+  "model_requested": "gemini/gemini-2.5-flash",
+  "exit_status": "LimitsExceeded",
+  "cost_usd": 0.14680017000000004,
+  "api_calls": 40,
+  "models_returned": [
+    "gemini-2.5-flash"
+  ],
+  "status": "LIMIT_EXCEEDED",
+  "spent_total_after": 0.7258
+}

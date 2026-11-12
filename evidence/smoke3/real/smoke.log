@@ -1,0 +1,13 @@
+[2026-11-12 18:52:49] SMOKE (real) schemathesis__schemathesis-4087 start; HEAD fe54862
+[2026-11-12 18:52:49] stage1 testgen
+schemathesis__schemathesis-4087 VALID LIMIT_EXCEEDED 0.14680017000000004 [] True
+[2026-11-12 19:02:47] stage1 rc=0
+schemathesis__schemathesis-4087 0 disc: 0 det: None
+[2026-11-12 19:02:47] stage1 frozen 75b3f8b (patch dir exists: no)
+[2026-11-12 19:02:47] stage2 run_id=pa-schemathesis__schemathesis-4087-20261112T190247-55d42e99
+schemathesis__schemathesis-4087 APPROVE  0.13112917000000002 546
+[2026-11-12 19:07:08] stage2 sealed 7a6d1ca
+[2026-11-12 19:07:08] stage3
+schemathesis__schemathesis-4087 A APPROVE B REJECT REJECT_INSUFFICIENT_EVIDENCE GT False
+[2026-11-12 19:07:17] stage3 rc=0
+[2026-11-12 19:07:17] SMOKE (real) end

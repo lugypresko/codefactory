@@ -1,0 +1,35 @@
+{
+  "instance_id": "schemathesis__schemathesis-4087",
+  "engine": "OpenHands SDK 1.62.0 agent-server (Docker sandbox)",
+  "agent": {
+    "execution_status": "ConversationExecutionStatus.FINISHED",
+    "cost_usd": 0.0,
+    "run_id": "pa-schemathesis__schemathesis-4087-20261112T184802-45b22ef1",
+    "base_sha": "9ed8b8b5946ae814f9894fd13526bf03e1c03dba",
+    "inject_apply_rc": 0,
+    "injected": true
+  },
+  "cost_usd": 0.0,
+  "patch_sha256": "a2d19478f47e4b05ae07a5b8c411efd54e560be0b239f647b936ca8459fcf9a6",
+  "patch_raw_sha256": "a2d19478f47e4b05ae07a5b8c411efd54e560be0b239f647b936ca8459fcf9a6",
+  "patch_empty": false,
+  "dropped_test_files": [],
+  "artifact": {
+    "path": "results/patches/schemathesis__schemathesis-4087/patch.diff",
+    "sha256": "a2d19478f47e4b05ae07a5b8c411efd54e560be0b239f647b936ca8459fcf9a6",
+    "bytes": 684,
+    "empty": false,
+    "raw_path": "results/patches/schemathesis__schemathesis-4087/patch_agent_output.diff",
+    "raw_sha256": "a2d19478f47e4b05ae07a5b8c411efd54e560be0b239f647b936ca8459fcf9a6",
+    "raw_bytes": 684,
+    "producer_run_id": "pa-schemathesis__schemathesis-4087-20261112T184802-45b22ef1",
+    "producer_reported_run_id": "pa-schemathesis__schemathesis-4087-20261112T184802-45b22ef1",
+    "base_sha": "9ed8b8b5946ae814f9894fd13526bf03e1c03dba",
+    "original_base_commit": "e5fcd1c8ab5772dbcc3dd92059fe3b0acd88eb3c",
+    "produced_at": "2026-11-12T18:48:05+0200"
+  },
+  "A_decision": "APPROVE",
+  "A_reason": "",
+  "final_message_uncertain": false,
+  "uncertainty_matches": []
+}

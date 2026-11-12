@@ -1,0 +1,16 @@
+Warning: Input is not a terminal (fd=0).
+Building agent config from specs: ['/workspace/lc1a0_smoke_real/mini_base.yaml',
+'/workspace/lc1a0_smoke_real/work/runs/testgen/schemathesis__schemathesis-4087/c
+onfig.yaml']
+minisweagent.environment: DEBUG: Starting container with command: docker run -d 
+--name minisweagent-0fff44b0 -w /testbed --rm --network none --user 1000:1000   
+--cap-drop ALL --security-opt no-new-privileges --memory 1536m --cpus 1         
+--pids-limit 256 --label lc1a0.run=tg-schemathesis__schemathesis-4087 -v        
+/workspace/lc1a0_smoke_real/work/runs/testgen/schemathesis__schemathesis-4087/ws
+:/testbed swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087:latest
+sleep 2h                                                                        
+minisweagent.environment: INFO: Started container minisweagent-0fff44b0 with ID 
+ebc98a6a5f26648a013091c8cd843aaaeef6fa84523beb4d773ed567be9a21c9                
+Saved trajectory to 
+'/workspace/lc1a0_smoke_real/work/runs/testgen/schemathesis__schemathesis-4087/t
+rajectory.json'

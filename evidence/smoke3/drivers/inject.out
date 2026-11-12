@@ -1,0 +1,8 @@
+[2026-11-12 18:48:02] SMOKE (inject) schemathesis__schemathesis-4087 start; HEAD b653f04
+[2026-11-12 18:48:02] stage2 run_id=pa-schemathesis__schemathesis-4087-20261112T184802-45b22ef1
+schemathesis__schemathesis-4087 APPROVE  0.0 684
+[2026-11-12 18:48:05] stage2 sealed c2db783
+[2026-11-12 18:48:05] stage3
+schemathesis__schemathesis-4087 A APPROVE B REJECT REJECT_INVALID_PATCH GT False
+[2026-11-12 18:52:43] stage3 rc=0
+[2026-11-12 18:52:43] SMOKE (inject) end
