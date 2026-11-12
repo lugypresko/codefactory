@@ -1,0 +1,23 @@
+diff --git a/src/tox/tox.schema.json b/src/tox/tox.schema.json
+index e2b5b38..abc41a0 100644
+--- a/src/tox/tox.schema.json
++++ b/src/tox/tox.schema.json
+@@ -400,7 +400,17 @@
+           "deprecated": true
+         },
+         "deps": {
+-          "type": "string",
++          "anyOf": [
++            {
++              "type": "string"
++            },
++            {
++              "type": "array",
++              "items": {
++                "type": "string"
++              }
++            }
++          ],
+           "description": "python dependencies with optional version specifiers, as specified by PEP-440"
+         },
+         "dependency_groups": {
