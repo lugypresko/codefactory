@@ -1,0 +1,11 @@
+{
+ "instance_id": "youssofal__mtplx-21",
+ "frozen_at": "2026-11-12T19:45:56+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/youssofal__mtplx-21/task.txt": "8867a52a597d0863fbbc39edacdb7c99be39a55ac265595bf203e43a4d0a1e69",
+  "results/testgen/youssofal__mtplx-21/record.json": "88a441238acf0a1732b0fa18e2ec1d8020ef66a4d76f04ee78d8bdfd6ac787f3",
+  "results/testgen/youssofal__mtplx-21/config.yaml": "d30337e047c3e69151394768cd8abbcb441d285d6e2c1307cbac20fecdcd6848",
+  "results/testgen/youssofal__mtplx-21/pre_eval.json": "87020804c8b1ec255539154b29185fbb6d5cdc35cf48c44f6547f1848f462132"
+ }
+}

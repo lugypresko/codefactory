@@ -1,0 +1,45 @@
+{
+  "instance_id": "youssofal__mtplx-21",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/youssofal__mtplx-21/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-youssofal__mtplx-21",
+    "mini_rc": 0,
+    "wall_seconds": 990,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "TimeExceeded",
+    "cost_usd": 0.026122629999999997,
+    "api_calls": 10,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "WALL_TIMEOUT",
+    "spent_total_after": 1.0721
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "af6970a81729458b039fd1a5ac4dde65ec44f953",
+  "original_base_commit": "c06cc13286e86d9ff3d2e3b991eba327549c534b",
+  "task_sha256": "8867a52a597d0863fbbc39edacdb7c99be39a55ac265595bf203e43a4d0a1e69",
+  "test_files": {},
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/youssofal__mtplx-21/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.youssofal_1776_mtplx-21:latest"
+  }
+}
