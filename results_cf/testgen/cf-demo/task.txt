@@ -1,0 +1,37 @@
+You are a test engineer. Your job is to write ACCEPTANCE TESTS for the GitHub issue below, for the Python repository in /testbed (already installed; run tests with `python -m pytest`). The issue has NOT been fixed in this code. Do NOT fix it.
+
+Goal: write new pytest test file(s) that encode the behaviour the issue asks for, such that
+  (a) they FAIL on the current, unfixed code, for the reason described in the issue (an assertion about the issue's behaviour, not an unrelated error);
+  (b) they PASS once a correct fix is implemented, whatever reasonable implementation the developer chooses;
+  (c) they would FAIL for plausible-but-incomplete fixes (cover the edge cases the issue implies, not only its literal example).
+
+Rules:
+- Create only NEW test files named test_*.py, placed next to the project's existing tests (look at how the existing tests are organised and import the code). Do not modify, delete or rename any existing file. Do not create any other file inside /testbed; use /tmp for scratch work.
+- Test observable behaviour described by the issue. Do not depend on exact error-message wording or on private implementation details unless the issue itself specifies them; a correct fix may name internals differently. If you must assume a new public API name (parameter/function), take it from the issue text when it gives one.
+- There is no network access. Tests must not need the network.
+- Run your tests and confirm they fail on the current code for the right reason, and that the rest of the file runs.
+- If the issue is too vague or does not define a checkable expected behaviour, do NOT write tests. Instead create /testbed/CLARIFICATION_NEEDED.md with the specific questions you would ask the reporter, then finish.
+
+<issue>
+# split_even drops the remainder when n does not divide total
+
+## Summary
+
+`cfdemo.split_even(total, n)` is supposed to split a non-negative integer `total` into `n` non-negative integer parts that **sum back to `total`** and differ by at most 1.
+
+When `n` does not divide `total`, the current implementation returns `n` copies of `total // n` and silently drops `total % n`. The parts then sum to less than `total`.
+
+## Reproduction
+
+```python
+from cfdemo import split_even
+print(split_even(10, 3))  # today: [3, 3, 3]  (sum 9, not 10)
+```
+
+## Expected
+
+The returned list has length `n`, every element is a non-negative integer, elements differ by at most 1, and `sum(parts) == total`. For the example above one valid result is `[4, 3, 3]` (the remainder may be distributed on any of the parts, as long as those constraints hold).
+
+The existing regression tests only cover cases where `n` already divides `total` (or n==1, or total==0), so they stay green while this bug remains.
+
+</issue>
