@@ -1,0 +1,8 @@
+# LC-1A. Changes to the verifier, the task (including hidden tests), and CI
+# require a review from the human owner. The agent does not approve.
+
+/.github/** @lugypresko
+/task/** @lugypresko
+/evaluate.sh @lugypresko
+/lib/** @lugypresko
+/docker/** @lugypresko
