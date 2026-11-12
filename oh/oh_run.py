@@ -15,6 +15,9 @@ os.makedirs(out, exist_ok=True); ws = f"{out}/ws"; conda = f"{out}/conda"; sockd
 sh = lambda *a, **k: subprocess.run(a, capture_output=True, text=True, **k)
 t0 = time.time()
 base = A.prep_ws(img, ws)
+if os.environ.get("LC_BASE_PATCH"):
+    r = sh("git", "-C", ws, "-c", "safe.directory=*", "apply", os.path.abspath(os.environ["LC_BASE_PATCH"]))
+    assert r.returncode == 0, "LC_BASE_PATCH apply failed:\n" + (r.stderr or r.stdout)
 if not os.path.exists(conda):
     cid = sh("docker", "create", img).stdout.strip(); r = sh("docker", "cp", f"{cid}:/opt/conda", conda); sh("docker", "rm", "-f", cid)
     assert r.returncode == 0, r.stderr
@@ -27,6 +30,7 @@ run = ["docker", "run", "-d", "--name", name, "--network", "none", "--cap-drop",
        "--memory", "2g", "--cpus", "1", "--pids-limit", "512", "--label", "lc1a0.oh=1",
        "-v", f"{ws}:/testbed", "-v", f"{conda}:/opt/conda:ro", "-v", f"{OH}:/lc_oh:ro", "-v", f"{sockd}:/lc_sock",
        "-e", f"PATH={PATH}", "-e", "CONDA_DEFAULT_ENV=testbed", "-e", "OH_ENABLE_VSCODE=false", "-e", "OH_ENABLE_VNC=false",
+       "-e", "LITELLM_LOCAL_MODEL_COST_MAP=True",
        SERVER, "--port", "8000"]
 r = sh(*run); assert r.returncode == 0, r.stderr
 port = A.__dict__.get("_p", None) or (lambda s: (s.bind(("127.0.0.1", 0)), s.getsockname()[1], s.close())[1])(socket.socket())
@@ -37,6 +41,8 @@ try:
     host = f"http://127.0.0.1:{port}"
     import urllib.request
     for i in range(90):
+        if sh("docker", "inspect", "-f", "{{.State.Running}}", name).stdout.strip() != "true":
+            raise RuntimeError("INFRA_FAIL: agent-server container not running:\n" + sh("docker", "logs", "--tail", "50", name).stdout + sh("docker", "logs", "--tail", "50", name).stderr)
         try:
             urllib.request.urlopen(f"{host}/health", timeout=5).read(); break
         except Exception: time.sleep(2)
@@ -49,8 +55,10 @@ try:
     ag = get_default_agent(llm=llm, cli_mode=True)
     w = RemoteWorkspace(host=host, working_dir="/testbed")
     conv = Conversation(agent=ag, workspace=w, max_iteration_per_run=max_iter)
-    conv.send_message("Please solve this GitHub issue in the repository at /testbed (Python; dependencies are installed; there is no network access). "
-                      "Make the minimal source change that resolves the issue. When you are done, finish.\n\n<issue>\n" + issue + "\n</issue>")
+    msg = ("Please solve this GitHub issue in the repository at /testbed (Python; dependencies are installed; there is no network access). "
+           "Make the minimal source change that resolves the issue. When you are done, finish.\n\n<issue>\n" + issue + "\n</issue>")
+    if os.environ.get("LC_FEEDBACK"): msg += "\n\n" + os.environ["LC_FEEDBACK"]
+    conv.send_message(msg)
     import threading
     def _run():
         try: conv.run()

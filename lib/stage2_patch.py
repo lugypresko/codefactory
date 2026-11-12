@@ -7,7 +7,8 @@ from common2 import ROOT, H, items, strip_tests
 iid = sys.argv[1]
 RID = sys.argv[2] if len(sys.argv) > 2 else None  # Amendment 3: producer run ID minted by the pipeline
 if not RID: print(iid, "INTEGRITY_FAIL: no producer run ID"); sys.exit(4)
-if os.path.exists(f"{ROOT}/results/patches/{iid}") and not os.access(f"{ROOT}/results/patches/{iid}", os.W_OK):
+od = os.path.abspath(os.path.join(ROOT, os.environ["LC_OUT"])) if os.environ.get("LC_OUT") else f"{ROOT}/results/patches/{iid}"
+if os.path.exists(od) and not os.access(od, os.W_OK):
     print(iid, "INTEGRITY_FAIL: a sealed artifact already exists; refusing to overwrite"); sys.exit(4)
 if agent.spent() + 0.50 > agent.BUDGET: print(iid, "BUDGET_STOP"); sys.exit(0)
 rd = f"{ROOT}/work/runs/patch/{iid}"; shutil.rmtree(rd, ignore_errors=True); os.makedirs(rd)
@@ -25,7 +26,7 @@ raw = "".join(x for x in parts if not any(b in x.split("\n", 1)[0] for b in agen
 src, dropped = strip_tests(raw)
 last = res.get("final_message", "") or ""
 UNC = re.compile(r"\b(partial(ly)?|uncertain|not sure|unsure|could not|couldn't|unable|cannot verify|may not|might not|TODO|workaround|not fully)\b", re.I)
-od = f"{ROOT}/results/patches/{iid}"; shutil.rmtree(od, ignore_errors=True); os.makedirs(od)
+shutil.rmtree(od, ignore_errors=True); os.makedirs(od)
 open(f"{od}/patch_agent_output.diff", "w").write(agent_raw); open(f"{od}/patch_raw.diff", "w").write(raw); open(f"{od}/patch.diff", "w").write(src); open(f"{od}/final_message.txt", "w").write(last)
 finished = "FINISHED" in str(res.get("execution_status")) and not res.get("wall_timeout") and not res.get("error") and not res.get("run_error")
 A = "APPROVE" if (finished and src.strip()) else "REJECT"
@@ -33,8 +34,8 @@ reason = "" if A == "APPROVE" else ("EMPTY_DIFF" if finished else ("WALL_TIMEOUT
 rec = {"instance_id": iid, "engine": "OpenHands SDK 1.62.0 agent-server (Docker sandbox)", "agent": {k: v for k, v in res.items() if k not in ("final_message",)},
        "cost_usd": res.get("cost_usd"), "patch_sha256": H(src), "patch_raw_sha256": H(raw), "patch_empty": not src.strip(),
        "dropped_test_files": [d for d in dropped],
-       "artifact": {"path": f"results/patches/{iid}/patch.diff", "sha256": H(src), "bytes": len(src.encode()), "empty": not src.strip(),
-                    "raw_path": f"results/patches/{iid}/patch_agent_output.diff", "raw_sha256": H(agent_raw), "raw_bytes": len(agent_raw.encode()),
+       "artifact": {"path": os.path.relpath(f"{od}/patch.diff", ROOT), "sha256": H(src), "bytes": len(src.encode()), "empty": not src.strip(),
+                    "raw_path": os.path.relpath(f"{od}/patch_agent_output.diff", ROOT), "raw_sha256": H(agent_raw), "raw_bytes": len(agent_raw.encode()),
                     "producer_run_id": RID, "producer_reported_run_id": res.get("run_id"), "base_sha": res.get("base_sha"),
                     "original_base_commit": items()[iid]["base_commit"], "produced_at": __import__("time").strftime("%FT%T%z")}, "A_decision": A, "A_reason": reason,
        "final_message_uncertain": bool(UNC.search(last)), "uncertainty_matches": sorted({m.group(0).lower() for m in UNC.finditer(last)})}
