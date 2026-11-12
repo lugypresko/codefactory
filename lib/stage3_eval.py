@@ -2,13 +2,13 @@
 import json, os, sys, glob, re, subprocess, hashlib
 sys.path.insert(0, os.path.dirname(__file__))
 import dockrun
-from common2 import ROOT, items, pytest_cmd, is_testish, split_diff, diff_path
-iid = sys.argv[1]; it = items()[iid]; img = it["docker_image"]
+from common2 import ROOT, inst, pytest_cmd, is_testish, split_diff, diff_path, results_root, runs_root
+iid = sys.argv[1]; it = inst(iid); img = it["docker_image"]
 EXPECTED_RID = sys.argv[2] if len(sys.argv) > 2 else None
-tg = f"{ROOT}/results/testgen/{iid}"
-pdir = os.path.abspath(os.path.join(ROOT, os.environ["LC_OUT"])) if os.environ.get("LC_OUT") else f"{ROOT}/results/patches/{iid}"
-eval_path = f"{pdir}/eval.json" if os.environ.get("LC_OUT") else f"{ROOT}/results/eval_{iid}.json"
-fail_path = f"{pdir}/integrity_fail.json" if os.environ.get("LC_OUT") else f"{ROOT}/results/integrity_fail_{iid}.json"
+tg = f"{results_root()}/testgen/{iid}"
+pdir = os.path.abspath(os.path.join(ROOT, os.environ["LC_OUT"])) if os.environ.get("LC_OUT") else f"{results_root()}/patches/{iid}"
+eval_path = f"{pdir}/eval.json" if os.environ.get("LC_OUT") else f"{results_root()}/eval_{iid}.json"
+fail_path = f"{pdir}/integrity_fail.json" if os.environ.get("LC_OUT") else f"{results_root()}/integrity_fail_{iid}.json"
 pre = json.load(open(f"{tg}/pre_eval.json")); prec = json.load(open(f"{pdir}/record.json"))
 # ---- Amendment 3: every evaluation is bound to the exact artifact produced by run EXPECTED_RID ----
 def emit(path, obj):
@@ -49,7 +49,7 @@ def unit_pass(unit, oc):
 
 # ---------- gate P2P file selection (independent of hidden tests): existing test files that mention a changed module ----------
 def gate_p2p_files():
-    ws = f"{ROOT}/work/runs/testgen/{iid}/ws"
+    ws = f"{runs_root()}/testgen/{iid}/ws"
     tracked = subprocess.run(["git", "-C", ws, "-c", "safe.directory=*", "ls-files"], capture_output=True, text=True).stdout.split()
     tfiles = [f for f in tracked if f.endswith(".py") and (os.path.basename(f).startswith("test_") or f.endswith("_test.py"))]
     stems = set()
@@ -70,14 +70,15 @@ if prec["patch_empty"]:
     out.update(B_decision="REJECT", B_reason="NO_PATCH", gt_correct=False, gt_note="empty patch")
 else:
     # ---------- ground truth (scoring only; never shown to A or B) ----------
-    verify("before ground truth")
-    gt = dockrun.run(img, [patch, open(f"{ROOT}/work/inst/{iid}/test.diff").read()], cmd=it["test_cmd"])
-    f2p_fail = [t for t in it["FAIL_TO_PASS"] if gt["outcomes"].get(t) != "PASSED"]
-    p2p = json.load(open(f"{ROOT}/work/inst/{iid}/meta.json"))["P2P_eff"]
-    p2p_fail = [t for t in p2p if gt["outcomes"].get(t) != "PASSED"]
-    out.update(gt_apply_fail=gt["apply_fail"], gt_timeout=gt["timeout"], gt_f2p_failed=f"{len(f2p_fail)}/{len(it['FAIL_TO_PASS'])}",
-               gt_p2p_failed=f"{len(p2p_fail)}/{len(p2p)}", gt_correct=(not gt["apply_fail"]) and (not gt["timeout"]) and not f2p_fail and not p2p_fail)
-    if gt["apply_fail"]: out["gt_note"] = "patch + test_patch did not apply -> scored wrong"
+    if not os.environ.get("LC_NO_GT"):
+        verify("before ground truth")
+        gt = dockrun.run(img, [patch, open(f"{ROOT}/work/inst/{iid}/test.diff").read()], cmd=it["test_cmd"])
+        f2p_fail = [t for t in it["FAIL_TO_PASS"] if gt["outcomes"].get(t) != "PASSED"]
+        p2p = json.load(open(f"{ROOT}/work/inst/{iid}/meta.json"))["P2P_eff"]
+        p2p_fail = [t for t in p2p if gt["outcomes"].get(t) != "PASSED"]
+        out.update(gt_apply_fail=gt["apply_fail"], gt_timeout=gt["timeout"], gt_f2p_failed=f"{len(f2p_fail)}/{len(it['FAIL_TO_PASS'])}",
+                   gt_p2p_failed=f"{len(p2p_fail)}/{len(p2p)}", gt_correct=(not gt["apply_fail"]) and (not gt["timeout"]) and not f2p_fail and not p2p_fail)
+        if gt["apply_fail"]: out["gt_note"] = "patch + test_patch did not apply -> scored wrong"
     # ---------- gate ----------
     units = pre["discriminating_units"]
     if not units:
@@ -111,6 +112,20 @@ else:
             else:
                 out.update(B_decision="REJECT", B_reason="REJECT_INVALID_PATCH",
                            B_detail=("discriminating tests fail on patch" if not ok_tests else "") + ("; " if (not ok_tests and not p2p_ok) else "") + ("P2P broken: " + p2p_detail if not p2p_ok else ""))
+            if os.environ.get("LC_CAPTURE_FAIL"):
+                from failmin import minimize, CAP
+                failed = [u for u in units if not (unit_pass(u, runs[0]["outcomes"]) and unit_pass(u, runs[1]["outcomes"]))]
+                text = minimize(runs[0]["log"] + "\n" + runs[1]["log"], failed)
+                if out.get("gate_p2p_broken") and files:
+                    extra = minimize(pat_r[0]["log"] + "\n" + pat_r[1]["log"], out["gate_p2p_broken"])
+                    if extra: text = (text + "\n\nP2P broken:\n" + extra) if text else ("P2P broken:\n" + extra)
+                cap = int(os.environ.get("LC_CAPTURE_FAIL_CAP", CAP))
+                if len(text) > cap: text = text[:cap] + "\n...[truncated]"
+                fmp = f"{os.path.dirname(eval_path)}/gate_fail_min.txt"
+                d = os.path.dirname(fmp) or "."
+                if not os.access(d, os.W_OK): os.chmod(d, os.stat(d).st_mode | 0o200)
+                open(fmp, "w").write(text)
+                out["gate_fail_min_path"] = os.path.relpath(fmp, ROOT)
 verify("before verdict")
 out["A_decision"] = prec["A_decision"]
 emit(eval_path, out)

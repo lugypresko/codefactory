@@ -3,12 +3,18 @@ import json, os, re, subprocess, time, shutil, fnmatch
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VENV = os.path.join(ROOT, ".venv")
 MODEL = os.environ.get("LC1A0_MODEL", "gemini/gemini-2.5-flash")
-LEDGER = os.path.join(ROOT, "work", "cost_ledger.jsonl")
+LEDGER = os.path.join(ROOT, "work", "cost_ledger.jsonl")  # default path; callers must use ledger_path()
 BUDGET = 25.0
 BENIGN = ("__pycache__/", ".pytest_cache/", ".hypothesis/", ".coverage", ".pyc", ".mypy_cache/", ".ruff_cache/")
 
+def ledger_path():
+    try:
+        from common2 import ledger_path as _lp; return _lp()
+    except Exception:
+        return os.environ.get("LC_LEDGER") or LEDGER
+
 def spent():
-    try: return sum(json.loads(l)["cost_usd"] or 0 for l in open(LEDGER))
+    try: return sum(json.loads(l)["cost_usd"] or 0 for l in open(ledger_path()))
     except FileNotFoundError: return 0.0
 
 def sh(*a, **k):
@@ -124,7 +130,8 @@ environment:
     elif res.get("exit_status") == "LimitsExceeded": res["status"] = "LIMIT_EXCEEDED"
     elif res.get("exit_status") is None: res["status"] = "AGENT_CRASH"
     else: res["status"] = str(res.get("exit_status"))
-    with open(LEDGER, "a") as f:
+    os.makedirs(os.path.dirname(ledger_path()) or ".", exist_ok=True)
+    with open(ledger_path(), "a") as f:
         f.write(json.dumps({"run_id": rid, "role": role, "cost_usd": res.get("cost_usd") or 0.0, "ts": time.strftime("%FT%T%z")}) + "\n")
     res["spent_total_after"] = round(spent(), 4)
     json.dump(res, open(f"{run_dir}/agent_result.json", "w"), indent=2)

@@ -46,7 +46,8 @@ def main():
             fb, meta = feedback(pre_path, ev_path)
             od = f"results_lc1a1/{iid}/attempt{k}"
             rid = f"pa-{iid}-{time.strftime('%Y%m%dT%H%M%S')}-{os.urandom(4).hex()}"
-            env = dict(os.environ, LC_BASE_PATCH=os.path.abspath(base_patch), LC_FEEDBACK=fb, LC_OUT=od)
+            env = dict(os.environ, LC_BASE_PATCH=os.path.abspath(base_patch), LC_FEEDBACK=fb, LC_OUT=od,
+                       LC_RUNS=os.path.abspath(od) + "_run", LC_LEDGER=os.path.abspath(od) + "_run/cost_ledger.jsonl")
             r = subprocess.run([PY, "lib/stage2_patch.py", iid, rid], env=env, capture_output=True, text=True)
             att = {"attempt": k, "run_id": rid, "stage2_rc": r.returncode, "stage2_out": (r.stdout or r.stderr)[-500:], "feedback": meta}
             if r.returncode:

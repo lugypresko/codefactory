@@ -3,22 +3,22 @@ Runs only after the issue's stage-1 outputs are frozen (git commit)."""
 import json, os, sys, shutil, subprocess, re
 sys.path.insert(0, os.path.dirname(__file__))
 import agent
-from common2 import ROOT, H, items, strip_tests
+from common2 import ROOT, H, inst, strip_tests, results_root, runs_root, ledger_path
 iid = sys.argv[1]
 RID = sys.argv[2] if len(sys.argv) > 2 else None  # Amendment 3: producer run ID minted by the pipeline
 if not RID: print(iid, "INTEGRITY_FAIL: no producer run ID"); sys.exit(4)
-od = os.path.abspath(os.path.join(ROOT, os.environ["LC_OUT"])) if os.environ.get("LC_OUT") else f"{ROOT}/results/patches/{iid}"
+od = os.path.abspath(os.path.join(ROOT, os.environ["LC_OUT"])) if os.environ.get("LC_OUT") else f"{results_root()}/patches/{iid}"
 if os.path.exists(od) and not os.access(od, os.W_OK):
     print(iid, "INTEGRITY_FAIL: a sealed artifact already exists; refusing to overwrite"); sys.exit(4)
 if agent.spent() + 0.50 > agent.BUDGET: print(iid, "BUDGET_STOP"); sys.exit(0)
-rd = f"{ROOT}/work/runs/patch/{iid}"; shutil.rmtree(rd, ignore_errors=True); os.makedirs(rd)
+rd = f"{runs_root()}/patch/{iid}"; shutil.rmtree(rd, ignore_errors=True); os.makedirs(rd)
 env = dict(os.environ, LC_ROLE="patch-openhands", LC_RUNID=RID)
 p = subprocess.run(["timeout", "1700", f"{ROOT}/.ohvenv/bin/python", f"{ROOT}/oh/oh_run.py", iid, rd, "0.50", "50", "1200"], env=env, capture_output=True, text=True)
 open(f"{rd}/oh_stdout.log", "w").write(p.stdout[-50000:] + "\n---stderr---\n" + p.stderr[-50000:])
 res = json.load(open(f"{rd}/oh_result.json")) if os.path.exists(f"{rd}/oh_result.json") else {"error": f"oh_run exit {p.returncode}", "cost_usd": None}
 if not os.path.exists(f"{rd}/oh_result.json"):  # crashed before ledger write: record proxy ledger if any
     lj = f"{rd}/llm_ledger.json"; c = json.load(open(lj))["cost"] if os.path.exists(lj) else 0.0
-    open(agent.LEDGER, "a").write(json.dumps({"run_id": RID, "role": "patch-openhands", "cost_usd": c, "note": "oh_run crashed"}) + "\n"); res["cost_usd"] = c
+    os.makedirs(os.path.dirname(ledger_path()) or ".", exist_ok=True); open(ledger_path(), "a").write(json.dumps({"run_id": RID, "role": "patch-openhands", "cost_usd": c, "note": "oh_run crashed"}) + "\n"); res["cost_usd"] = c
 raw = open(f"{rd}/patch_raw.diff").read() if os.path.exists(f"{rd}/patch_raw.diff") else ""
 agent_raw = raw  # exact agent output, hashed separately
 parts = [x for x in re.split(r'(?=^diff --git )', raw, flags=re.M) if x.startswith("diff --git ")]
@@ -37,7 +37,7 @@ rec = {"instance_id": iid, "engine": "OpenHands SDK 1.62.0 agent-server (Docker 
        "artifact": {"path": os.path.relpath(f"{od}/patch.diff", ROOT), "sha256": H(src), "bytes": len(src.encode()), "empty": not src.strip(),
                     "raw_path": os.path.relpath(f"{od}/patch_agent_output.diff", ROOT), "raw_sha256": H(agent_raw), "raw_bytes": len(agent_raw.encode()),
                     "producer_run_id": RID, "producer_reported_run_id": res.get("run_id"), "base_sha": res.get("base_sha"),
-                    "original_base_commit": items()[iid]["base_commit"], "produced_at": __import__("time").strftime("%FT%T%z")}, "A_decision": A, "A_reason": reason,
+                    "original_base_commit": inst(iid)["base_commit"], "produced_at": __import__("time").strftime("%FT%T%z")}, "A_decision": A, "A_reason": reason,
        "final_message_uncertain": bool(UNC.search(last)), "uncertainty_matches": sorted({m.group(0).lower() for m in UNC.finditer(last)})}
 json.dump(rec, open(f"{od}/record.json", "w"), indent=2, default=str)
 for f in os.listdir(od): os.chmod(f"{od}/{f}", 0o444)

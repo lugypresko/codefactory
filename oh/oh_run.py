@@ -9,8 +9,8 @@ iid, out, cap, max_iter = sys.argv[1], os.path.abspath(sys.argv[2]), float(sys.a
 WALL = int(sys.argv[5]) if len(sys.argv) > 5 else 1200
 ROOT = "/workspace/lc1a0"; OH = f"{ROOT}/oh"; SERVER = "ghcr.io/openhands/agent-server:1.62.0-python"
 S = {x["instance_id"]: x for x in json.load(open(f"{ROOT}/sample_v2.json"))["instances"]} if os.path.exists(f"{ROOT}/sample_v2.json") else {}
-img = S[iid]["docker_image"] if iid in S else json.load(open(f"{ROOT}/work/inst/{iid}/meta.json"))["image"]
-issue = open(f"{ROOT}/work/inst/{iid}/issue.md").read()
+img = os.environ.get("LC_IMAGE") or (S[iid]["docker_image"] if iid in S else json.load(open(f"{ROOT}/work/inst/{iid}/meta.json"))["image"])
+issue = open(os.environ["LC_ISSUE_FILE"] if os.environ.get("LC_ISSUE_FILE") else f"{ROOT}/work/inst/{iid}/issue.md").read()
 os.makedirs(out, exist_ok=True); ws = f"{out}/ws"; conda = f"{out}/conda"; sockd = f"{out}/sock"
 sh = lambda *a, **k: subprocess.run(a, capture_output=True, text=True, **k)
 t0 = time.time()
@@ -101,5 +101,6 @@ except Exception as e: res["final_msg_error"] = repr(e)
 res["litellm_accumulated_cost"] = acc; res["proxy_metered_cost"] = (res["llm"] or {}).get("cost", 0.0)
 res["base_sha"] = base; res["run_id"] = os.environ.get("LC_RUNID"); res["cost_usd"] = max(acc, res["proxy_metered_cost"]); res["final_message"] = final_msg; res["wall_seconds"] = round(time.time() - t0); res["diff_bytes"] = len(diff)
 json.dump(res, open(f"{out}/oh_result.json", "w"), indent=2, default=str)
-with open(A.LEDGER, "a") as f: f.write(json.dumps({"run_id": os.environ.get("LC_RUNID", f"oh-feasibility-{iid}"), "role": os.environ.get("LC_ROLE", "oh-feasibility"), "cost_usd": res["cost_usd"], "ts": time.strftime("%FT%T%z")}) + "\n")
+os.makedirs(os.path.dirname(A.ledger_path()) or ".", exist_ok=True)
+with open(A.ledger_path(), "a") as f: f.write(json.dumps({"run_id": os.environ.get("LC_RUNID", f"oh-feasibility-{iid}"), "role": os.environ.get("LC_ROLE", "oh-feasibility"), "cost_usd": res["cost_usd"], "ts": time.strftime("%FT%T%z")}) + "\n")
 print(json.dumps({k: res.get(k) for k in ("execution_status", "error", "cost_usd", "wall_seconds", "diff_bytes", "n_events")}))
