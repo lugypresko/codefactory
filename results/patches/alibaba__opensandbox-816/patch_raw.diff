@@ -1,0 +1,146 @@
+diff --git a/server/opensandbox_server/services/docker.py b/server/opensandbox_server/services/docker.py
+index 66d4422..228e573 100644
+--- a/server/opensandbox_server/services/docker.py
++++ b/server/opensandbox_server/services/docker.py
+@@ -1484,8 +1484,7 @@ class DockerSandboxService(DockerDiagnosticsMixin, OSSFSMixin, SandboxService, E
+         # allowlist.  Even though sub_path traversal (../) is blocked by
+         # ensure_valid_sub_path(), normalizing and re-checking prevents
+         # any edge-case bypass.
+-        if allowed_prefixes and resolved_path != volume.host.path:
+-            ensure_valid_host_path(resolved_path, allowed_prefixes)
++        ensure_valid_host_path(resolved_path, allowed_prefixes)
+ 
+         # Allow existing host files (for example ISO binds to /boot.iso)
+         # without attempting directory creation.
+diff --git a/server/opensandbox_server/services/validators.py b/server/opensandbox_server/services/validators.py
+index 4b37b57..73a9002 100644
+--- a/server/opensandbox_server/services/validators.py
++++ b/server/opensandbox_server/services/validators.py
+@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Sequence
+ 
+ from fastapi import HTTPException, status
+ import re
++import os
+ 
+ from opensandbox_server.services.constants import RESERVED_LABEL_PREFIX, SandboxErrorCodes
+ 
+@@ -411,13 +412,63 @@ def ensure_valid_host_path(
+             },
+         )
+ 
+-    if not HOST_PATH_RE.match(path):
++    # Resolve symlinks in the path to prevent path traversal via symlinks.
++    # We must call realpath BEFORE checking against allowed_prefixes because
++    # the resolved path might be outside the allowed prefixes.
++    # The `strict=True` flag ensures that realpath raises FileNotFoundError
++    # if a component of the path does not exist or is a dangling symlink.
++    try:
++        # Use os.path.join and os.sep to ensure cross-platform compatibility
++        # when dealing with path components, particularly for Windows.
++        real_path = os.path.realpath(path, strict=True)
++    except FileNotFoundError:
++        raise HTTPException(
++            status_code=status.HTTP_400_BAD_REQUEST,
++            detail={
++                "code": SandboxErrorCodes.INVALID_HOST_PATH,
++                "message": f"Host path '{path}' does not exist or contains a dangling symbolic link.",
++            },
++        )
++
++    # Check that no intermediate path component is a symbolic link.
++    # This check is crucial even after resolving the real path, because
++    # realpath only resolves the *final* target, not intermediate symlinks.
++    # An attacker could still craft a path like /allowed/symlink_to_root/etc
++    # where /allowed is whitelisted, but symlink_to_root bypasses it.
++    current_path_component = ""
++    # Use os.path.split to correctly handle drive letters on Windows
++    # and / on Unix.
++    path_parts = []
++    head = real_path
++    while head and head != os.sep:
++        head, tail = os.path.split(head)
++        path_parts.append(tail)
++    if head == os.sep: # Add the root / if it was not already handled
++        path_parts.append(os.sep)
++    path_parts.reverse()
++
++    for part in path_parts:
++        # os.path.join handles leading / correctly
++        current_path_component = os.path.join(current_path_component, part)
++        if os.path.islink(current_path_component):
++            raise HTTPException(
++                status_code=status.HTTP_400_BAD_REQUEST,
++                detail={
++                    "code": SandboxErrorCodes.INVALID_HOST_PATH,
++                    "message": (
++                        f"Host path '{path}' contains a symbolic link component "
++                        f"('{current_path_component}') which is not allowed."
++                    ),
++                },
++            )
++
++    if not HOST_PATH_RE.match(real_path):
+         raise HTTPException(
+             status_code=status.HTTP_400_BAD_REQUEST,
+             detail={
+                 "code": SandboxErrorCodes.INVALID_HOST_PATH,
+                 "message": (
+-                    f"Host path '{path}' must be an absolute path starting with '/' "
++                    f"Host path '{real_path}' must be an absolute path starting with '/' "
+                     "or a Windows drive letter (e.g. 'C:\\' or 'D:/')."
+                 ),
+             },
+@@ -426,7 +477,7 @@ def ensure_valid_host_path(
+     # Normalize separators to forward slashes for consistent security checks.
+     # Keep checks cross-platform by parsing drive prefixes without relying on
+     # os.path.splitdrive behavior of the host OS.
+-    _path_fwd = path.replace("\\", "/")
++    _path_fwd = real_path.replace("\\", "/")
+     _windows_drive_match = re.match(r"^[A-Za-z]:/", _path_fwd)
+     _tail_fwd = _path_fwd[2:] if _windows_drive_match else _path_fwd
+ 
+@@ -436,7 +487,7 @@ def ensure_valid_host_path(
+             status_code=status.HTTP_400_BAD_REQUEST,
+             detail={
+                 "code": SandboxErrorCodes.INVALID_HOST_PATH,
+-                "message": f"Host path '{path}' contains path traversal component '..'.",
++                "message": f"Host path '{real_path}' contains path traversal component '..'.",
+             },
+         )
+ 
+@@ -446,7 +497,7 @@ def ensure_valid_host_path(
+             status_code=status.HTTP_400_BAD_REQUEST,
+             detail={
+                 "code": SandboxErrorCodes.INVALID_HOST_PATH,
+-                "message": f"Host path '{path}' is not normalized. Remove redundant slashes.",
++                "message": f"Host path '{real_path}' is not normalized. Remove redundant slashes.",
+             },
+         )
+ 
+@@ -454,10 +505,10 @@ def ensure_valid_host_path(
+     if allowed_prefixes is not None:
+         # Normalize separators for cross-platform prefix checks so Windows-style
+         # paths can be validated consistently even when server runs on Unix.
+-        norm_path = _normalize_prefix_path(path)
++        norm_real_path = _normalize_prefix_path(real_path)
+         is_allowed = any(
+-            norm_path == _normalize_prefix_path(prefix)
+-            or norm_path.startswith(_normalize_prefix_path(prefix) + "/")
++            norm_real_path == _normalize_prefix_path(prefix)
++            or norm_real_path.startswith(_normalize_prefix_path(prefix) + "/")
+             for prefix in allowed_prefixes
+         )
+         if not is_allowed:
+@@ -465,11 +516,10 @@ def ensure_valid_host_path(
+                 status_code=status.HTTP_400_BAD_REQUEST,
+                 detail={
+                     "code": SandboxErrorCodes.HOST_PATH_NOT_ALLOWED,
+-                    "message": f"Host path '{path}' is not under any allowed prefix. Allowed prefixes: {allowed_prefixes}",
++                    "message": f"Host path '{real_path}' is not under any allowed prefix. Allowed prefixes: {allowed_prefixes}",
+                 },
+             )
+ 
+-
+ def ensure_valid_pvc_name(claim_name: str) -> None:
+     """
+     Validate that a PVC claim name is a valid Kubernetes resource name.
