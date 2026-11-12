@@ -1,0 +1,47 @@
+{
+  "instance_id": "cf-demo",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/results_cf_gh2/runs/testgen/cf-demo/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-cf-demo",
+    "mini_rc": 0,
+    "wall_seconds": 16,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.00774576,
+    "api_calls": 4,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 0.0077
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "04e90cfdcb026eb807c512e97b0a6dfdb3d6bf94",
+  "original_base_commit": "1b3a7b8545b420e25465b87c641d6ee59176f62d",
+  "task_sha256": "9c3d05ed8b3e065d77410a1d07f94c96c2ce0205a658cd62be51783886a97b18",
+  "test_files": {
+    "tests/test_merge_intervals_acceptance.py": "778c4d366d81101ac967d96f9a4261aa4d801920d3818458f9bc6e83e4e9cdb3"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/results_cf_gh2/runs/testgen/cf-demo/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "cf-demo:local"
+  }
+}
