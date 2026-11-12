@@ -1,0 +1,434 @@
+[
+ {
+  "instance_id": "schemathesis__schemathesis-4087",
+  "repo": "schemathesis/schemathesis",
+  "created_at": "2026-05-12 11:45:06",
+  "size_gb": 1.47,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "aallan__vera-662_interface",
+  "repo": "aallan/vera",
+  "created_at": "2026-05-12 08:07:53",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "cs-si__eodag-2176",
+  "repo": "CS-SI/eodag",
+  "created_at": "2026-05-11 10:01:25",
+  "size_gb": 1.63,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "nesquena__hermes-webui-2056",
+  "repo": "nesquena/hermes-webui",
+  "created_at": "2026-05-11 05:49:36",
+  "size_gb": 1.26,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "geopython__pygeoapi-2338",
+  "repo": "geopython/pygeoapi",
+  "created_at": "2026-05-11 03:12:03",
+  "size_gb": 2.15,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "raullenchai__rapid-mlx-341_interface",
+  "repo": "raullenchai/Rapid-MLX",
+  "created_at": "2026-05-09 17:33:42",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "macbre__sql-metadata-625_interface",
+  "repo": "macbre/sql-metadata",
+  "created_at": "2026-05-07 20:17:44",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "youssofal__mtplx-21",
+  "repo": "youssofal/MTPLX",
+  "created_at": "2026-05-07 19:59:26",
+  "size_gb": 1.35,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "raullenchai__rapid-mlx-289",
+  "repo": "raullenchai/Rapid-MLX",
+  "created_at": "2026-05-07 19:33:12",
+  "size_gb": 1.42,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "nesquena__hermes-webui-1818",
+  "repo": "nesquena/hermes-webui",
+  "created_at": "2026-05-07 13:43:28",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "olofk__fusesoc-776_interface",
+  "repo": "olofk/fusesoc",
+  "created_at": "2026-05-07 12:05:49",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "python-wheel-build__fromager-1124",
+  "repo": "python-wheel-build/fromager",
+  "created_at": "2026-05-07 03:47:42",
+  "size_gb": 1.33,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "itsdnns__docsight-437",
+  "repo": "itsDNNS/docsight",
+  "created_at": "2026-05-06 09:32:16",
+  "size_gb": 1.43,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "agronholm__anyio-1134",
+  "repo": "agronholm/anyio",
+  "created_at": "2026-05-05 21:20:58",
+  "size_gb": 1.26,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "raullenchai__rapid-mlx-228",
+  "repo": "raullenchai/Rapid-MLX",
+  "created_at": "2026-05-05 17:40:54",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "raullenchai__rapid-mlx-227",
+  "repo": "raullenchai/Rapid-MLX",
+  "created_at": "2026-05-05 17:39:40",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "python-wheel-build__fromager-1106",
+  "repo": "python-wheel-build/fromager",
+  "created_at": "2026-05-04 11:13:36",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "schemathesis__schemathesis-3933",
+  "repo": "schemathesis/schemathesis",
+  "created_at": "2026-05-04 09:43:10",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "graphistry__pygraphistry-1277",
+  "repo": "graphistry/pygraphistry",
+  "created_at": "2026-05-04 02:58:43",
+  "size_gb": 1.53,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "pallets-eco__wtforms-892_interface",
+  "repo": "pallets-eco/wtforms",
+  "created_at": "2026-05-03 13:17:49",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "tox-dev__tox-3931",
+  "repo": "tox-dev/tox",
+  "created_at": "2026-05-01 15:37:40",
+  "size_gb": 1.29,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "copier-org__copier-2646",
+  "repo": "copier-org/copier",
+  "created_at": "2026-04-30 11:21:38",
+  "size_gb": 1.26,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "hkuds__openharness-217",
+  "repo": "HKUDS/OpenHarness",
+  "created_at": "2026-04-30 00:28:27",
+  "size_gb": 1.4,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "astronomy-commons__lsdb-1349",
+  "repo": "astronomy-commons/lsdb",
+  "created_at": "2026-04-29 20:36:11",
+  "size_gb": 1.81,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "beever-ai__beever-atlas-102",
+  "repo": "Beever-AI/beever-atlas",
+  "created_at": "2026-04-29 16:56:35",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "alibaba__opensandbox-816",
+  "repo": "alibaba/OpenSandbox",
+  "created_at": "2026-04-29 07:35:36",
+  "size_gb": 1.39,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "apache__iceberg-python-3295",
+  "repo": "apache/iceberg-python",
+  "created_at": "2026-04-28 22:03:47",
+  "size_gb": 1.67,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "reframe-hpc__reframe-3660_interface",
+  "repo": "reframe-hpc/reframe",
+  "created_at": "2026-04-27 23:53:48",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "databricks__dbt-databricks-1428",
+  "repo": "databricks/dbt-databricks",
+  "created_at": "2026-04-27 19:20:43",
+  "size_gb": 1.5,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "zarr-developers__virtualizarr-979",
+  "repo": "zarr-developers/VirtualiZarr",
+  "created_at": "2026-04-24 16:09:18",
+  "size_gb": 1.54,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "sigma67__ytmusicapi-909_interface",
+  "repo": "sigma67/ytmusicapi",
+  "created_at": "2026-04-23 19:52:13",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "vprusso__toqito-1538",
+  "repo": "vprusso/toqito",
+  "created_at": "2026-04-22 15:23:30",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "agronholm__anyio-1121",
+  "repo": "agronholm/anyio",
+  "created_at": "2026-04-21 14:00:36",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "schemathesis__schemathesis-3778",
+  "repo": "schemathesis/schemathesis",
+  "created_at": "2026-04-21 11:18:39",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "pyinfra-dev__pyinfra-1679_interface",
+  "repo": "pyinfra-dev/pyinfra",
+  "created_at": "2026-04-20 07:41:05",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "mempalace__mempalace-1004",
+  "repo": "MemPalace/mempalace",
+  "created_at": "2026-04-18 17:52:28",
+  "size_gb": 1.51,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "celestoai__smolvm-172",
+  "repo": "CelestoAI/SmolVM",
+  "created_at": "2026-04-18 11:06:08",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pypa__twine-1309",
+  "repo": "pypa/twine",
+  "created_at": "2026-04-17 17:23:13",
+  "size_gb": 1.26,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "ultraplot__ultraplot-696",
+  "repo": "Ultraplot/UltraPlot",
+  "created_at": "2026-04-16 22:58:14",
+  "size_gb": 1.64,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "pyinfra-dev__pyinfra-1665",
+  "repo": "pyinfra-dev/pyinfra",
+  "created_at": "2026-04-14 07:06:21",
+  "size_gb": 1.3,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "pipecat-ai__pipecat-4283",
+  "repo": "pipecat-ai/pipecat",
+  "created_at": "2026-04-13 22:11:49",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pennylaneai__pennylane-9298",
+  "repo": "PennyLaneAI/pennylane",
+  "created_at": "2026-04-13 19:33:03",
+  "size_gb": 1.65,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "microsoft__qcodes-8039",
+  "repo": "microsoft/Qcodes",
+  "created_at": "2026-04-13 10:36:33",
+  "size_gb": 1.85,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "deltares__hydrolib-core-1049_interface",
+  "repo": "Deltares/HYDROLIB-core",
+  "created_at": "2026-04-13 09:42:06",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pypsa__pypsa-1653",
+  "repo": "PyPSA/PyPSA",
+  "created_at": "2026-04-13 08:33:16",
+  "size_gb": 1.81,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "spack__spack-52244",
+  "repo": "spack/spack",
+  "created_at": "2026-04-13 07:36:02",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "nesquena__hermes-webui-330_interface",
+  "repo": "nesquena/hermes-webui",
+  "created_at": "2026-04-12 21:10:36",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "agentscope-ai__qwenpaw-3278",
+  "repo": "agentscope-ai/QwenPaw",
+  "created_at": "2026-04-12 04:51:22",
+  "size_gb": 1.9,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "unit8co__darts-3065",
+  "repo": "unit8co/darts",
+  "created_at": "2026-04-10 23:06:13",
+  "size_gb": 1.88,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "meltano__meltano-9950",
+  "repo": "meltano/meltano",
+  "created_at": "2026-04-10 20:30:39",
+  "size_gb": 1.59,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "pypa__build-1027",
+  "repo": "pypa/build",
+  "created_at": "2026-04-10 18:48:38",
+  "size_gb": 1.31,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "tobymao__sqlglot-7479",
+  "repo": "tobymao/sqlglot",
+  "created_at": "2026-04-09 12:51:48",
+  "size_gb": 1.4,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ }
+]
