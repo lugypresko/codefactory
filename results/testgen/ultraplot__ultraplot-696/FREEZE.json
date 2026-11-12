@@ -1,0 +1,13 @@
+{
+ "instance_id": "ultraplot__ultraplot-696",
+ "frozen_at": "2026-11-12T21:38:34+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/ultraplot__ultraplot-696/task.txt": "eac27d9e5e875c4007a038b40373d7f83ee51f0cf1b03baac809cb59dddfd810",
+  "results/testgen/ultraplot__ultraplot-696/CLARIFICATION_NEEDED.md": "2f0544b7fa12ec46aaa1f072e3d287d93b78242f0d184b1680d5ff7beb761a44",
+  "results/testgen/ultraplot__ultraplot-696/record.json": "d8923fbcaa2f4583f130ed92976d8d8117c278e23ee8fe70c82f490a48edbcd5",
+  "results/testgen/ultraplot__ultraplot-696/config.yaml": "2227e73c0e778dc6dff4af33062cc1477a243f92777e9303d757f29ece04acf7",
+  "results/testgen/ultraplot__ultraplot-696/pre_eval.json": "eae2be85a3f5b3d6298c03ee30de5ed5fa43d2ed9f7e160ce55b1de87cce3a0d",
+  "results/testgen/ultraplot__ultraplot-696/tests/ultraplot/tests/test_legend_visibility.py": "6388b1770a4dee6091d20182a6d1b433e104c39c29e26ae77acc340764dbded1"
+ }
+}

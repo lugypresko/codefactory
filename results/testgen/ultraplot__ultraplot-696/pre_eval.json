@@ -1,0 +1,25 @@
+{
+  "instance_id": "ultraplot__ultraplot-696",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "ultraplot/tests/test_legend_visibility.py::test_legend_hides_yticklabels_with_sharey_labs_external_legend": "PASSED",
+      "ultraplot/tests/test_legend_visibility.py::test_legend_does_not_hide_yticklabels_with_sharey_labs_internal_legend": "PASSED",
+      "ultraplot/tests/test_legend_visibility.py::test_legend_hides_yticklabels_with_sharey_labs_larger_grid": "PASSED"
+    },
+    {
+      "ultraplot/tests/test_legend_visibility.py::test_legend_hides_yticklabels_with_sharey_labs_external_legend": "PASSED",
+      "ultraplot/tests/test_legend_visibility.py::test_legend_does_not_hide_yticklabels_with_sharey_labs_internal_legend": "PASSED",
+      "ultraplot/tests/test_legend_visibility.py::test_legend_hides_yticklabels_with_sharey_labs_larger_grid": "PASSED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [],
+  "non_discriminating_discarded": [
+    "ultraplot/tests/test_legend_visibility.py::test_legend_does_not_hide_yticklabels_with_sharey_labs_internal_legend",
+    "ultraplot/tests/test_legend_visibility.py::test_legend_hides_yticklabels_with_sharey_labs_external_legend",
+    "ultraplot/tests/test_legend_visibility.py::test_legend_hides_yticklabels_with_sharey_labs_larger_grid"
+  ],
+  "no_outcomes": false
+}

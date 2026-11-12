@@ -1,0 +1,46 @@
+You are a test engineer. Your job is to write ACCEPTANCE TESTS for the GitHub issue below, for the Python repository in /testbed (already installed; run tests with `python -m pytest`). The issue has NOT been fixed in this code. Do NOT fix it.
+
+Goal: write new pytest test file(s) that encode the behaviour the issue asks for, such that
+  (a) they FAIL on the current, unfixed code, for the reason described in the issue (an assertion about the issue's behaviour, not an unrelated error);
+  (b) they PASS once a correct fix is implemented, whatever reasonable implementation the developer chooses;
+  (c) they would FAIL for plausible-but-incomplete fixes (cover the edge cases the issue implies, not only its literal example).
+
+Rules:
+- Create only NEW test files named test_*.py, placed next to the project's existing tests (look at how the existing tests are organised and import the code). Do not modify, delete or rename any existing file. Do not create any other file inside /testbed; use /tmp for scratch work.
+- Test observable behaviour described by the issue. Do not depend on exact error-message wording or on private implementation details unless the issue itself specifies them; a correct fix may name internals differently. If you must assume a new public API name (parameter/function), take it from the issue text when it gives one.
+- There is no network access. Tests must not need the network.
+- Run your tests and confirm they fail on the current code for the right reason, and that the rest of the file runs.
+- If the issue is too vague or does not define a checkable expected behaviour, do NOT write tests. Instead create /testbed/CLARIFICATION_NEEDED.md with the specific questions you would ask the reporter, then finish.
+
+<issue>
+Adding a legend to right of plot can remove y-axis tick labels
+Got a bit of a weird edge case here for you.
+
+If I run the following code to make a subplots instance with three axes and shared y-axis labels, then hide the last one, everything looks good.
+
+```
+fig,axs=uplt.subplots(ncols=3, sharey='labs')
+axs[-1].set_visible(False)
+for ax in axs[:-1]:
+    ax.plot([0, 1], [0, 1], label='line')
+```
+
+<img width="8240" height="2830" alt="Image" src="https://github.com/user-attachments/assets/ee0e2c0c-5a77-4e2a-98cf-bcb8bce3d272" />
+
+However, if I then add a legend to the second axis, the y-axis ticks for that second axis become hidden:
+`axs[-2].legend(loc='r')`
+
+<img width="8590" height="2830" alt="Image" src="https://github.com/user-attachments/assets/6a318a83-79de-4eab-a7c2-fa43053484ae" />
+
+This doesn't happen if I place the legend inside the axis:
+```
+fig,axs=uplt.subplots(ncols=3, sharey='labs')
+axs[-1].set_visible(False)
+for ax in axs[:-1]:
+    ax.plot([0, 1], [0, 1], label='line')
+axs[-2].legend(loc='lr')
+```
+<img width="8240" height="2830" alt="Image" src="https://github.com/user-attachments/assets/82a07d48-3979-4d78-a556-4b770f1bafad" />
+
+Kind of a niche edge case, although it becomes relevant when I have say 15 plots to show in a figure, and want to make a 4x4 grid and hide the last one.
+</issue>

@@ -1,0 +1,47 @@
+{
+  "instance_id": "ultraplot__ultraplot-696",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/ultraplot__ultraplot-696/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-ultraplot__ultraplot-696",
+    "mini_rc": 0,
+    "wall_seconds": 130,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.08631578999999999,
+    "api_calls": 35,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 2.2787
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "1ea363350ec3c821a10abc521e92478660a81a5a",
+  "original_base_commit": "1567aa35dc5669b67babe76a929452e1c6d85fdb",
+  "task_sha256": "eac27d9e5e875c4007a038b40373d7f83ee51f0cf1b03baac809cb59dddfd810",
+  "test_files": {
+    "ultraplot/tests/test_legend_visibility.py": "6388b1770a4dee6091d20182a6d1b433e104c39c29e26ae77acc340764dbded1"
+  },
+  "clarification": true,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/ultraplot__ultraplot-696/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.ultraplot_1776_ultraplot-696:latest"
+  }
+}

@@ -1,0 +1,16 @@
+agent:
+  step_limit: 40
+  cost_limit: 0.25
+  wall_time_limit_seconds: 900
+environment:
+  environment_class: docker
+  image: swerebench/sweb.eval.x86_64.ultraplot_1776_ultraplot-696:latest
+  executable: docker
+  cwd: /testbed
+  timeout: 120
+  forward_env: []
+  interpreter: ["bash", "-c"]
+  env: {HOME: /tmp, PAGER: cat, MANPAGER: cat, PYTHONDONTWRITEBYTECODE: "1", PIP_NO_INDEX: "1", CONDA_DEFAULT_ENV: testbed, PATH: "/opt/conda/envs/testbed/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}
+  run_args: ["--rm", "--network", "none", "--user", "1000:1000", "--cap-drop", "ALL",
+             "--security-opt", "no-new-privileges", "--memory", "1536m", "--cpus", "1", "--pids-limit", "256",
+             "--label", "lc1a0.run=tg-ultraplot__ultraplot-696", "-v", "/workspace/lc1a0/work/runs/testgen/ultraplot__ultraplot-696/ws:/testbed"]
