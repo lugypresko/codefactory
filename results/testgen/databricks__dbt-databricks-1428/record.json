@@ -1,0 +1,47 @@
+{
+  "instance_id": "databricks__dbt-databricks-1428",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/databricks__dbt-databricks-1428/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-databricks__dbt-databricks-1428",
+    "mini_rc": 0,
+    "wall_seconds": 176,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.07296603000000002,
+    "api_calls": 27,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 2.1206
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "edd921fb571288473db703dd6c30f8f801438cd1",
+  "original_base_commit": "80e486c6dce6d10b13ef1705a8e9255bbc4a521b",
+  "task_sha256": "7dfe6c6c3686678d50fb6820349ab898c9c7cbcdc52eba7f75ca6851ee8474cc",
+  "test_files": {
+    "tests/functional/adapter/catalog_integrations/test_databricks_empty_schema_docs_generate.py": "40f3738a254c4c890f1aa4edfb849ddc748f733b6dd5f86ac1516aa49bfad8d8"
+  },
+  "clarification": true,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/databricks__dbt-databricks-1428/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.databricks_1776_dbt-databricks-1428:latest"
+  }
+}

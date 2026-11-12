@@ -1,0 +1,13 @@
+{
+ "instance_id": "databricks__dbt-databricks-1428",
+ "frozen_at": "2026-11-12T21:15:16+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/databricks__dbt-databricks-1428/task.txt": "7dfe6c6c3686678d50fb6820349ab898c9c7cbcdc52eba7f75ca6851ee8474cc",
+  "results/testgen/databricks__dbt-databricks-1428/CLARIFICATION_NEEDED.md": "b5068a4e6347835096a6024fa74245d9a0c96041b10bacb4003d6f19c8e30686",
+  "results/testgen/databricks__dbt-databricks-1428/record.json": "5d68e3fe532358e4e36f12648dfd7d737b1e24784a3abcd36c380f48d05a2b53",
+  "results/testgen/databricks__dbt-databricks-1428/config.yaml": "b6db80f21af9378fc77c4e0bcba2a4b20579223d87603bf64de7e019880c674b",
+  "results/testgen/databricks__dbt-databricks-1428/pre_eval.json": "50df057622446b1effdc01738de545c0098b3c138a17c9f8ec06ddf34cb95e1a",
+  "results/testgen/databricks__dbt-databricks-1428/tests/tests/functional/adapter/catalog_integrations/test_databricks_empty_schema_docs_generate.py": "40f3738a254c4c890f1aa4edfb849ddc748f733b6dd5f86ac1516aa49bfad8d8"
+ }
+}
