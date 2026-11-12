@@ -1,0 +1,83 @@
+You are a test engineer. Your job is to write ACCEPTANCE TESTS for the GitHub issue below, for the Python repository in /testbed (already installed; run tests with `python -m pytest`). The issue has NOT been fixed in this code. Do NOT fix it.
+
+Goal: write new pytest test file(s) that encode the behaviour the issue asks for, such that
+  (a) they FAIL on the current, unfixed code, for the reason described in the issue (an assertion about the issue's behaviour, not an unrelated error);
+  (b) they PASS once a correct fix is implemented, whatever reasonable implementation the developer chooses;
+  (c) they would FAIL for plausible-but-incomplete fixes (cover the edge cases the issue implies, not only its literal example).
+
+Rules:
+- Create only NEW test files named test_*.py, placed next to the project's existing tests (look at how the existing tests are organised and import the code). Do not modify, delete or rename any existing file. Do not create any other file inside /testbed; use /tmp for scratch work.
+- Test observable behaviour described by the issue. Do not depend on exact error-message wording or on private implementation details unless the issue itself specifies them; a correct fix may name internals differently. If you must assume a new public API name (parameter/function), take it from the issue text when it gives one.
+- There is no network access. Tests must not need the network.
+- Run your tests and confirm they fail on the current code for the right reason, and that the rest of the file runs.
+- If the issue is too vague or does not define a checkable expected behaviour, do NOT write tests. Instead create /testbed/CLARIFICATION_NEEDED.md with the specific questions you would ask the reporter, then finish.
+
+<issue>
+[BUG] minimize_work_wires = True sets work wires to zero when it should not
+### Expected behavior
+
+I think this is a bug:
+
+When I set a specific number of work wires in the decomposer, and at the same time set minimize_work_wires = True , it simply does not use the work wires at all, even though the only possible/allowed decomposition requires the provided single work wire.
+
+MWE this should work with minimize_work_wires set to True or not.
+
+```python
+import pennylane as qp
+qp.decomposition.enable_graph()
+
+n = 4
+wires = range(n)
+
+@qp.decompose(
+    gate_set={"TemporaryAND", "Adjoint(TemporaryAND)", "CNOT", "X", "Toffoli", "GlobalPhase"},
+    num_work_wires=1,
+    # minimize_work_wires=True,
+)
+@qp.qnode(qp.device("default.qubit"))
+def circuit():
+    qp.MultiControlledX(wires)
+    return qp.state()
+
+print(qp.draw(circuit)())
+```
+
+```
+<DynamicWire>: ──Allocate─╭⊕─╭●──⊕╮──Deallocate─┤  State
+            2: ───────────├●─│───●┤─────────────┤  State
+            1: ───────────╰●─│───●╯─────────────┤  State
+            0: ──────────────├●─────────────────┤  State
+            3: ──────────────╰X─────────────────┤  State
+```
+
+### Actual behavior
+
+The graph decomposer fails and it falls back on the legacy decomposition system
+
+### Additional information
+
+[slack thread](https://xanaduhq.slack.com/archives/C0743CNS9E3/p1776076743240279)
+
+### Source code
+
+```shell
+
+```
+
+### Tracebacks
+
+```shell
+
+```
+
+### System information
+
+```shell
+Name: pennylane
+Version: 0.45.0.dev76
+```
+
+### Existing GitHub issues
+
+- [x] I have searched existing GitHub issues to make sure the issue does not already exist.
+</issue>

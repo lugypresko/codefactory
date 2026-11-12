@@ -1,0 +1,47 @@
+{
+  "instance_id": "pennylaneai__pennylane-9298",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/pennylaneai__pennylane-9298/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-pennylaneai__pennylane-9298",
+    "mini_rc": 0,
+    "wall_seconds": 134,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.06383911,
+    "api_calls": 36,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 2.5521
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "008cf454341d9bc0fbd48242697551a2139551e6",
+  "original_base_commit": "4c31d796dcaa6f6ef96cc46b311f9171ea26102e",
+  "task_sha256": "ba16dd80bf5a83c78e9d503d4bcc194d9c822d9e79ce9caf97924988b45eb38e",
+  "test_files": {
+    "tests/transforms/test_graph_decomposer_work_wires.py": "ee28bb249decd47c44ba575dd69f0d2d3d49a817dec48e53d050922b16c481e4"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/pennylaneai__pennylane-9298/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.pennylaneai_1776_pennylane-9298:latest"
+  }
+}

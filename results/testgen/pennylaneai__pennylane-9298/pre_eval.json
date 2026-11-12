@@ -1,0 +1,19 @@
+{
+  "instance_id": "pennylaneai__pennylane-9298",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/transforms/test_graph_decomposer_work_wires.py::test_minimize_work_wires_with_required_work_wire": "FAILED"
+    },
+    {
+      "tests/transforms/test_graph_decomposer_work_wires.py::test_minimize_work_wires_with_required_work_wire": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/transforms/test_graph_decomposer_work_wires.py::test_minimize_work_wires_with_required_work_wire"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}
