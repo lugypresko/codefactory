@@ -1,0 +1,12 @@
+{
+ "instance_id": "astronomy-commons__lsdb-1349",
+ "frozen_at": "2026-11-12T20:57:29+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/astronomy-commons__lsdb-1349/task.txt": "31e4dfc61e450232ac4e4f3eb3e992519756644254b91f2323aa5497fee9a4fd",
+  "results/testgen/astronomy-commons__lsdb-1349/record.json": "0d12131fa1e50f148fcd3d4017f2e39bfa5da097174afea11fdeb1495263f132",
+  "results/testgen/astronomy-commons__lsdb-1349/config.yaml": "46b116b18f204902414c00b3d88a4a63d9db2bf0ee964462f0c4af56eb59aee0",
+  "results/testgen/astronomy-commons__lsdb-1349/pre_eval.json": "979433cd84e7bd18fce2ffb20ffe27a4e578868f5cb6303c636e03421e36bf03",
+  "results/testgen/astronomy-commons__lsdb-1349/tests/tests/lsdb/io/test_write_pixel_directories.py": "569e1de5d72e768ad4bc909333ac30e06a371ef20cf0412aa6e3f993ddd127c7"
+ }
+}

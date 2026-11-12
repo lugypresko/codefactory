@@ -1,0 +1,22 @@
+{
+  "instance_id": "astronomy-commons__lsdb-1349",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/lsdb/io/test_write_pixel_directories.py::test_write_catalog_with_pixel_directories": "FAILED",
+      "tests/lsdb/io/test_write_pixel_directories.py::test_write_catalog_with_pixel_directories_custom_filename": "FAILED"
+    },
+    {
+      "tests/lsdb/io/test_write_pixel_directories.py::test_write_catalog_with_pixel_directories": "FAILED",
+      "tests/lsdb/io/test_write_pixel_directories.py::test_write_catalog_with_pixel_directories_custom_filename": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/lsdb/io/test_write_pixel_directories.py::test_write_catalog_with_pixel_directories",
+    "tests/lsdb/io/test_write_pixel_directories.py::test_write_catalog_with_pixel_directories_custom_filename"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

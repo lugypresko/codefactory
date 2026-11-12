@@ -1,0 +1,47 @@
+{
+  "instance_id": "astronomy-commons__lsdb-1349",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/astronomy-commons__lsdb-1349/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-astronomy-commons__lsdb-1349",
+    "mini_rc": 0,
+    "wall_seconds": 32,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.015865960000000002,
+    "api_calls": 5,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.8139
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "8d8ae538d0eb78043b803268887359646dbc8cd8",
+  "original_base_commit": "ba11985ca7940dabb77d4f7db731d516e6527d47",
+  "task_sha256": "31e4dfc61e450232ac4e4f3eb3e992519756644254b91f2323aa5497fee9a4fd",
+  "test_files": {
+    "tests/lsdb/io/test_write_pixel_directories.py": "569e1de5d72e768ad4bc909333ac30e06a371ef20cf0412aa6e3f993ddd127c7"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/astronomy-commons__lsdb-1349/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.astronomy-commons_1776_lsdb-1349:latest"
+  }
+}
