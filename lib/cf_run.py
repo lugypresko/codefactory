@@ -17,7 +17,7 @@ from failmin import minimize, CAP
 os.chdir(ROOT)
 PY = f"{ROOT}/.venv/bin/python"
 IID = "cf-demo"
-OUT = "results_cf"
+OUT = os.environ.get("CF_OUT", "results_cf")
 
 def sh(*a, **k):
     return subprocess.run(a, capture_output=True, text=True, **k)
@@ -27,6 +27,38 @@ def log(m):
 def die(m, code=1):
     log("ERROR: " + m); sys.exit(code)
 
+def _token():
+    return os.environ.get("CF_GH_TOKEN") or os.environ.get("GH_TOKEN") or ""
+
+def _gh_env():
+    env = dict(os.environ)
+    tok = _token()
+    if tok:
+        env["GH_TOKEN"] = tok
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    env["GH_PROMPT_DISABLED"] = "1"
+    return env, tok
+
+def _redact(s, tok):
+    return (s or "").replace(tok, "[redacted]") if tok else (s or "")
+
+def git_auth(*args, cwd=None):
+    """git with GH_TOKEN via `gh auth git-credential`. Token is not put in the URL or config."""
+    env, tok = _gh_env()
+    cmd = ["git"]
+    if cwd:
+        cmd += ["-C", cwd]
+    cmd += ["-c", "credential.helper=", "-c", "credential.helper=!gh auth git-credential", *args]
+    r = subprocess.run(cmd, capture_output=True, text=True, env=env)
+    r.stdout, r.stderr = _redact(r.stdout, tok), _redact(r.stderr, tok)
+    return r
+
+def gh(*args):
+    env, tok = _gh_env()
+    r = subprocess.run(["gh", *args], capture_output=True, text=True, env=env)
+    r.stdout, r.stderr = _redact(r.stdout, tok), _redact(r.stderr, tok)
+    return r
+
 def demo_env(image, issue_file, base_commit, lc_out=None, attempt=None):
     env = dict(os.environ,
                LC_IMAGE=image, LC_ISSUE_FILE=os.path.abspath(issue_file),
@@ -34,7 +66,9 @@ def demo_env(image, issue_file, base_commit, lc_out=None, attempt=None):
                LC_RESULTS=os.path.abspath(os.path.join(ROOT, OUT)),
                LC_RUNS=os.path.abspath(os.path.join(ROOT, OUT, "runs") + (f"/attempt{attempt}" if attempt else "")),
                LC_LEDGER=os.path.abspath(os.path.join(ROOT, OUT, "cost_ledger.jsonl")),
-               LC_NO_GT="1", LC_CAPTURE_FAIL="1", LC_CAPTURE_FAIL_CAP=str(CAP))
+               LC_NO_GT="1", LC_CAPTURE_FAIL="1", LC_CAPTURE_FAIL_CAP=str(CAP),
+               LC_CF_P2P="1")
+    env["LC_P2P_WS"] = os.path.abspath(os.path.join(ROOT, OUT, "runs", "testgen", IID, "ws"))
     if lc_out: env["LC_OUT"] = lc_out
     return env
 
@@ -93,10 +127,14 @@ def write_report(path, kind, body):
     return path
 
 def pr_body(d):
+    n = d.get("issue_number")
+    ref = f"Fixes #{n}" if n else f"Closes: {d.get("issue_ref", "(local ISSUE.md)")}"
+    p2p_files = d.get("p2p_files") or []
+    p2p_line = (f"{d.get('p2p_ok')}: {d.get('p2p_detail') or ''}  files: {', '.join(p2p_files) or '(none)'}")
     return textwrap.dedent(f"""\
     ## Code Factory draft (needs human approval)
 
-    Closes: {d.get("issue_ref", "(local ISSUE.md)")}
+    {ref}
 
     This is a **draft**. B's generated tests are evidence, not independent proof of correctness.
     A human must review the patch before any merge. No merge or deploy is performed by this driver.
@@ -107,6 +145,7 @@ def pr_body(d):
     ### Tests run and results
     - Discriminating (B) tests fail on the pre-fix base: {d.get("disc_fail_on_base")}
     - Discriminating (B) tests pass on the patch: {d.get("disc_pass_on_patch")}
+    - P2P (existing project tests): {p2p_line}
     - Project regression tests pass on the patch: {d.get("regression_pass")}
     - B decision: {d.get("B_decision")} ({d.get("B_reason") or "ok"})
     - Patch bytes: {d.get("patch_bytes")}  sha256: {d.get("patch_sha")}
@@ -137,20 +176,46 @@ def failure_report(d):
     not independent verification.
     """).strip() + "\n\n" + (d.get("detail") or "") + "\n"
 
-def maybe_create_pr(flag, body_path, title, repo_slug=None):
+def maybe_create_pr(flag, body_path, title, repo_slug=None, repo_path=None, patch=None, issue_number=None, base="main"):
     if not flag:
         log("PR not created (--create-draft-pr not set); body/report is on disk")
         return False
-    token = os.environ.get("CF_GH_TOKEN") or os.environ.get("GH_TOKEN")
+    token = _token()
     if not token: die("--create-draft-pr set but CF_GH_TOKEN/GH_TOKEN is missing")
-    env = dict(os.environ, GH_TOKEN=token)
-    cmd = ["gh", "pr", "create", "--draft", "--title", title, "--body-file", body_path]
-    if repo_slug: cmd.extend(["--repo", repo_slug])
+    if not repo_path or not patch or not repo_slug:
+        die("--create-draft-pr needs the demo repo path, the patch, and --github owner/repo")
+    branch = f"cf/issue-{issue_number}" if issue_number else f"cf/fix-{time.strftime('%Y%m%dT%H%M%S')}"
+    # branch + commit in the cloned repo; do not add untracked helper files (e.g. .cf_issue.md)
+    r = sh("git", "-C", repo_path, "checkout", "-B", branch)
+    if r.returncode: die("failed to create PR branch: " + (r.stderr or r.stdout))
+    import tempfile
+    fd, pfile = tempfile.mkstemp(prefix="cf_pr_patch_", suffix=".diff")
+    os.close(fd)
+    open(pfile, "w").write(patch)
+    try:
+        r = sh("git", "-C", repo_path, "apply", pfile)
+        if r.returncode: die("patch apply for PR branch failed: " + (r.stderr or r.stdout))
+        sh("git", "-C", repo_path, "add", "-u")
+        r = sh("git", "-C", repo_path, "-c", "user.email=cf-bot@local", "-c", "user.name=Code Factory",
+               "commit", "-m", title)
+        if r.returncode: die("commit for PR branch failed: " + (r.stderr or r.stdout))
+    finally:
+        try: os.unlink(pfile)
+        except OSError: pass
+    log(f"pushing branch {branch} to {repo_slug} (credential helper, no token in URL)")
+    r = git_auth("push", "-u", f"https://github.com/{repo_slug}.git", f"HEAD:refs/heads/{branch}", cwd=repo_path)
+    open(f"{OUT}/gh_push.log", "w").write((r.stdout or "") + (r.stderr or ""))
+    if r.returncode: die("git push of PR branch failed; see " + f"{OUT}/gh_push.log")
     log("running gh pr create --draft (title only logged, no token)")
+    env, tok = _gh_env()
+    cmd = ["gh", "pr", "create", "--draft", "--title", title, "--body-file", body_path,
+           "--base", base, "--head", branch, "--repo", repo_slug]
     r = subprocess.run(cmd, capture_output=True, text=True, env=env)
-    out = ((r.stdout or "") + (r.stderr or "")).replace(token, "[redacted]")
+    out = _redact((r.stdout or "") + (r.stderr or ""), tok)
     open(f"{OUT}/gh_pr.log", "w").write(out)
-    if r.returncode: die("gh pr create failed; see results_cf/gh_pr.log")
+    if r.returncode: die("gh pr create failed; see " + f"{OUT}/gh_pr.log")
+    url = _redact((r.stdout or "").strip(), tok)
+    log("draft PR created: " + url.splitlines()[-1] if url else "(no url in gh stdout)")
     return True
 
 def demo_cost():
@@ -307,17 +372,25 @@ def run_real(repo, issue_file, budget, create_pr, issue_ref, repo_slug=None):
         used_repair = True
 
     import hashlib
-    d = {"issue_ref": issue_ref, "B_decision": ev.get("B_decision"), "B_reason": ev.get("B_reason") or "",
+    issue_number = None
+    if issue_ref and "#" in str(issue_ref):
+        try: issue_number = int(str(issue_ref).rsplit("#", 1)[-1])
+        except ValueError: issue_number = None
+    d = {"issue_ref": issue_ref, "issue_number": issue_number,
+         "B_decision": ev.get("B_decision"), "B_reason": ev.get("B_reason") or "",
          "disc_fail_on_base": disc_fail_on_base, "disc_pass_on_patch": disc_pass, "regression_pass": reg_ok,
+         "p2p_ok": ev.get("gate_p2p_ok"), "p2p_detail": ev.get("gate_p2p_detail"),
+         "p2p_files": ev.get("gate_p2p_files") or [],
          "patch_bytes": len(patch.encode()), "patch_sha": hashlib.sha256(patch.encode()).hexdigest(),
          "cost_usd": demo_cost(), "budget": budget,
          "change_summary": f"Attempt {'2 (repair)' if used_repair else '1'}. {len(patch.splitlines())} diff lines. See {od}/patch.diff.",
          "status": "READY_FOR_DRAFT_PR" if ok else "FAILED_VERIFICATION",
-         "detail": f"used_repair={used_repair}\nB_detail={ev.get('B_detail')}\ngate_units_passed={ev.get('gate_units_passed')}/{ev.get('gate_units')}\n"}
+         "detail": f"used_repair={used_repair}\nB_detail={ev.get('B_detail')}\ngate_units_passed={ev.get('gate_units_passed')}/{ev.get('gate_units')}\ngate_p2p_files={ev.get('gate_p2p_files')}\ngate_p2p_detail={ev.get('gate_p2p_detail')}\n"}
     if ok:
         path = write_report(f"{OUT}/PR_DRAFT.md", "draft PR body", pr_body(d))
         title = "fix: split_even should preserve the remainder (cf-demo)"
-        maybe_create_pr(create_pr, path, title, repo_slug)
+        maybe_create_pr(create_pr, path, title, repo_slug, repo_path=repo, patch=patch,
+                        issue_number=issue_number)
     else:
         write_report(f"{OUT}/FAILURE.md", "failure report", failure_report(d))
     log("done")
@@ -338,16 +411,27 @@ def main():
         dest = f"{ROOT}/work/cf/src/{args.github.replace('/', '__')}"
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         if args.smoke: die("refusing to clone GitHub in --smoke; pass --repo for the local demo")
-        r = sh("git", "clone", "--", f"https://github.com/{args.github}.git", dest)
-        if r.returncode: die("git clone failed")
+        if not _token(): die("--github requires CF_GH_TOKEN or GH_TOKEN")
+        if os.path.exists(dest):
+            sh("rm", "-rf", dest)
+        r = git_auth("clone", "--", f"https://github.com/{args.github}.git", dest)
+        if r.returncode: die("git clone failed (token not logged)")
         args.repo = dest
-        ir = sh("gh", "issue", "view", str(args.issue_number), "-R", args.github, "--json", "title,body")
-        if ir.returncode: die("gh issue view failed")
+        base = sh("git", "-C", dest, "rev-parse", "HEAD").stdout.strip()
+        log(f"cloned {args.github} at recorded base {base}")
+        ir = gh("issue", "view", str(args.issue_number), "-R", args.github, "--json", "title,body,url")
+        if ir.returncode:
+            err = (ir.stderr or ir.stdout or "")
+            if "403" in err or "Resource not accessible" in err:
+                die("gh issue view failed: PAT lacks Issues permission (403). Stopping this path; not retrying with other credentials.")
+            die("gh issue view failed (token not logged)")
         meta = json.loads(ir.stdout)
         issue_file = f"{dest}/.cf_issue.md"
-        open(issue_file, "w").write("# " + meta["title"] + "\n\n" + meta["body"] + "\n")
+        open(issue_file, "w").write("# " + meta["title"] + "\n\n" + (meta.get("body") or "") + "\n")
         args.issue = issue_file
         repo_slug, issue_ref = args.github, f"{args.github}#{args.issue_number}"
+        if meta.get("url"):
+            log("issue url recorded (see report); not writing token")
     if not args.repo: die("need --repo DIR (or --github owner/repo --issue-number N)")
     issue_file = os.path.abspath(args.issue or os.path.join(args.repo, "ISSUE.md"))
     if not os.path.exists(issue_file): die("issue file not found: " + issue_file)

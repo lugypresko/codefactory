@@ -3,6 +3,7 @@ import json, os, sys, glob, re, subprocess, hashlib
 sys.path.insert(0, os.path.dirname(__file__))
 import dockrun
 from common2 import ROOT, inst, pytest_cmd, is_testish, split_diff, diff_path, results_root, runs_root
+from p2p_gate import select_p2p_files
 iid = sys.argv[1]; it = inst(iid); img = it["docker_image"]
 EXPECTED_RID = sys.argv[2] if len(sys.argv) > 2 else None
 tg = f"{results_root()}/testgen/{iid}"
@@ -49,8 +50,19 @@ def unit_pass(unit, oc):
 
 # ---------- gate P2P file selection (independent of hidden tests): existing test files that mention a changed module ----------
 def gate_p2p_files():
-    ws = f"{runs_root()}/testgen/{iid}/ws"
-    tracked = subprocess.run(["git", "-C", ws, "-c", "safe.directory=*", "ls-files"], capture_output=True, text=True).stdout.split()
+    # LC_CF_P2P is opt-in for Code Factory runs only; default path and matching stay LC-1A.0.
+    cf = bool(os.environ.get("LC_CF_P2P"))
+    ws = os.environ.get("LC_P2P_WS") or (
+        f"{results_root()}/runs/testgen/{iid}/ws" if cf else f"{runs_root()}/testgen/{iid}/ws"
+    )
+    if cf:
+        sha = json.load(open(f"{tg}/record.json")).get("sanitized_base_sha")
+        tracked = subprocess.run(
+            ["git", "-C", ws, "-c", "safe.directory=*", "ls-tree", "-r", "--name-only", sha],
+            capture_output=True, text=True,
+        ).stdout.split()
+    else:
+        tracked = subprocess.run(["git", "-C", ws, "-c", "safe.directory=*", "ls-files"], capture_output=True, text=True).stdout.split()
     tfiles = [f for f in tracked if f.endswith(".py") and (os.path.basename(f).startswith("test_") or f.endswith("_test.py"))]
     stems = set()
     for p in split_diff(patch):
@@ -59,11 +71,11 @@ def gate_p2p_files():
             st = os.path.splitext(os.path.basename(f))[0]
             if st == "__init__": st = os.path.basename(os.path.dirname(f))
             if st: stems.add(st)
-    sel = []
-    for f in sorted(tfiles):
-        try: txt = open(os.path.join(ws, f), errors="replace").read()
-        except OSError: continue
-        if any(re.search(r"(import|from)\s+[\w.]*\b%s\b" % re.escape(s), txt) for s in stems): sel.append(f)
+    texts = {}
+    for f in tfiles:
+        try: texts[f] = open(os.path.join(ws, f), errors="replace").read()
+        except OSError: texts[f] = ""
+    sel = select_p2p_files(tfiles, stems, texts, name_match=cf)
     return sel[:10], sorted(stems)
 
 if prec["patch_empty"]:
