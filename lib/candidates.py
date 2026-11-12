@@ -39,6 +39,6 @@ for r in rows:
         else: seen.add(r['repo'])
     rec['excluded'] = why
     out.append(rec)
-    if sum(1 for o in out if not o['excluded']) >= 30: break
+    if sum(1 for o in out if not o['excluded']) >= 50: break
 json.dump(out, open('data/candidates.json', 'w'), indent=1)
 for o in out: print(o['created_at'], o['instance_id'], o.get('size_gb'), o['excluded'])

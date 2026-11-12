@@ -4,7 +4,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VENV = os.path.join(ROOT, ".venv")
 MODEL = os.environ.get("LC1A0_MODEL", "gemini/gemini-2.5-flash")
 LEDGER = os.path.join(ROOT, "work", "cost_ledger.jsonl")
-BUDGET = 10.0
+BUDGET = 25.0
 BENIGN = ("__pycache__/", ".pytest_cache/", ".hypothesis/", ".coverage", ".pyc", ".mypy_cache/", ".ruff_cache/")
 
 def spent():
@@ -66,7 +66,8 @@ def classify(ws, base):
             out["violations"].append(f"{code.strip()} tracked file: {path}")
     return out
 
-def run(role, rid, image, task, ws, run_dir, cost, steps, wall, extra_mounts=()):
+def run(role, rid, image, task, ws, run_dir, cost, steps, wall, extra_mounts=(), base_cfg=None):
+    base_cfg = base_cfg or os.path.join(ROOT, "mini_base.yaml")
     os.makedirs(run_dir, exist_ok=True)
     if spent() + cost > BUDGET:
         return {"status": "BUDGET_STOP", "cost_usd": 0.0, "spent_before": spent()}
@@ -94,12 +95,12 @@ environment:
     with open(f"{run_dir}/agent_stdout.log", "w") as lf:
         try:
             rc = subprocess.run(["timeout", "--kill-after=30", str(wall + 120), f"{VENV}/bin/mini", "--agent-class", "default",
-                                 "-m", MODEL, "-c", f"{ROOT}/mini_base.yaml", "-c", f"{run_dir}/config.yaml", "-t", task,
+                                 "-m", MODEL, "-c", base_cfg, "-c", f"{run_dir}/config.yaml", "-t", task,
                                  "-o", f"{run_dir}/trajectory.json"], stdin=subprocess.DEVNULL, stdout=lf, stderr=lf, env=env).returncode
         finally:
             ids = sh("docker", "ps", "-aq", "--filter", f"label=lc1a0.run={rid}").stdout.split()
             if ids: sh("docker", "rm", "-f", *ids)
-    res = {"role": role, "run_id": rid, "mini_rc": rc, "wall_seconds": round(time.time() - t0),
+    res = {"base_config": base_cfg, "mounts": [f"{ws}:/testbed"] + list(extra_mounts), "network": "none (container); LLM calls from host process only", "role": role, "run_id": rid, "mini_rc": rc, "wall_seconds": round(time.time() - t0),
            "caps": {"cost": cost, "steps": steps, "wall": wall}, "model_requested": MODEL}
     tp = f"{run_dir}/trajectory.json"
     if os.path.exists(tp):

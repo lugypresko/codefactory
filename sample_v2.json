@@ -1,0 +1,620 @@
+{
+ "dataset": "nebius/SWE-rebench-leaderboard",
+ "dataset_revision": "34d5a58864acf91613740a09ec5d205228dcfa39",
+ "parquet_ref": "refs/convert/parquet@55f056ab01ea7452ed4e300b723688a0364804dd",
+ "splits": [
+  "2026_01",
+  "2026_02",
+  "2026_03"
+ ],
+ "parquet_sha256": [
+  "b34360fba386349e41e612e57147f5a183d7524fc7be9d48001f06b33d1d4f3b  data/2026_01.parquet",
+  "0418d67761cf65f7a897de4a5d3fc21db803a0ca5dc3fae9ad8f569e2fb00a41  data/2026_02.parquet",
+  "18e198ac18b3c25b307c0aa5d9b6e20d338886e186bf7c12addb759ad4165a61  data/2026_03.parquet"
+ ],
+ "alternative_source_not_used": "github.com/SWE-rebench/SWE-rebench-V2",
+ "selection_rule": "lib/candidates.py + PREREGISTRATION_v2.md",
+ "preregistration_v2_sha256": "226c5ce0a8b0a5fa9dd8542a550382af2dbfbefd069d3dcb04c9b9e1c48996ac",
+ "verification_rejections": [
+  {
+   "instance_id": "geopython__pygeoapi-2338",
+   "reason": "9/40 P2P fail on gold (>5%)"
+  },
+  {
+   "instance_id": "graphistry__pygraphistry-1277",
+   "reason": "52/628 P2P fail on gold (>5%)"
+  },
+  {
+   "instance_id": "mempalace__mempalace-1004",
+   "reason": "9/36 P2P fail on gold (>5%)"
+  },
+  {
+   "instance_id": "pypa__twine-1309",
+   "reason": "1/1 F2P not passing on gold"
+  },
+  {
+   "instance_id": "pypa__build-1027",
+   "reason": "1/4 F2P not passing on gold"
+  },
+  {
+   "instance_id": "azure-samples__azure-search-openai-demo-3025",
+   "reason": "2/2 F2P not passing on gold"
+  },
+  {
+   "instance_id": "pdm-project__pdm-3759",
+   "reason": "4/63 P2P fail on gold (>5%)"
+  }
+ ],
+ "instance_ids_in_order": [
+  "schemathesis__schemathesis-4087",
+  "cs-si__eodag-2176",
+  "nesquena__hermes-webui-2056",
+  "youssofal__mtplx-21",
+  "raullenchai__rapid-mlx-289",
+  "python-wheel-build__fromager-1124",
+  "itsdnns__docsight-437",
+  "agronholm__anyio-1134",
+  "tox-dev__tox-3931",
+  "copier-org__copier-2646",
+  "hkuds__openharness-217",
+  "astronomy-commons__lsdb-1349",
+  "alibaba__opensandbox-816",
+  "apache__iceberg-python-3295",
+  "databricks__dbt-databricks-1428",
+  "zarr-developers__virtualizarr-979",
+  "ultraplot__ultraplot-696",
+  "pyinfra-dev__pyinfra-1665",
+  "pennylaneai__pennylane-9298",
+  "microsoft__qcodes-8039",
+  "pypsa__pypsa-1653",
+  "agentscope-ai__qwenpaw-3278",
+  "unit8co__darts-3065",
+  "meltano__meltano-9950",
+  "tobymao__sqlglot-7479",
+  "huggingface__huggingface_hub-4056",
+  "koxudaxi__datamodel-code-generator-3070",
+  "ucfopen__canvasapi-716",
+  "zauberzeug__nicegui-5914",
+  "oemof__tespy-921"
+ ],
+ "instances": [
+  {
+   "instance_id": "schemathesis__schemathesis-4087",
+   "repo": "schemathesis/schemathesis",
+   "created_at": "2026-05-12 11:45:06",
+   "base_commit": "e5fcd1c8ab5772dbcc3dd92059fe3b0acd88eb3c",
+   "docker_image": "swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087@sha256:85fae37fcacb6479d21c3d4dc1c769a5d27884a2dc60d3c8f8c1f7557c97a58f",
+   "issue_sha256": "0c6d76d5d3a4481435609b40ab56abe87dbdb5c5b3a947a3834140f141506fe9",
+   "gold_patch_sha256": "24542c19e5fb55160cc77ef53c7243f2bafe4e453357a5b70ce63914ee7d76f4",
+   "test_patch_sha256": "564c0517f39be968b9661cdf00ae663135e30642b4de231c7f7b47f408ac0906",
+   "FAIL_TO_PASS": [
+    "test/specs/openapi/test_checks.py::test_has_only_additional_properties_mutations_aware[phantom-path-negation-suppresses]",
+    "test/specs/openapi/test_checks.py::test_has_only_additional_properties_mutations_aware[empty-name-query-extra-suppresses]"
+   ],
+   "n_effective_p2p": 104,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider test/specs/openapi/test_checks.py"
+  },
+  {
+   "instance_id": "cs-si__eodag-2176",
+   "repo": "CS-SI/eodag",
+   "created_at": "2026-05-11 10:01:25",
+   "base_commit": "a058e6c2c7fb082c80bc5015e495dade6c87ae1b",
+   "docker_image": "swerebench/sweb.eval.x86_64.cs-si_1776_eodag-2176:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.cs-si_1776_eodag-2176@sha256:abdf3c8dd48ac05e351489c400a6b9625beeb2d2eda641b84056151d88cb0dfb",
+   "issue_sha256": "f4256811071739ae7d60220db889431be7dffbef44f2e325c3705b435af2b114",
+   "gold_patch_sha256": "e73eea8a1ccd3add7d95499fdc755f57fa60f6fb2bdaadd319daacce5dc2ba44",
+   "test_patch_sha256": "e84b77a78002b0ff309083a3c2aa8a6369c981aacf8b360ec2b7de4dea1846c5",
+   "FAIL_TO_PASS": [
+    "tests/units/test_search_plugins.py::TestSearchPluginStacSearch::test_plugins_search_stacsearch_discover_queryables_no_pattern_propagation"
+   ],
+   "n_effective_p2p": 123,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/context.py tests/units/test_search_plugins.py"
+  },
+  {
+   "instance_id": "nesquena__hermes-webui-2056",
+   "repo": "nesquena/hermes-webui",
+   "created_at": "2026-05-11 05:49:36",
+   "base_commit": "b766b7f7596e931f141d3ad26a507807baa69774",
+   "docker_image": "swerebench/sweb.eval.x86_64.nesquena_1776_hermes-webui-2056:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.nesquena_1776_hermes-webui-2056@sha256:7404a1ff916987bed0ada9b44bc4e74b1970bc5144efc3817f1e16dc70370b78",
+   "issue_sha256": "0ccf920ad7e71c8f2e6ee755c5252cc27bf23c4b445fb607da873a269fd0ea76",
+   "gold_patch_sha256": "4bef31235ec165f35d188baceb5edf7c23dc374eefc75a1c8d05d13b66ff6d10",
+   "test_patch_sha256": "73a4157d7043a8750afe2630b68741bf92bce53e3841f3e677f38318f3cc3296",
+   "FAIL_TO_PASS": [
+    "tests/test_custom_providers_in_panel.py::TestCustomProvidersInGetProviders::test_custom_provider_parenthesized_port_uses_safe_provider_id",
+    "tests/test_model_resolver.py::test_custom_provider_name_with_parenthesized_port_uses_safe_slug",
+    "tests/test_provider_management.py::TestRemoveProviderKey::test_clean_custom_provider_key_matches_safe_name_slug"
+   ],
+   "n_effective_p2p": 54,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_custom_providers_in_panel.py tests/test_model_resolver.py tests/test_provider_management.py"
+  },
+  {
+   "instance_id": "youssofal__mtplx-21",
+   "repo": "youssofal/MTPLX",
+   "created_at": "2026-05-07 19:59:26",
+   "base_commit": "c06cc13286e86d9ff3d2e3b991eba327549c534b",
+   "docker_image": "swerebench/sweb.eval.x86_64.youssofal_1776_mtplx-21:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.youssofal_1776_mtplx-21@sha256:32510a901064f5d405f3d4313a4556d924c94e72b2b0993296a43f04de83370e",
+   "issue_sha256": "7219d0cdca1720de11e77c7ee57b1649f089728447947be31e37d6c87fc3d6a2",
+   "gold_patch_sha256": "1999283ff200d4ec7a51cd5bce700f2823baab8b8fd31fae70cf42b6f3dfbf31",
+   "test_patch_sha256": "05d9927bd895b2b6eb298571beacad3f55378dbb0a4aa48a66b2c5cb5082e077",
+   "FAIL_TO_PASS": [
+    "tests/test_tool_aware_stream_translator.py::test_mixed_text_then_tool_call_in_one_chunk",
+    "tests/test_tool_aware_stream_translator.py::test_mixed_text_then_tool_call_streamed_in_pieces",
+    "tests/test_tool_aware_stream_translator.py::test_partial_marker_held_across_chunks_in_content_mode",
+    "tests/test_tool_aware_stream_translator.py::test_marker_split_across_three_chunks_after_text"
+   ],
+   "n_effective_p2p": 5,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_tool_aware_stream_translator.py"
+  },
+  {
+   "instance_id": "raullenchai__rapid-mlx-289",
+   "repo": "raullenchai/Rapid-MLX",
+   "created_at": "2026-05-07 19:33:12",
+   "base_commit": "67c49b5bec9a049e361785090a20a17f6085886d",
+   "docker_image": "swerebench/sweb.eval.x86_64.raullenchai_1776_rapid-mlx-289:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.raullenchai_1776_rapid-mlx-289@sha256:c518273fc729729206db46632ff3ae99052e00d2279aad795302692b4a6e02b0",
+   "issue_sha256": "3ae27ef5d79a458199fe77579d9c2737af36949b5eba763d0b1ef7f02c8a8edf",
+   "gold_patch_sha256": "07f839c5ae2b2b6e10e66d5fce7466c530d6d1306c809a6bf476433b54272ed2",
+   "test_patch_sha256": "41ef756aebff91b517386962f1ef97f4963a60f954dd54fe7cae7db7f1cf1b9b",
+   "FAIL_TO_PASS": [
+    "tests/test_reasoning_parsers.py::TestGemma4Streaming::test_delta_straddles_thought_close_then_content_open",
+    "tests/test_reasoning_parsers.py::TestGemma4Streaming::test_delta_straddles_implicit_close_only"
+   ],
+   "n_effective_p2p": 122,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_reasoning_parsers.py"
+  },
+  {
+   "instance_id": "python-wheel-build__fromager-1124",
+   "repo": "python-wheel-build/fromager",
+   "created_at": "2026-05-07 03:47:42",
+   "base_commit": "5fd5d20ff117279b938f003a5a0de18292fbbb83",
+   "docker_image": "swerebench/sweb.eval.x86_64.python-wheel-build_1776_fromager-1124:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.python-wheel-build_1776_fromager-1124@sha256:62103850e36c30400d4fb7861a4cf7688b278cbc3d62c0debeaf5a8026b594d7",
+   "issue_sha256": "9bc92ccdff5e2810042c5b75f3f3ee838a286bf219ab75b9271879d531ba6bc7",
+   "gold_patch_sha256": "133201f5d93b758873d14a093ed67afd941fb8f9f118923fc33afa6b7597885e",
+   "test_patch_sha256": "70cb154c25e1bc5cae8c7143c30b49b56c0746289a253d0d20da31fa7cf06e33",
+   "FAIL_TO_PASS": [
+    "tests/test_cooldown.py::test_toplevel_equality_pin_bypasses_cooldown_via_resolve",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_exempt_toplevel_equality_pin",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_enforced_transitive_equality_pin",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_enforced_toplevel_no_pin",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_none_req_type_not_exempt",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_toplevel_wildcard_equality_not_exempt",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_toplevel_compound_specifier_not_exempt"
+   ],
+   "n_effective_p2p": 28,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_cooldown.py"
+  },
+  {
+   "instance_id": "itsdnns__docsight-437",
+   "repo": "itsDNNS/docsight",
+   "created_at": "2026-05-06 09:32:16",
+   "base_commit": "f478c6eeded6e97b3b1dafc55108522b6c693c3b",
+   "docker_image": "swerebench/sweb.eval.x86_64.itsdnns_1776_docsight-437:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.itsdnns_1776_docsight-437@sha256:2a5f7d8b1131ed2fa4435bf50aa789f871271150ddabc607e000331ba74690be",
+   "issue_sha256": "e9818f01f4ad39c2d0c0e8a0279c1e87dc59d73384b1be35810167e71da3a132",
+   "gold_patch_sha256": "8e0a5b972188e1e98f4982d85bdf81ebc716a7d152898737865bd3bba9ec692c",
+   "test_patch_sha256": "a818672e7f729cc3edbd890f850140c3dd891c7b0bda1f93e035118f1a267731",
+   "FAIL_TO_PASS": [
+    "tests/test_comparison_module.py::TestAggregatePeriod::test_unsupported_error_counters_remain_none",
+    "tests/test_comparison_module.py::TestAggregatePeriod::test_zero_error_counters_stay_supported_zeroes",
+    "tests/test_comparison_module.py::TestAggregatePeriod::test_partially_supported_error_counters_do_not_invent_zeroes",
+    "tests/test_comparison_module.py::TestComputeDelta::test_delta_ignores_unsupported_error_counters",
+    "tests/test_correlation.py::TestCorrelationTimeline::test_modem_unsupported_error_counters_remain_none[True]"
+   ],
+   "n_effective_p2p": 40,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/e2e/test_comparison.py tests/test_comparison_module.py tests/test_correlation.py"
+  },
+  {
+   "instance_id": "agronholm__anyio-1134",
+   "repo": "agronholm/anyio",
+   "created_at": "2026-05-05 21:20:58",
+   "base_commit": "01b8d02381ba95ba11241c1ec361e908fe05b8be",
+   "docker_image": "swerebench/sweb.eval.x86_64.agronholm_1776_anyio-1134:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.agronholm_1776_anyio-1134@sha256:d7997027864d2bfb32d649e7e544381f5d1b161df8f1682c719d222d66489dc0",
+   "issue_sha256": "7ac987411d8df0baa5896eee7f6237dccd1a67b06610d7d7f1b7a5926b4ba749",
+   "gold_patch_sha256": "97999bbcebd51ca9dc7b22e13d9eab238bd296caea07d25478e793956018f983",
+   "test_patch_sha256": "3763362080fdf1af4088ec7c947e7b752fd3c60e10dcef8dc93b7f6b0e3c8ea8",
+   "FAIL_TO_PASS": [
+    "tests/test_to_process.py::test_entrypoint_main_module[asyncio]",
+    "tests/test_to_process.py::test_entrypoint_main_module[asyncio+uvloop]",
+    "tests/test_to_process.py::test_entrypoint_main_module[asyncio+eager]",
+    "tests/test_to_process.py::test_entrypoint_main_module[trio]"
+   ],
+   "n_effective_p2p": 36,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_to_process.py"
+  },
+  {
+   "instance_id": "tox-dev__tox-3931",
+   "repo": "tox-dev/tox",
+   "created_at": "2026-05-01 15:37:40",
+   "base_commit": "dd305fe8f347c49fcd3bd63d5e56c912e4c428f2",
+   "docker_image": "swerebench/sweb.eval.x86_64.tox-dev_1776_tox-3931:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.tox-dev_1776_tox-3931@sha256:6c44571aa2f3c2e01be2ba54b3330efcb4b5ba0d00983aa4a309d27853804896",
+   "issue_sha256": "87f7f4920a5afb6ad7dfdb5eb309a9dfe87f72c335218612bb94e7853a35ad8f",
+   "gold_patch_sha256": "31b37c6ce552f3676bdb966508b6d413b56930f4414fa5f1fbbf1023d8212969",
+   "test_patch_sha256": "9258012ce1b69bfd277d41c591b27b7bbc7ef0595f59f4b56c8a5d6e6735847c",
+   "FAIL_TO_PASS": [
+    "tests/session/cmd/test_schema.py::test_schema_allows_deps_array"
+   ],
+   "n_effective_p2p": 2,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/session/cmd/test_schema.py"
+  },
+  {
+   "instance_id": "copier-org__copier-2646",
+   "repo": "copier-org/copier",
+   "created_at": "2026-04-30 11:21:38",
+   "base_commit": "e05ddfec08bc580d3e7b6a2a3e7cb18b6c761ba5",
+   "docker_image": "swerebench/sweb.eval.x86_64.copier-org_1776_copier-2646:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.copier-org_1776_copier-2646@sha256:bb745d823b4f629441f1db4cab88719e352cf430dccabf7e59ad9003b75b6d4c",
+   "issue_sha256": "41d0cde2a478420fe6d6158e5be591ca315cf6c78fd86a1011c30b81ba508711",
+   "gold_patch_sha256": "3d30fdded97be0c03e0dc4de2bdf49dcf533e6a46b2aca3f059491f2fc251362",
+   "test_patch_sha256": "7071cb8412bb0ac962265ca139a32a777821dca5dda08d4ff46d174f66a90dbf",
+   "FAIL_TO_PASS": [
+    "tests/test_cleanup.py::test_cleanup_on_interrupt_during_git_clone"
+   ],
+   "n_effective_p2p": 6,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_cleanup.py"
+  },
+  {
+   "instance_id": "hkuds__openharness-217",
+   "repo": "HKUDS/OpenHarness",
+   "created_at": "2026-04-30 00:28:27",
+   "base_commit": "1bcdc62a50db14c2f0bf5dbee05b2bdc369dffb3",
+   "docker_image": "swerebench/sweb.eval.x86_64.hkuds_1776_openharness-217:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.hkuds_1776_openharness-217@sha256:ad0997cf2e90f0a31f3e6f8fd5cba18ced7f364ae3a62bd59f4c9e1d88b7678d",
+   "issue_sha256": "5a1163602919f92cffa9aa885f04b1db190c3071b17eff2cf2fc439225841f5a",
+   "gold_patch_sha256": "ebe564b5cc1065a69c31a08ea3ac2436f489204ff3a01b3b48684890b5d8bb9b",
+   "test_patch_sha256": "235a5ebd1bb70a887a4b8bb790dc637aea7928e0a337b7a33fcd9ba8efc1c8a7",
+   "FAIL_TO_PASS": [
+    "tests/test_auth/test_flows.py::test_open_browser_windows_uses_startfile_not_shell",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[javascript:alert(1)]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[file:///etc/passwd]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[ftp://example.com/payload]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[calc.exe]"
+   ],
+   "n_effective_p2p": 2,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_auth/test_flows.py"
+  },
+  {
+   "instance_id": "astronomy-commons__lsdb-1349",
+   "repo": "astronomy-commons/lsdb",
+   "created_at": "2026-04-29 20:36:11",
+   "base_commit": "ba11985ca7940dabb77d4f7db731d516e6527d47",
+   "docker_image": "swerebench/sweb.eval.x86_64.astronomy-commons_1776_lsdb-1349:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.astronomy-commons_1776_lsdb-1349@sha256:44300fa3f5ab7ea4c7bb8bb68e60f1faa75f199faf5769d1911d6ee970a71c0c",
+   "issue_sha256": "d9c750832e516dfb9dca02eb6ae7ce730293818b1c9768e8aeee8c15b8eac0ec",
+   "gold_patch_sha256": "a55a1762b34cd55773af8cacc31c8e209af9d22565523516e2ed4a21fdbcc3e7",
+   "test_patch_sha256": "a161a7324f2d5d4e9b55b471922403cbd58285969bb014f2269fea2254500e93",
+   "FAIL_TO_PASS": [
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_with_npix_suffix"
+   ],
+   "n_effective_p2p": 21,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/lsdb/io/test_to_hats.py"
+  },
+  {
+   "instance_id": "alibaba__opensandbox-816",
+   "repo": "alibaba/OpenSandbox",
+   "created_at": "2026-04-29 07:35:36",
+   "base_commit": "fb78091f947f62ae2c71a372af42425a764aacee",
+   "docker_image": "swerebench/sweb.eval.x86_64.alibaba_1776_opensandbox-816:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.alibaba_1776_opensandbox-816@sha256:eb2223e2f7957ad3f8bf3a69946fed4ca7b9abc309ec9c14f388786785d02ea0",
+   "issue_sha256": "2d0a06e6d3d0277d9bff355f199f869a0558e8daf526044b57417b59abf658cf",
+   "gold_patch_sha256": "09c94a62068815c16678b176895498a72f11b13ef6737b6419dea0d477031199",
+   "test_patch_sha256": "ca60a5ccbcacbef3bfd216808121e689d3f64048fab122cfcfdfd7f4b8ab1648",
+   "FAIL_TO_PASS": [
+    "server/tests/test_docker_service.py::TestDockerVolumeValidation::test_host_volume_symlink_bypass_rejected"
+   ],
+   "n_effective_p2p": 108,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider server/tests/test_docker_service.py"
+  },
+  {
+   "instance_id": "apache__iceberg-python-3295",
+   "repo": "apache/iceberg-python",
+   "created_at": "2026-04-28 22:03:47",
+   "base_commit": "b67b7241690e05413f3cfea69287f897b0b2410e",
+   "docker_image": "swerebench/sweb.eval.x86_64.apache_1776_iceberg-python-3295:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.apache_1776_iceberg-python-3295@sha256:10595208bda942416f6673a2629c9fb66bd5226818bbe62ce1ef99a3bef8e6d1",
+   "issue_sha256": "90e2078c4acec2f6df0fe8072aeeb91a31f2e4c9dec856ae62239077bca99253",
+   "gold_patch_sha256": "b0f799df5455b17bcd8026c76a4e4c524faf7da92506655d6ce2c829b5273297",
+   "test_patch_sha256": "6c09eff7ec5daad6651cbb7bb3edc749f5909781e0b2bb8504e80c69f715a2a3",
+   "FAIL_TO_PASS": [
+    "tests/expressions/test_expressions.py::test_deepcopy_and",
+    "tests/expressions/test_expressions.py::test_deepcopy_or",
+    "tests/expressions/test_expressions.py::test_deepcopy_not",
+    "tests/expressions/test_expressions.py::test_deepcopy_balanced_and",
+    "tests/expressions/test_expressions.py::test_deepcopy_balanced_or",
+    "tests/expressions/test_expressions.py::test_deepcopy_nested_expression",
+    "tests/expressions/test_expressions.py::test_deepcopy_then_pickle"
+   ],
+   "n_effective_p2p": 164,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/expressions/test_expressions.py"
+  },
+  {
+   "instance_id": "databricks__dbt-databricks-1428",
+   "repo": "databricks/dbt-databricks",
+   "created_at": "2026-04-27 19:20:43",
+   "base_commit": "80e486c6dce6d10b13ef1705a8e9255bbc4a521b",
+   "docker_image": "swerebench/sweb.eval.x86_64.databricks_1776_dbt-databricks-1428:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.databricks_1776_dbt-databricks-1428@sha256:6f8a87b157e081ac2f738f239cf8fc99f4d7f3648e781feb8f38e12999ebc734",
+   "issue_sha256": "8113751a47699c2a4204ef8b5756aa8d36550b80d349165e8889c73bcc13e153",
+   "gold_patch_sha256": "9c0337af7d5ef15d41a11760af154f849db44ac0e8acabd78ebaabebbcfd59df",
+   "test_patch_sha256": "0129744a786e70eead7187f7e0a4a3104b73e6c90e02a8f71cb601e3f694f6ae",
+   "FAIL_TO_PASS": [
+    "tests/unit/test_adapter.py::TestDatabricksAdapter::test_get_schema_for_catalog__metadata_columns_are_always_text",
+    "tests/unit/test_adapter.py::TestDatabricksAdapter::test_get_schema_for_catalog__results_merge_across_schemas"
+   ],
+   "n_effective_p2p": 60,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/unit/test_adapter.py"
+  },
+  {
+   "instance_id": "zarr-developers__virtualizarr-979",
+   "repo": "zarr-developers/VirtualiZarr",
+   "created_at": "2026-04-24 16:09:18",
+   "base_commit": "3194b095ede4abaa9d9d0daaa91a6f0424cc4a93",
+   "docker_image": "swerebench/sweb.eval.x86_64.zarr-developers_1776_virtualizarr-979:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.zarr-developers_1776_virtualizarr-979@sha256:d8b6d05d6e668a53fb4356aaabaa40d99f7cdfacf2d0e6145e2dc7fcd68fba74",
+   "issue_sha256": "850a4bd16b4d94eceb05987913d87311358409fdd8fbb60824bfee4701ab0f2e",
+   "gold_patch_sha256": "5750f67a03eea6fccdcc1a8c770ff7c0edfddfffb47ce4d256c1fca3834fd863",
+   "test_patch_sha256": "314d81a38273ac6be3382f73c8e65849ea1958f7b10b503458c172fcaea77a15",
+   "FAIL_TO_PASS": [
+    "virtualizarr/tests/test_parsers/test_kerchunk.py::test_parse_inline_refs_json[base64]",
+    "virtualizarr/tests/test_parsers/test_kerchunk.py::test_parse_inline_refs_json[raw_string]",
+    "virtualizarr/tests/test_parsers/test_kerchunk.py::test_read_inline_and_virtual_refs_end_to_end"
+   ],
+   "n_effective_p2p": 10,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider virtualizarr/tests/test_parsers/test_kerchunk.py"
+  },
+  {
+   "instance_id": "ultraplot__ultraplot-696",
+   "repo": "Ultraplot/UltraPlot",
+   "created_at": "2026-04-16 22:58:14",
+   "base_commit": "1567aa35dc5669b67babe76a929452e1c6d85fdb",
+   "docker_image": "swerebench/sweb.eval.x86_64.ultraplot_1776_ultraplot-696:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.ultraplot_1776_ultraplot-696@sha256:93adcb08a95ee7fb4a6a7451ca82160730b895e914e7a25353266785f1e51e7d",
+   "issue_sha256": "e12ee3075355c57a0bb32260df8a520fa5a7a0379c5da5ceb835cca6df4b076e",
+   "gold_patch_sha256": "fac94a65648b6ad530cb28f06c59a0f3a38e8f0d91676eb64b23f2761fd8bc69",
+   "test_patch_sha256": "e2a6e7f9145bc0a44902546a24cb0d86af787a1847efcf4dd080c734d2025422",
+   "FAIL_TO_PASS": [
+    "ultraplot/tests/test_subplots.py::test_outer_legend_keeps_ticklabels_with_label_sharing[labs]",
+    "ultraplot/tests/test_subplots.py::test_outer_legend_keeps_ticklabels_with_label_sharing[lims]"
+   ],
+   "n_effective_p2p": 49,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider ultraplot/tests/test_subplots.py"
+  },
+  {
+   "instance_id": "pyinfra-dev__pyinfra-1665",
+   "repo": "pyinfra-dev/pyinfra",
+   "created_at": "2026-04-14 07:06:21",
+   "base_commit": "185f7dbec96f8e1d5f7cfefe0f325f99ab73927a",
+   "docker_image": "swerebench/sweb.eval.x86_64.pyinfra-dev_1776_pyinfra-1665:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.pyinfra-dev_1776_pyinfra-1665@sha256:138a496547f392c77a1d472fd259e3c3fff6dd20bf5cba084335888857f395a3",
+   "issue_sha256": "6db63b001b70674a6cd551c902d802495967cec273296be8357a6e5cf1499493",
+   "gold_patch_sha256": "54ff89ac96e4db7ddd2de0086498d7ca0b38d6a100d66477006b0dc80152f697",
+   "test_patch_sha256": "8687c3cee15bc9d0651669af9e32c57012cf7fe5d4c09e53a7d04a04863e7a65",
+   "FAIL_TO_PASS": [
+    "tests/test_connectors/test_util.py::TestRemoveAnySudoAskpassFile::test_swallows_errors_and_clears_state"
+   ],
+   "n_effective_p2p": 33,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_connectors/test_util.py"
+  },
+  {
+   "instance_id": "pennylaneai__pennylane-9298",
+   "repo": "PennyLaneAI/pennylane",
+   "created_at": "2026-04-13 19:33:03",
+   "base_commit": "4c31d796dcaa6f6ef96cc46b311f9171ea26102e",
+   "docker_image": "swerebench/sweb.eval.x86_64.pennylaneai_1776_pennylane-9298:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.pennylaneai_1776_pennylane-9298@sha256:fab072dc01e046ad71303bf9830e6a34b69713644b8822cc16f8231c01e206c9",
+   "issue_sha256": "62a304e316d4f5b6ad2b7a923ed66e3228a74c3db92020c914298951c64026d5",
+   "gold_patch_sha256": "556b6dc77036c898d14648914aa4f671f420a943daef9cab8c00911f74ebb5dd",
+   "test_patch_sha256": "401c354472fd80504ab75d9c144a7ce9f428fea1c06d6d14e66e0d7c43bfac66",
+   "FAIL_TO_PASS": [
+    "tests/decomposition/test_decomposition_graph.py::TestDecompositionGraph::test_min_work_wires_unreacheable_rule"
+   ],
+   "n_effective_p2p": 31,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/decomposition/test_decomposition_graph.py"
+  },
+  {
+   "instance_id": "microsoft__qcodes-8039",
+   "repo": "microsoft/Qcodes",
+   "created_at": "2026-04-13 10:36:33",
+   "base_commit": "fb48ab0c58eb2c144ab634d0b4209e70334c89ab",
+   "docker_image": "swerebench/sweb.eval.x86_64.microsoft_1776_qcodes-8039:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.microsoft_1776_qcodes-8039@sha256:ce91b642dde511eb1e07e8b2fe846d3d599ec54c9feb9f2eaf6a91c820060f24",
+   "issue_sha256": "93b774672227e60888dd1d9429feaa90a5c8df74bf631752286d430a8e7eb845",
+   "gold_patch_sha256": "37473f71e8f257580288f7d53c4167ece5bf7492cb710248cb25300398555a91",
+   "test_patch_sha256": "fd093a5f2f763e704c7c967db075a310ed3579a3a56587f7751ded52ecd03f67",
+   "FAIL_TO_PASS": [
+    "tests/helpers/test_delegate_attribues.py::test_faulty_property_surfaces_original_attribute_error",
+    "tests/helpers/test_delegate_attribues.py::test_faulty_property_preserves_inner_traceback"
+   ],
+   "n_effective_p2p": 6,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/helpers/test_delegate_attribues.py"
+  },
+  {
+   "instance_id": "pypsa__pypsa-1653",
+   "repo": "PyPSA/PyPSA",
+   "created_at": "2026-04-13 08:33:16",
+   "base_commit": "50bcbb8c1ba6319167a8bf0059cf18114b2f2eac",
+   "docker_image": "swerebench/sweb.eval.x86_64.pypsa_1776_pypsa-1653:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.pypsa_1776_pypsa-1653@sha256:816b556e593792201bdb32055bf05533c037aeb4d2b7cd78702bd691b9e59b26",
+   "issue_sha256": "1ab705fb7143c7f88a37a632e44ec1979f5799ecab2d9d686014445bedf846b5",
+   "gold_patch_sha256": "1bdb322ebc45f2aad11912ba9d9ab06e091743a33031f96d3212ef2b36fc5f14",
+   "test_patch_sha256": "bc159ee509ac084049c708ecc3ac83550c9d851746d7e9e0d512e0e441c3332d",
+   "FAIL_TO_PASS": [
+    "test/test_collection_statistics.py::test_network_collection_name_grouper"
+   ],
+   "n_effective_p2p": 25,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider test/test_collection_statistics.py"
+  },
+  {
+   "instance_id": "agentscope-ai__qwenpaw-3278",
+   "repo": "agentscope-ai/QwenPaw",
+   "created_at": "2026-04-12 04:51:22",
+   "base_commit": "4302189c43142b819f18b7ac7938d91ea05001f7",
+   "docker_image": "swerebench/sweb.eval.x86_64.agentscope-ai_1776_qwenpaw-3278:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.agentscope-ai_1776_qwenpaw-3278@sha256:e6935dfe3819e0083542e7a2c9009d2276cf426fb0fe9966569335a93ba25d78",
+   "issue_sha256": "f6816a32169c0d5e72223300146dd3a29cffbd62790457cf5e735af2666ffe8f",
+   "gold_patch_sha256": "186e25ef57ddf802ec4a3185dcd46831a1055c4a302725dde20db84a3d3e7b44",
+   "test_patch_sha256": "34a6f5a564aa033740e945bdecac021ff3924c2925fb17cccdda8f2c33dd6197",
+   "FAIL_TO_PASS": [
+    "tests/unit/agents/test_session.py::test_load_corrupted_json_extra_data",
+    "tests/unit/agents/test_session.py::test_load_corrupted_json_real_world_tail",
+    "tests/unit/agents/test_session.py::test_get_corrupted_json",
+    "tests/unit/agents/test_session.py::test_update_corrupted_json",
+    "tests/unit/agents/test_session.py::test_load_completely_corrupted",
+    "tests/unit/agents/test_session.py::test_get_completely_corrupted",
+    "tests/unit/agents/test_session.py::test_update_completely_corrupted",
+    "tests/unit/agents/test_session.py::test_load_empty_file",
+    "tests/unit/agents/test_session.py::test_get_empty_file",
+    "tests/unit/agents/test_session.py::test_update_empty_file",
+    "tests/unit/agents/test_session.py::test_load_null_bytes",
+    "tests/unit/agents/test_session.py::test_load_double_write_overlap",
+    "tests/unit/agents/test_session.py::test_load_whitespace_only"
+   ],
+   "n_effective_p2p": 3,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/unit/agents/test_session.py"
+  },
+  {
+   "instance_id": "unit8co__darts-3065",
+   "repo": "unit8co/darts",
+   "created_at": "2026-04-10 23:06:13",
+   "base_commit": "6bfda77e4afc9c123740ab6cc52ca39a7ab92d84",
+   "docker_image": "swerebench/sweb.eval.x86_64.unit8co_1776_darts-3065:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.unit8co_1776_darts-3065@sha256:ce882b8e668e4a6d5452c6612cd5dc9227839f21efc3bde67437603e4d14b7d0",
+   "issue_sha256": "20e27cabc09093b03b24a6c023a0484ca47f9f4f44570ad752d75da2a72b4630",
+   "gold_patch_sha256": "4233c967bd7448718b2a4cc00a3fa98218e4464f94d18d8ff48775703a5c6f8d",
+   "test_patch_sha256": "2188a609893476567de7c7e76b087fdf94bdda40b6f24c58339d265438cd10d0",
+   "FAIL_TO_PASS": [
+    "darts/tests/dataprocessing/transformers/test_static_covariates_transformer.py::TestStaticCovariatesTransformer::test_one_hot_encoder_with_drop_single_series[first]",
+    "darts/tests/dataprocessing/transformers/test_static_covariates_transformer.py::TestStaticCovariatesTransformer::test_one_hot_encoder_with_drop_single_series[if_binary]",
+    "darts/tests/dataprocessing/transformers/test_static_covariates_transformer.py::TestStaticCovariatesTransformer::test_one_hot_encoder_with_drop_multi_series[first]",
+    "darts/tests/dataprocessing/transformers/test_static_covariates_transformer.py::TestStaticCovariatesTransformer::test_one_hot_encoder_with_drop_multi_series[if_binary]"
+   ],
+   "n_effective_p2p": 8,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider darts/tests/dataprocessing/transformers/test_static_covariates_transformer.py"
+  },
+  {
+   "instance_id": "meltano__meltano-9950",
+   "repo": "meltano/meltano",
+   "created_at": "2026-04-10 20:30:39",
+   "base_commit": "2a7a073b14a54011caaaea2ea40d36e5d97220d6",
+   "docker_image": "swerebench/sweb.eval.x86_64.meltano_1776_meltano-9950:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.meltano_1776_meltano-9950@sha256:2ddfef1ea390993bb585cd76a4757de152d9c30ba5f46833ddd1cce7accbf786",
+   "issue_sha256": "cc3472a753d92909f66e4e2aa900b66e09c4a79f6aa6eae276cf17ce9f330db1",
+   "gold_patch_sha256": "88da1f7d87cb9dd55fb992bb3fd79bd4fc0cdd47e3a59cbc13b698247992c3a8",
+   "test_patch_sha256": "7db09bdf293bd7f55f6f8ff398f896ef0b6fb4e2b63567315547806fd105dad3",
+   "FAIL_TO_PASS": [
+    "tests/meltano/cli/test_cli_group.py::test_group_order_is_correct",
+    "tests/meltano/cli/test_cli_group.py::test_options_present_in_correct_groups",
+    "tests/meltano/cli/test_cli_group.py::test_run_command_has_grouped_options"
+   ],
+   "n_effective_p2p": 2,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/meltano/cli/test_cli_group.py"
+  },
+  {
+   "instance_id": "tobymao__sqlglot-7479",
+   "repo": "tobymao/sqlglot",
+   "created_at": "2026-04-09 12:51:48",
+   "base_commit": "38357253ee1f2847bd14e0a7b68baf5a2c0a2228",
+   "docker_image": "swerebench/sweb.eval.x86_64.tobymao_1776_sqlglot-7479:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.tobymao_1776_sqlglot-7479@sha256:73e012bfeb6198988d5567a556ed85639779375f17c58c06103d879427f33036",
+   "issue_sha256": "ffc533a64d0a19dc3976dbe70d30eb913567d90e6282d660e18b35ef116feaab",
+   "gold_patch_sha256": "8e942b5c63d3b0595817a987e5abb1a41a9db065616ad75cf67934c543783ded",
+   "test_patch_sha256": "312a6e7fd523d54ccecb04e91a27d446c56d2121e3726532df9bccaced82ba9c",
+   "FAIL_TO_PASS": [
+    "tests/dialects/test_bigquery.py::TestBigQuery::test_ml_functions"
+   ],
+   "n_effective_p2p": 57,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/dialects/test_bigquery.py"
+  },
+  {
+   "instance_id": "huggingface__huggingface_hub-4056",
+   "repo": "huggingface/huggingface_hub",
+   "created_at": "2026-04-06 15:39:13",
+   "base_commit": "6983a4d3d2bdcbd09c6ea08acae64cdf83ccb2e4",
+   "docker_image": "swerebench/sweb.eval.x86_64.huggingface_1776_huggingface_hub-4056:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.huggingface_1776_huggingface_hub-4056@sha256:cbfae263dff792cc7c763057905869c548bf37733352ff999b3d7d4278c87677",
+   "issue_sha256": "0c5e720a0184d26be8497ab2a150b0a15823b8557210f68937aafbdc3a1c4521",
+   "gold_patch_sha256": "4ed0bca7b7370147472f34b56aa7d67aa2938cf9dd03bfa45a1786df495b04bd",
+   "test_patch_sha256": "265988b2a6734a001f8b4577a9686be5c72c564c7cea97adb2d4f345049599b8",
+   "FAIL_TO_PASS": [
+    "tests/test_utils_tqdm.py::TestCreateProgressBarCustomClass::test_custom_tqdm_class_not_disabled_in_non_tty",
+    "tests/test_utils_tqdm.py::TestCreateProgressBarCustomClass::test_custom_tqdm_class_ignores_hf_disable_signal"
+   ],
+   "n_effective_p2p": 19,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_utils_tqdm.py"
+  },
+  {
+   "instance_id": "koxudaxi__datamodel-code-generator-3070",
+   "repo": "koxudaxi/datamodel-code-generator",
+   "created_at": "2026-04-04 06:59:19",
+   "base_commit": "5dcbc09a9086febf62e92f11b88215584d3a5c45",
+   "docker_image": "swerebench/sweb.eval.x86_64.koxudaxi_1776_datamodel-code-generator-3070:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.koxudaxi_1776_datamodel-code-generator-3070@sha256:7c1b9b88231ef9aa9a532fa82b498d47e46f8eebdb381f8ed1a415521abbec6e",
+   "issue_sha256": "528738c23d3d0c438680a4fdb6d529721b2460c728fb1aed00fe36c7a8316e30",
+   "gold_patch_sha256": "a37387d067b5e20b2c7a803ff4cd9ba8a6fac4288d9f46727ffe5d5e02fe4f28",
+   "test_patch_sha256": "68c993ca95028576e24a81e23cb02de85cd53c15c0b8d3f3d3404427354100ca",
+   "FAIL_TO_PASS": [
+    "tests/main/openapi/test_main_openapi.py::test_main_openapi_discriminator_integer_mapping",
+    "tests/main/openapi/test_main_openapi.py::test_main_openapi_discriminator_integer_no_mapping",
+    "tests/main/openapi/test_main_openapi.py::test_main_openapi_discriminator_integer_no_mapping_literal",
+    "tests/main/openapi/test_main_openapi.py::test_main_openapi_discriminator_partial_mapping"
+   ],
+   "n_effective_p2p": 309,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/data/expected/main/openapi/discriminator/integer_mapping.py tests/data/expected/main/openapi/discriminator/integer_no_mapping.py tests/data/expected/main/openapi/discriminator/integer_no_mapping_literal.py tests/data/expected/main/openapi/discriminator/partial_mapping.py tests/main/openapi/test_main_openapi.py"
+  },
+  {
+   "instance_id": "ucfopen__canvasapi-716",
+   "repo": "ucfopen/canvasapi",
+   "created_at": "2026-03-31 19:11:13",
+   "base_commit": "77ff5b248603db987e57f11a104767d4b790265a",
+   "docker_image": "swerebench/sweb.eval.x86_64.ucfopen_1776_canvasapi-716:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.ucfopen_1776_canvasapi-716@sha256:6eb2cb4155cf4e7a75b451a3c3f7edcc0966d34a945ed99e7d66ef588c9c7e85",
+   "issue_sha256": "b4463fa157fea02b9b7b3ddeb6cc64b1a2dc404096fc483125ee05fa961f89fb",
+   "gold_patch_sha256": "972db0274fd8c98fd29a9b8ea3129bd85926f46a74d0e25a9d87f8490dcfa83c",
+   "test_patch_sha256": "1e18a5a8a29bd405d8ca582e82b959ef5ff6648c14bfa28996bedf056f95cb3c",
+   "FAIL_TO_PASS": [
+    "tests/test_util.py::TestUtil::test_obj_or_str_invalid_obj_type",
+    "tests/test_util.py::TestUtil::test_obj_or_str_str"
+   ],
+   "n_effective_p2p": 60,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_util.py"
+  },
+  {
+   "instance_id": "zauberzeug__nicegui-5914",
+   "repo": "zauberzeug/nicegui",
+   "created_at": "2026-03-26 14:10:41",
+   "base_commit": "b6c2d3dd191acb488427e8eae6ab2c868b547636",
+   "docker_image": "swerebench/sweb.eval.x86_64.zauberzeug_1776_nicegui-5914:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.zauberzeug_1776_nicegui-5914@sha256:024b25ca4989cf7eabd6156a29e520229f1f30e1d2bf600df0382ad4b4ac408e",
+   "issue_sha256": "2588b150fa320e3357e6159ca394ac11ef350823a05a7cf1076d78149c650047",
+   "gold_patch_sha256": "f13d4388f3b65511415188399ac8154346bd34a73e93899453dc223a88737035",
+   "test_patch_sha256": "3db2e2dd50d7362213a623ed26f868d9bcd6d4ae7811b69c3f6d7d81316850c5",
+   "FAIL_TO_PASS": [
+    "tests/test_sub_pages.py::test_refresh_sub_page"
+   ],
+   "n_effective_p2p": 50,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_sub_pages.py"
+  },
+  {
+   "instance_id": "oemof__tespy-921",
+   "repo": "oemof/tespy",
+   "created_at": "2026-03-26 06:19:08",
+   "base_commit": "28670b60d89b48d1879ada9056c37b982836e51d",
+   "docker_image": "swerebench/sweb.eval.x86_64.oemof_1776_tespy-921:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.oemof_1776_tespy-921@sha256:089f077576aad46c55fffe9bcae1bc7e44f3963fd624c58c45e8943c9eebab01",
+   "issue_sha256": "83f48e3b2328d647ad8bdf929f5846cc0ec0981cb9f01f988df7c62be8246874",
+   "gold_patch_sha256": "15e4d661c476c90258d34ce47d69cd227950489013b576ea32289507ae0dd951",
+   "test_patch_sha256": "3ff0296fc9ad6cbfbe9d199feef541dbecbddad6d1a10112cabc77f7e6d24bc2",
+   "FAIL_TO_PASS": [
+    "tests/test_networks/test_network.py::test_setting_ref_on_hex_leads_to_linear_dependency"
+   ],
+   "n_effective_p2p": 46,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_networks/test_network.py"
+  }
+ ]
+}

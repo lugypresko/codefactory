@@ -1,0 +1,24 @@
+alibaba__opensandbox-816 True  16
+apache__iceberg-python-3295 True  25
+databricks__dbt-databricks-1428 True  34
+zarr-developers__virtualizarr-979 True  20
+mempalace__mempalace-1004 False 9/36 P2P fail on gold (>5%) 21
+pypa__twine-1309 False 1/1 F2P not passing on gold 10
+ultraplot__ultraplot-696 True  78
+pyinfra-dev__pyinfra-1665 True  11
+pennylaneai__pennylane-9298 True  23
+microsoft__qcodes-8039 True  49
+pypsa__pypsa-1653 True  43
+agentscope-ai__qwenpaw-3278 True  46
+unit8co__darts-3065 True  30
+meltano__meltano-9950 True  22
+pypa__build-1027 False 1/4 F2P not passing on gold 14
+tobymao__sqlglot-7479 True  15
+azure-samples__azure-search-openai-demo-3025 False 2/2 F2P not passing on gold 32
+huggingface__huggingface_hub-4056 True  18
+koxudaxi__datamodel-code-generator-3070 True  32
+pdm-project__pdm-3759 False 4/63 P2P fail on gold (>5%) 44
+ucfopen__canvasapi-716 True  10
+zauberzeug__nicegui-5914 True  188
+oemof__tespy-921 True  36
+verified: 30 ['schemathesis__schemathesis-4087', 'cs-si__eodag-2176', 'nesquena__hermes-webui-2056', 'youssofal__mtplx-21', 'raullenchai__rapid-mlx-289', 'python-wheel-build__fromager-1124', 'itsdnns__docsight-437', 'agronholm__anyio-1134', 'tox-dev__tox-3931', 'copier-org__copier-2646', 'hkuds__openharness-217', 'astronomy-commons__lsdb-1349', 'alibaba__opensandbox-816', 'apache__iceberg-python-3295', 'databricks__dbt-databricks-1428', 'zarr-developers__virtualizarr-979', 'ultraplot__ultraplot-696', 'pyinfra-dev__pyinfra-1665', 'pennylaneai__pennylane-9298', 'microsoft__qcodes-8039', 'pypsa__pypsa-1653', 'agentscope-ai__qwenpaw-3278', 'unit8co__darts-3065', 'meltano__meltano-9950', 'tobymao__sqlglot-7479', 'huggingface__huggingface_hub-4056', 'koxudaxi__datamodel-code-generator-3070', 'ucfopen__canvasapi-716', 'zauberzeug__nicegui-5914', 'oemof__tespy-921']

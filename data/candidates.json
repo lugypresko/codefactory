@@ -430,5 +430,401 @@
    "amd64"
   ],
   "excluded": null
+ },
+ {
+  "instance_id": "graphistry__pygraphistry-1107_interface",
+  "repo": "graphistry/pygraphistry",
+  "created_at": "2026-04-08 23:33:51",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "azure-samples__azure-search-openai-demo-3025",
+  "repo": "Azure-Samples/azure-search-openai-demo",
+  "created_at": "2026-04-06 23:17:47",
+  "size_gb": 1.75,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "keras-team__keras-22642",
+  "repo": "keras-team/keras",
+  "created_at": "2026-04-06 21:57:28",
+  "size_gb": 4.33,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": "image_too_large"
+ },
+ {
+  "instance_id": "huggingface__huggingface_hub-4056",
+  "repo": "huggingface/huggingface_hub",
+  "created_at": "2026-04-06 15:39:13",
+  "size_gb": 1.42,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "cpp-linter__cpp-linter-hooks-206_interface",
+  "repo": "cpp-linter/cpp-linter-hooks",
+  "created_at": "2026-04-05 20:19:31",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "tobymao__sqlglot-7457",
+  "repo": "tobymao/sqlglot",
+  "created_at": "2026-04-05 13:50:52",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "koxudaxi__datamodel-code-generator-3071",
+  "repo": "koxudaxi/datamodel-code-generator",
+  "created_at": "2026-04-04 07:33:36",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "koxudaxi__datamodel-code-generator-3070",
+  "repo": "koxudaxi/datamodel-code-generator",
+  "created_at": "2026-04-04 06:59:19",
+  "size_gb": 1.31,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "meltano__meltano-9929",
+  "repo": "meltano/meltano",
+  "created_at": "2026-04-04 02:15:27",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "python-scim__scim2-models-139_interface",
+  "repo": "python-scim/scim2-models",
+  "created_at": "2026-04-03 08:06:17",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pdm-project__pdm-3759",
+  "repo": "pdm-project/pdm",
+  "created_at": "2026-04-01 14:37:40",
+  "size_gb": 1.28,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "line__line-bot-sdk-python-981_interface",
+  "repo": "line/line-bot-sdk-python",
+  "created_at": "2026-04-01 07:44:57",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "ucfopen__canvasapi-716",
+  "repo": "ucfopen/canvasapi",
+  "created_at": "2026-03-31 19:11:13",
+  "size_gb": 1.25,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "zauberzeug__nicegui-5914",
+  "repo": "zauberzeug/nicegui",
+  "created_at": "2026-03-26 14:10:41",
+  "size_gb": 1.67,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "oemof__tespy-921",
+  "repo": "oemof/tespy",
+  "created_at": "2026-03-26 06:19:08",
+  "size_gb": 1.62,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "tox-dev__tox-3904",
+  "repo": "tox-dev/tox",
+  "created_at": "2026-03-26 04:52:51",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "marshmallow-code__marshmallow-2925_interface",
+  "repo": "marshmallow-code/marshmallow",
+  "created_at": "2026-03-25 16:50:58",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "holoviz__param-1117",
+  "repo": "holoviz/param",
+  "created_at": "2026-03-25 14:50:38",
+  "size_gb": 1.24,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "delgan__loguru-1451",
+  "repo": "Delgan/loguru",
+  "created_at": "2026-03-25 02:34:06",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "scrapy__scrapy-7351_interface",
+  "repo": "scrapy/scrapy",
+  "created_at": "2026-03-24 14:13:12",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pyinfra-dev__pyinfra-1630",
+  "repo": "pyinfra-dev/pyinfra",
+  "created_at": "2026-03-24 13:55:45",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pandas-dev__pandas-64816",
+  "repo": "pandas-dev/pandas",
+  "created_at": "2026-03-24 01:27:57",
+  "size_gb": 1.71,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "kubeflow__pipelines-13112",
+  "repo": "kubeflow/pipelines",
+  "created_at": "2026-03-23 23:40:27",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pandas-dev__pandas-64797",
+  "repo": "pandas-dev/pandas",
+  "created_at": "2026-03-23 21:01:03",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "pandas-dev__pandas-64796",
+  "repo": "pandas-dev/pandas",
+  "created_at": "2026-03-23 21:00:36",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "getmoto__moto-9903",
+  "repo": "getmoto/moto",
+  "created_at": "2026-03-23 19:41:08",
+  "size_gb": 1.4,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "pgmpy__pgmpy-3137",
+  "repo": "pgmpy/pgmpy",
+  "created_at": "2026-03-22 09:18:02",
+  "size_gb": 1.5,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "sunpy__sunpy-8548_interface",
+  "repo": "sunpy/sunpy",
+  "created_at": "2026-03-21 21:08:48",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "harumiweb__exstruct-113",
+  "repo": "harumiWeb/exstruct",
+  "created_at": "2026-03-21 08:53:23",
+  "size_gb": 1.44,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "genericmappingtools__pygmt-4463",
+  "repo": "GenericMappingTools/pygmt",
+  "created_at": "2026-03-21 08:51:06",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "idaholab__montepy-933_interface",
+  "repo": "idaholab/MontePy",
+  "created_at": "2026-03-20 15:47:06",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "hiero-ledger__hiero-sdk-python-2007_interface",
+  "repo": "hiero-ledger/hiero-sdk-python",
+  "created_at": "2026-03-20 10:52:28",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "stanfordnlp__dspy-9478_interface",
+  "repo": "stanfordnlp/dspy",
+  "created_at": "2026-03-20 05:25:19",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "vprusso__toqito-1484_interface",
+  "repo": "vprusso/toqito",
+  "created_at": "2026-03-19 11:41:16",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "con__nwb2bids-347_interface",
+  "repo": "con/nwb2bids",
+  "created_at": "2026-03-18 18:16:27",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "psd-tools__psd-tools-593",
+  "repo": "psd-tools/psd-tools",
+  "created_at": "2026-03-17 11:04:07",
+  "size_gb": 1.44,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "scikit-learn__scikit-learn-33565",
+  "repo": "scikit-learn/scikit-learn",
+  "created_at": "2026-03-17 10:54:06",
+  "size_gb": 1.99,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "sqlfluff__sqlfluff-7622",
+  "repo": "sqlfluff/sqlfluff",
+  "created_at": "2026-03-16 15:50:33",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "astropy__astropy-19438",
+  "repo": "astropy/astropy",
+  "created_at": "2026-03-16 13:19:32",
+  "size_gb": 1.46,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "sqlfluff__sqlfluff-7617",
+  "repo": "sqlfluff/sqlfluff",
+  "created_at": "2026-03-16 06:55:25",
+  "size_gb": 1.39,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "dagster-io__dagster-33605",
+  "repo": "dagster-io/dagster",
+  "created_at": "2026-03-15 15:42:33",
+  "size_gb": 2.81,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "sqlfluff__sqlfluff-7615",
+  "repo": "sqlfluff/sqlfluff",
+  "created_at": "2026-03-15 12:31:18",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "conan-io__conan-19750",
+  "repo": "conan-io/conan",
+  "created_at": "2026-03-13 10:20:23",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "pycqa__isort-2491",
+  "repo": "PyCQA/isort",
+  "created_at": "2026-03-12 21:21:11",
+  "size_gb": 1.25,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "destine-climate-dt__aqua-2768",
+  "repo": "DestinE-Climate-DT/AQUA",
+  "created_at": "2026-03-12 01:12:01",
+  "size_gb": 2.59,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
+ },
+ {
+  "instance_id": "alibaba__opensandbox-426",
+  "repo": "alibaba/OpenSandbox",
+  "created_at": "2026-03-11 12:47:51",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "koxudaxi__datamodel-code-generator-3046",
+  "repo": "koxudaxi/datamodel-code-generator",
+  "created_at": "2026-03-10 16:48:04",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "conan-io__conan-19735_interface",
+  "repo": "conan-io/conan",
+  "created_at": "2026-03-10 10:33:02",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "getmoto__moto-9841",
+  "repo": "getmoto/moto",
+  "created_at": "2026-03-09 23:11:49",
+  "excluded": "repo_already_selected_earlier"
+ },
+ {
+  "instance_id": "zauberzeug__nicegui-5858",
+  "repo": "zauberzeug/nicegui",
+  "created_at": "2026-03-09 16:34:24",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "hiero-ledger__hiero-sdk-python-1914_interface",
+  "repo": "hiero-ledger/hiero-sdk-python",
+  "created_at": "2026-03-06 14:12:44",
+  "excluded": "interface_variant"
+ },
+ {
+  "instance_id": "astronomy-commons__hats-648",
+  "repo": "astronomy-commons/hats",
+  "created_at": "2026-03-06 10:12:00",
+  "size_gb": 2.2,
+  "archs": [
+   "amd64"
+  ],
+  "excluded": null
  }
 ]
