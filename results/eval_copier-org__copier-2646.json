@@ -1,0 +1,40 @@
+{
+  "instance_id": "copier-org__copier-2646",
+  "evaluated_patch_sha256": "32f2b0c786d0ed413f5248cc432fb276b7944eedfc8850b2f02007ad299cfec4",
+  "evaluated_patch_bytes": 881,
+  "producer_run_id": "pa-copier-org__copier-2646-20261112T204720-aa7fcac8",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "1/1",
+  "gt_p2p_failed": "0/6",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 1,
+  "gate_deterministic": true,
+  "gate_p2p_files": [
+    "tests/test_config.py",
+    "tests/test_dirty_local.py",
+    "tests/test_exclude.py",
+    "tests/test_interrupts.py",
+    "tests/test_output.py",
+    "tests/test_recopy.py",
+    "tests/test_templated_prompt.py",
+    "tests/test_tmpdir.py",
+    "tests/test_unsafe.py",
+    "tests/test_updatediff.py"
+  ],
+  "gate_p2p_stems": [
+    "_main",
+    "_vcs"
+  ],
+  "gate_p2p_broken": [],
+  "gate_p2p_ok": true,
+  "gate_p2p_detail": "0/237 stable pre-fix passing tests broken",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch",
+  "A_decision": "APPROVE"
+}
