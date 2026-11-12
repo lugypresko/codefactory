@@ -1,0 +1,35 @@
+{
+  "instance_id": "cf-demo",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_split_even_remainder.py::test_split_even_remainder_zero_total": "PASSED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_n_is_one": "PASSED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_no_remainder": "PASSED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_basic": "FAILED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_large_numbers": "FAILED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_n_greater_than_total": "FAILED"
+    },
+    {
+      "tests/test_split_even_remainder.py::test_split_even_remainder_zero_total": "PASSED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_n_is_one": "PASSED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_no_remainder": "PASSED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_basic": "FAILED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_large_numbers": "FAILED",
+      "tests/test_split_even_remainder.py::test_split_even_remainder_n_greater_than_total": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_split_even_remainder.py::test_split_even_remainder_basic",
+    "tests/test_split_even_remainder.py::test_split_even_remainder_large_numbers",
+    "tests/test_split_even_remainder.py::test_split_even_remainder_n_greater_than_total"
+  ],
+  "non_discriminating_discarded": [
+    "tests/test_split_even_remainder.py::test_split_even_remainder_n_is_one",
+    "tests/test_split_even_remainder.py::test_split_even_remainder_no_remainder",
+    "tests/test_split_even_remainder.py::test_split_even_remainder_zero_total"
+  ],
+  "no_outcomes": false
+}
