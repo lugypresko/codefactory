@@ -1,0 +1,13 @@
+diff --git a/src/cfdemo/split.py b/src/cfdemo/split.py
+index 29c3dbd..4b00b11 100644
+--- a/src/cfdemo/split.py
++++ b/src/cfdemo/split.py
+@@ -11,4 +11,7 @@ def split_even(total: int, n: int) -> list[int]:
+         raise ValueError("total must be non-negative")
+     # BUG: the remainder total % n is dropped, so the parts sum to
+     # n * (total // n), which is less than total when n does not divide total.
+-    return [total // n] * n
++    base = total // n
++    remainder = total % n
++    parts = [base + 1] * remainder + [base] * (n - remainder)
++    return parts
