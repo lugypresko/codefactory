@@ -1,0 +1,22 @@
+diff --git a/copier/_vcs.py b/copier/_vcs.py
+index 418c0df..d1bd29a 100644
+--- a/copier/_vcs.py
++++ b/copier/_vcs.py
+@@ -2,7 +2,9 @@
+ 
+ from __future__ import annotations
+ 
++import atexit
+ import re
++from shutil import rmtree
+ import sys
+ from contextlib import suppress
+ from pathlib import Path
+@@ -191,6 +193,7 @@ def clone(url: str, ref: str = "HEAD") -> str:
+     git = get_git()
+     git_version = get_git_version()
+     location = mkdtemp(prefix=f"{__name__}.clone.")
++    atexit.register(rmtree, location, True)
+     _clone = git["clone", "--no-checkout", url, location]
+     # Faster clones if possible
+     if git_version >= Version("2.27"):

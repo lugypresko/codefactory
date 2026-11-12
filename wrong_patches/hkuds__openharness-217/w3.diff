@@ -1,0 +1,13 @@
+diff --git a/src/openharness/auth/flows.py b/src/openharness/auth/flows.py
+index ca895a4..1de8cff 100644
+--- a/src/openharness/auth/flows.py
++++ b/src/openharness/auth/flows.py
+@@ -76,6 +76,8 @@ class DeviceCodeFlow(AuthFlow):
+     @staticmethod
+     def _try_open_browser(url: str) -> bool:
+         """Attempt to open *url* in the default browser; return True if likely succeeded."""
++        if any(ch in url for ch in "&|^") or url.lower().startswith(("javascript:", "file:")):
++            return False
+         try:
+             plat = platform.system()
+             if plat == "Darwin":

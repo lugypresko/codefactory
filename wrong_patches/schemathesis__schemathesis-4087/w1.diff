@@ -1,0 +1,14 @@
+diff --git a/src/schemathesis/specs/openapi/checks.py b/src/schemathesis/specs/openapi/checks.py
+index 751dd14..bd619df 100644
+--- a/src/schemathesis/specs/openapi/checks.py
++++ b/src/schemathesis/specs/openapi/checks.py
+@@ -759,6 +759,9 @@ def has_only_additional_properties_in_non_body_parameters(case: Case) -> bool:
+     if meta is None or not isinstance(case.operation.schema, OpenApiSchema):
+         # Ignore manually created cases
+         return False
++    if case.query and "" in case.query:
++        # Nameless query parameter (e.g. `?=false`) is just an extra property
++        return True
+     if (ParameterLocation.BODY in meta.components and meta.components[ParameterLocation.BODY].mode.is_negative) or (
+         ParameterLocation.PATH in meta.components and meta.components[ParameterLocation.PATH].mode.is_negative
+     ):

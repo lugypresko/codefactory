@@ -1,0 +1,25 @@
+diff --git a/copier/_vcs.py b/copier/_vcs.py
+index 418c0df..38f4949 100644
+--- a/copier/_vcs.py
++++ b/copier/_vcs.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import re
++from shutil import rmtree
+ import sys
+ from contextlib import suppress
+ from pathlib import Path
+@@ -206,7 +207,11 @@ def clone(url: str, ref: str = "HEAD") -> str:
+             )
+         else:
+             _clone = _clone["--filter=blob:none"]
+-    _clone()
++    try:
++        _clone()
++    except Exception:
++        rmtree(location, ignore_errors=True)
++        raise
+     # Include dirty changes if checking out a local HEAD
+     url_abspath = Path(url).absolute()
+     if ref == "HEAD" and url_abspath.is_dir():

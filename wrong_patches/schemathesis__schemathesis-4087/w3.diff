@@ -1,0 +1,21 @@
+diff --git a/src/schemathesis/specs/openapi/checks.py b/src/schemathesis/specs/openapi/checks.py
+index 751dd14..90e8cff 100644
+--- a/src/schemathesis/specs/openapi/checks.py
++++ b/src/schemathesis/specs/openapi/checks.py
+@@ -759,7 +759,15 @@ def has_only_additional_properties_in_non_body_parameters(case: Case) -> bool:
+     if meta is None or not isinstance(case.operation.schema, OpenApiSchema):
+         # Ignore manually created cases
+         return False
+-    if (ParameterLocation.BODY in meta.components and meta.components[ParameterLocation.BODY].mode.is_negative) or (
++    phase_data = meta.phase.data
++    if (
++        isinstance(phase_data, FuzzingPhaseData)
++        and phase_data.mutations
++        and phase_data.parameter_location == ParameterLocation.QUERY
++        and all(key for key in (case.query or {}))
++    ):
++        pass
++    elif (ParameterLocation.BODY in meta.components and meta.components[ParameterLocation.BODY].mode.is_negative) or (
+         ParameterLocation.PATH in meta.components and meta.components[ParameterLocation.PATH].mode.is_negative
+     ):
+         # Body or path negations always imply other negations

@@ -1,0 +1,15 @@
+schemathesis__schemathesis-4087 True  19
+cs-si__eodag-2176 True  38
+nesquena__hermes-webui-2056 True  13
+geopython__pygeoapi-2338 False 9/40 P2P fail on gold (>5%) 76
+youssofal__mtplx-21 True  13
+raullenchai__rapid-mlx-289 True  16
+python-wheel-build__fromager-1124 True  13
+itsdnns__docsight-437 True  35
+agronholm__anyio-1134 True  25
+graphistry__pygraphistry-1277 False 52/628 P2P fail on gold (>5%) 193
+tox-dev__tox-3931 True  13
+copier-org__copier-2646 True  20
+hkuds__openharness-217 True  16
+astronomy-commons__lsdb-1349 True  48
+verified: 12 ['schemathesis__schemathesis-4087', 'cs-si__eodag-2176', 'nesquena__hermes-webui-2056', 'youssofal__mtplx-21', 'raullenchai__rapid-mlx-289', 'python-wheel-build__fromager-1124', 'itsdnns__docsight-437', 'agronholm__anyio-1134', 'tox-dev__tox-3931', 'copier-org__copier-2646', 'hkuds__openharness-217', 'astronomy-commons__lsdb-1349']

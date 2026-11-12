@@ -1,0 +1,16 @@
+diff --git a/src/anyio/to_process.py b/src/anyio/to_process.py
+index b289234..7df953b 100644
+--- a/src/anyio/to_process.py
++++ b/src/anyio/to_process.py
+@@ -230,7 +230,10 @@ def process_worker() -> None:
+             elif command == "init":
+                 main_module_path: str | None
+                 sys.path, main_module_path = args
+-                del sys.modules["__main__"]
++                if main_module_path and not main_module_path.endswith((".py", ".pyc")):
++                    main_module_path = None  # entry-point scripts: keep the worker's own __main__
++                else:
++                    del sys.modules["__main__"]
+                 if main_module_path and os.path.isfile(main_module_path):
+                     # Load the parent's main module but as __mp_main__ instead of
+                     # __main__ (like multiprocessing does) to avoid infinite recursion

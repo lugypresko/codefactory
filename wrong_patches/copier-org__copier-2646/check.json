@@ -1,0 +1,23 @@
+{
+ "w1.diff": {
+  "valid_wrong": true,
+  "apply_fail": false,
+  "f2p_failed": "1/1",
+  "p2p_failed": "0/6",
+  "p2p_failed_ids": []
+ },
+ "w2.diff": {
+  "valid_wrong": true,
+  "apply_fail": false,
+  "f2p_failed": "1/1",
+  "p2p_failed": "0/6",
+  "p2p_failed_ids": []
+ },
+ "w3.diff": {
+  "valid_wrong": true,
+  "apply_fail": false,
+  "f2p_failed": "1/1",
+  "p2p_failed": "0/6",
+  "p2p_failed_ids": []
+ }
+}

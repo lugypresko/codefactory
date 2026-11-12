@@ -1,0 +1,29 @@
+diff --git a/src/tox/session/cmd/schema.py b/src/tox/session/cmd/schema.py
+index 8160434..d546026 100644
+--- a/src/tox/session/cmd/schema.py
++++ b/src/tox/session/cmd/schema.py
+@@ -209,6 +209,8 @@ def _get_schema(conf: ConfigSet, path: str) -> dict[str, dict[str, typing.Any]]:
+ 
+ 
+ def _process_type(of_type: typing.Any) -> dict[str, typing.Any]:  # noqa: C901, PLR0911, PLR0912
++    if of_type is tox.tox_env.python.pip.req_file.PythonDeps:
++        return {"type": "array", "items": {"$ref": "#/definitions/subs"}}
+     if of_type in {
+         Path,
+         str,
+diff --git a/src/tox/tox.schema.json b/src/tox/tox.schema.json
+index e2b5b38..b939779 100644
+--- a/src/tox/tox.schema.json
++++ b/src/tox/tox.schema.json
+@@ -400,7 +400,10 @@
+           "deprecated": true
+         },
+         "deps": {
+-          "type": "string",
++          "type": "array",
++          "items": {
++            "$ref": "#/definitions/subs"
++          },
+           "description": "python dependencies with optional version specifiers, as specified by PEP-440"
+         },
+         "dependency_groups": {

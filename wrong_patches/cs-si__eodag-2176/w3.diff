@@ -1,0 +1,18 @@
+diff --git a/eodag/plugins/search/qssearch.py b/eodag/plugins/search/qssearch.py
+index f47852f..dd16d7b 100644
+--- a/eodag/plugins/search/qssearch.py
++++ b/eodag/plugins/search/qssearch.py
+@@ -2283,10 +2283,10 @@ class StacSearch(PostJsonSearch):
+                             # use eodag queryable type if provider one has no constraints
+                             field_definition = eodag_queryable_type, field_definition[1]
+ 
+-                        # merge provider and eodag queryables FieldInfo metadata
++                        # merge eodag and provider queryables FieldInfo metadata (eodag first)
+                         merged_metadata = (
+-                            field_definition[1].metadata
+-                            + eodag_queryable_fieldinfo.metadata
++                            eodag_queryable_fieldinfo.metadata
++                            + field_definition[1].metadata
+                         )
+                         # build merged attributes: use provider value if set, otherwise fall back to eodag value
+                         merged_attrs = {

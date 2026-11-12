@@ -1,0 +1,353 @@
+{
+ "frozen_at": "2026-11-12T16:48:40+02:00",
+ "preregistration_sha256": "4ef8c607a91f19a6cf8c5bc6357f2ea143df0f1ea62f53e872b0574d139a5683",
+ "source": "HF nebius/SWE-rebench-leaderboard parquet 2026_01..2026_03",
+ "source_parquet_sha256": [
+  "b34360fba386349e41e612e57147f5a183d7524fc7be9d48001f06b33d1d4f3b  data/2026_01.parquet",
+  "0418d67761cf65f7a897de4a5d3fc21db803a0ca5dc3fae9ad8f569e2fb00a41  data/2026_02.parquet",
+  "18e198ac18b3c25b307c0aa5d9b6e20d338886e186bf7c12addb759ad4165a61  data/2026_03.parquet",
+  ""
+ ],
+ "selection_rule": "lib/candidates.py + PREREGISTRATION.md (first 12 in created_at DESC order that verify; 2 candidates rejected, see verification_rejections)",
+ "verification_rejections": [
+  {
+   "instance_id": "geopython__pygeoapi-2338",
+   "reason": "9/40 P2P fail on gold (>5%)"
+  },
+  {
+   "instance_id": "graphistry__pygraphistry-1277",
+   "reason": "52/628 P2P fail on gold (>5%)"
+  }
+ ],
+ "vague_selection": "Real GitHub issues from 3 sample repos, closed as not_planned (and/or labelled needinfo), created Feb-May 2026, found with the GitHub search API; picked by the harness author for having no checkable expected code behaviour. Not random.",
+ "clear": [
+  {
+   "instance_id": "schemathesis__schemathesis-4087",
+   "repo": "schemathesis/schemathesis",
+   "created_at": "2026-05-12 11:45:06",
+   "base_commit": "e5fcd1c8ab5772dbcc3dd92059fe3b0acd88eb3c",
+   "docker_image": "swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087@sha256:85fae37fcacb6479d21c3d4dc1c769a5d27884a2dc60d3c8f8c1f7557c97a58f",
+   "issue_sha256": "0c6d76d5d3a4481435609b40ab56abe87dbdb5c5b3a947a3834140f141506fe9",
+   "gold_patch_sha256": "24542c19e5fb55160cc77ef53c7243f2bafe4e453357a5b70ce63914ee7d76f4",
+   "test_patch_sha256": "564c0517f39be968b9661cdf00ae663135e30642b4de231c7f7b47f408ac0906",
+   "FAIL_TO_PASS": [
+    "test/specs/openapi/test_checks.py::test_has_only_additional_properties_mutations_aware[phantom-path-negation-suppresses]",
+    "test/specs/openapi/test_checks.py::test_has_only_additional_properties_mutations_aware[empty-name-query-extra-suppresses]"
+   ],
+   "n_effective_p2p": 104,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider test/specs/openapi/test_checks.py",
+   "wrong_patches": {
+    "w1.diff": "a40fa2b0b03c214881088ea9b611a0c45523410fedfcf77477e9e767ab0b953f",
+    "w2.diff": "ada7a0cfff14e86d01496d92b5eeae844bf8955370b25d9ddd9cd1fd449ea0ce",
+    "w3.diff": "9ea754ba3d1dbedd1dfdbd73570c8d5a415a7d90cf8117ac81b7401afa36326a"
+   }
+  },
+  {
+   "instance_id": "cs-si__eodag-2176",
+   "repo": "CS-SI/eodag",
+   "created_at": "2026-05-11 10:01:25",
+   "base_commit": "a058e6c2c7fb082c80bc5015e495dade6c87ae1b",
+   "docker_image": "swerebench/sweb.eval.x86_64.cs-si_1776_eodag-2176:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.cs-si_1776_eodag-2176@sha256:abdf3c8dd48ac05e351489c400a6b9625beeb2d2eda641b84056151d88cb0dfb",
+   "issue_sha256": "f4256811071739ae7d60220db889431be7dffbef44f2e325c3705b435af2b114",
+   "gold_patch_sha256": "e73eea8a1ccd3add7d95499fdc755f57fa60f6fb2bdaadd319daacce5dc2ba44",
+   "test_patch_sha256": "e84b77a78002b0ff309083a3c2aa8a6369c981aacf8b360ec2b7de4dea1846c5",
+   "FAIL_TO_PASS": [
+    "tests/units/test_search_plugins.py::TestSearchPluginStacSearch::test_plugins_search_stacsearch_discover_queryables_no_pattern_propagation"
+   ],
+   "n_effective_p2p": 123,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/context.py tests/units/test_search_plugins.py",
+   "wrong_patches": {
+    "w1.diff": "c7056ba25d6e7ec5d89defb43d47fb75c9a1a7a59b218bd8e03e778877112452",
+    "w2.diff": "7f1dca3a9c4255e4eea0f823b3df536a53cf11aea17f5f10a0068ce657ade684",
+    "w3.diff": "39519f2f0dd0a0cce0e6ef2e089d9a1a763f76a8e17df4551fee1c1738c5822f"
+   }
+  },
+  {
+   "instance_id": "nesquena__hermes-webui-2056",
+   "repo": "nesquena/hermes-webui",
+   "created_at": "2026-05-11 05:49:36",
+   "base_commit": "b766b7f7596e931f141d3ad26a507807baa69774",
+   "docker_image": "swerebench/sweb.eval.x86_64.nesquena_1776_hermes-webui-2056:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.nesquena_1776_hermes-webui-2056@sha256:7404a1ff916987bed0ada9b44bc4e74b1970bc5144efc3817f1e16dc70370b78",
+   "issue_sha256": "0ccf920ad7e71c8f2e6ee755c5252cc27bf23c4b445fb607da873a269fd0ea76",
+   "gold_patch_sha256": "4bef31235ec165f35d188baceb5edf7c23dc374eefc75a1c8d05d13b66ff6d10",
+   "test_patch_sha256": "73a4157d7043a8750afe2630b68741bf92bce53e3841f3e677f38318f3cc3296",
+   "FAIL_TO_PASS": [
+    "tests/test_custom_providers_in_panel.py::TestCustomProvidersInGetProviders::test_custom_provider_parenthesized_port_uses_safe_provider_id",
+    "tests/test_model_resolver.py::test_custom_provider_name_with_parenthesized_port_uses_safe_slug",
+    "tests/test_provider_management.py::TestRemoveProviderKey::test_clean_custom_provider_key_matches_safe_name_slug"
+   ],
+   "n_effective_p2p": 54,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_custom_providers_in_panel.py tests/test_model_resolver.py tests/test_provider_management.py",
+   "wrong_patches": {
+    "w1.diff": "794777ebff85682eec4494eba64cde1fd11ba2249ffd1f88818324a7697dca17",
+    "w2.diff": "b722cadb1191f7cf27bb17cd9ea97a8f0c81958824781bb045466a8aac9ae924",
+    "w3.diff": "c4a7a5784c1e970271e67675f31c4d1b582e3a89a2c613af0b5aec34955ba8d9"
+   }
+  },
+  {
+   "instance_id": "youssofal__mtplx-21",
+   "repo": "youssofal/MTPLX",
+   "created_at": "2026-05-07 19:59:26",
+   "base_commit": "c06cc13286e86d9ff3d2e3b991eba327549c534b",
+   "docker_image": "swerebench/sweb.eval.x86_64.youssofal_1776_mtplx-21:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.youssofal_1776_mtplx-21@sha256:32510a901064f5d405f3d4313a4556d924c94e72b2b0993296a43f04de83370e",
+   "issue_sha256": "7219d0cdca1720de11e77c7ee57b1649f089728447947be31e37d6c87fc3d6a2",
+   "gold_patch_sha256": "1999283ff200d4ec7a51cd5bce700f2823baab8b8fd31fae70cf42b6f3dfbf31",
+   "test_patch_sha256": "05d9927bd895b2b6eb298571beacad3f55378dbb0a4aa48a66b2c5cb5082e077",
+   "FAIL_TO_PASS": [
+    "tests/test_tool_aware_stream_translator.py::test_mixed_text_then_tool_call_in_one_chunk",
+    "tests/test_tool_aware_stream_translator.py::test_mixed_text_then_tool_call_streamed_in_pieces",
+    "tests/test_tool_aware_stream_translator.py::test_partial_marker_held_across_chunks_in_content_mode",
+    "tests/test_tool_aware_stream_translator.py::test_marker_split_across_three_chunks_after_text"
+   ],
+   "n_effective_p2p": 5,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_tool_aware_stream_translator.py",
+   "wrong_patches": {
+    "w1.diff": "f18b8b1bcc7a8a0a067b99174968886712685fe34291631128bdea9e496dee86",
+    "w3.diff": "ea39c3b98aff10c8f7b274413e54fdebaa175d696849a5a9384e67d9e7f190fd",
+    "w4.diff": "5df659c33e04a1aa94be62129f0cf4275ab3970c712499d3aef7fc87fce8aacc"
+   }
+  },
+  {
+   "instance_id": "raullenchai__rapid-mlx-289",
+   "repo": "raullenchai/Rapid-MLX",
+   "created_at": "2026-05-07 19:33:12",
+   "base_commit": "67c49b5bec9a049e361785090a20a17f6085886d",
+   "docker_image": "swerebench/sweb.eval.x86_64.raullenchai_1776_rapid-mlx-289:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.raullenchai_1776_rapid-mlx-289@sha256:c518273fc729729206db46632ff3ae99052e00d2279aad795302692b4a6e02b0",
+   "issue_sha256": "3ae27ef5d79a458199fe77579d9c2737af36949b5eba763d0b1ef7f02c8a8edf",
+   "gold_patch_sha256": "07f839c5ae2b2b6e10e66d5fce7466c530d6d1306c809a6bf476433b54272ed2",
+   "test_patch_sha256": "41ef756aebff91b517386962f1ef97f4963a60f954dd54fe7cae7db7f1cf1b9b",
+   "FAIL_TO_PASS": [
+    "tests/test_reasoning_parsers.py::TestGemma4Streaming::test_delta_straddles_thought_close_then_content_open",
+    "tests/test_reasoning_parsers.py::TestGemma4Streaming::test_delta_straddles_implicit_close_only"
+   ],
+   "n_effective_p2p": 122,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_reasoning_parsers.py",
+   "wrong_patches": {
+    "w1.diff": "d645011e379a39b070dae7816da47245fc127368ac85bd055d822076b95477f3",
+    "w2.diff": "5768ac7f34357453e6ea3abc5ae3a4e4a59f9013c830e614d6fcfea4c05628a7",
+    "w3.diff": "9c22a5194c1abbf7a52cf8af9820e087af4756aa3f3801151cbae870f6a0f83e"
+   }
+  },
+  {
+   "instance_id": "python-wheel-build__fromager-1124",
+   "repo": "python-wheel-build/fromager",
+   "created_at": "2026-05-07 03:47:42",
+   "base_commit": "5fd5d20ff117279b938f003a5a0de18292fbbb83",
+   "docker_image": "swerebench/sweb.eval.x86_64.python-wheel-build_1776_fromager-1124:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.python-wheel-build_1776_fromager-1124@sha256:62103850e36c30400d4fb7861a4cf7688b278cbc3d62c0debeaf5a8026b594d7",
+   "issue_sha256": "9bc92ccdff5e2810042c5b75f3f3ee838a286bf219ab75b9271879d531ba6bc7",
+   "gold_patch_sha256": "133201f5d93b758873d14a093ed67afd941fb8f9f118923fc33afa6b7597885e",
+   "test_patch_sha256": "70cb154c25e1bc5cae8c7143c30b49b56c0746289a253d0d20da31fa7cf06e33",
+   "FAIL_TO_PASS": [
+    "tests/test_cooldown.py::test_toplevel_equality_pin_bypasses_cooldown_via_resolve",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_exempt_toplevel_equality_pin",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_enforced_transitive_equality_pin",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_enforced_toplevel_no_pin",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_none_req_type_not_exempt",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_toplevel_wildcard_equality_not_exempt",
+    "tests/test_cooldown.py::test_resolve_package_cooldown_toplevel_compound_specifier_not_exempt"
+   ],
+   "n_effective_p2p": 28,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_cooldown.py",
+   "wrong_patches": {
+    "w1.diff": "c647af746b98a10a4c96399acd4088cc8618f7563fbf8b7ff5304f46dca2d028",
+    "w2.diff": "6a0a2895d6841b20c53a361e8d09b5607500408c2daeef199f3342067112509b",
+    "w3.diff": "09a045795ebe0d6c019fd2875ccde022b65f8ad8f305b5ebd55c1085a3754554"
+   }
+  },
+  {
+   "instance_id": "itsdnns__docsight-437",
+   "repo": "itsDNNS/docsight",
+   "created_at": "2026-05-06 09:32:16",
+   "base_commit": "f478c6eeded6e97b3b1dafc55108522b6c693c3b",
+   "docker_image": "swerebench/sweb.eval.x86_64.itsdnns_1776_docsight-437:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.itsdnns_1776_docsight-437@sha256:2a5f7d8b1131ed2fa4435bf50aa789f871271150ddabc607e000331ba74690be",
+   "issue_sha256": "e9818f01f4ad39c2d0c0e8a0279c1e87dc59d73384b1be35810167e71da3a132",
+   "gold_patch_sha256": "8e0a5b972188e1e98f4982d85bdf81ebc716a7d152898737865bd3bba9ec692c",
+   "test_patch_sha256": "a818672e7f729cc3edbd890f850140c3dd891c7b0bda1f93e035118f1a267731",
+   "FAIL_TO_PASS": [
+    "tests/test_comparison_module.py::TestAggregatePeriod::test_unsupported_error_counters_remain_none",
+    "tests/test_comparison_module.py::TestAggregatePeriod::test_zero_error_counters_stay_supported_zeroes",
+    "tests/test_comparison_module.py::TestAggregatePeriod::test_partially_supported_error_counters_do_not_invent_zeroes",
+    "tests/test_comparison_module.py::TestComputeDelta::test_delta_ignores_unsupported_error_counters",
+    "tests/test_correlation.py::TestCorrelationTimeline::test_modem_unsupported_error_counters_remain_none[True]"
+   ],
+   "n_effective_p2p": 40,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/e2e/test_comparison.py tests/test_comparison_module.py tests/test_correlation.py",
+   "wrong_patches": {
+    "w1.diff": "36505f909c0788a65757f065a8aef5f824baa2f6e96f7151f24ea89c5895c0e1",
+    "w2.diff": "ae446b1047469d005806a99a4f03f29a43f5bba4c00aeede546c329f9cd3ee29",
+    "w3.diff": "baa184b768edb269a657ce1b13a22522062df0c50d9b9ab8107391dd57a153d9"
+   }
+  },
+  {
+   "instance_id": "agronholm__anyio-1134",
+   "repo": "agronholm/anyio",
+   "created_at": "2026-05-05 21:20:58",
+   "base_commit": "01b8d02381ba95ba11241c1ec361e908fe05b8be",
+   "docker_image": "swerebench/sweb.eval.x86_64.agronholm_1776_anyio-1134:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.agronholm_1776_anyio-1134@sha256:d7997027864d2bfb32d649e7e544381f5d1b161df8f1682c719d222d66489dc0",
+   "issue_sha256": "7ac987411d8df0baa5896eee7f6237dccd1a67b06610d7d7f1b7a5926b4ba749",
+   "gold_patch_sha256": "97999bbcebd51ca9dc7b22e13d9eab238bd296caea07d25478e793956018f983",
+   "test_patch_sha256": "3763362080fdf1af4088ec7c947e7b752fd3c60e10dcef8dc93b7f6b0e3c8ea8",
+   "FAIL_TO_PASS": [
+    "tests/test_to_process.py::test_entrypoint_main_module[asyncio]",
+    "tests/test_to_process.py::test_entrypoint_main_module[asyncio+uvloop]",
+    "tests/test_to_process.py::test_entrypoint_main_module[asyncio+eager]",
+    "tests/test_to_process.py::test_entrypoint_main_module[trio]"
+   ],
+   "n_effective_p2p": 36,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_to_process.py",
+   "wrong_patches": {
+    "w1.diff": "723c554574e6c1757e00e35dbd10876a6753918020cf032e71970b99b9c83fb5",
+    "w2.diff": "17e8f7539d0c0f42e149095f3543b83b163646a8974ad3c60cce547883d88916",
+    "w3.diff": "716c2a22b430a7e4ff3f29e5f96d42ff2a2cc40492534c621beb4bdac1aca594"
+   }
+  },
+  {
+   "instance_id": "tox-dev__tox-3931",
+   "repo": "tox-dev/tox",
+   "created_at": "2026-05-01 15:37:40",
+   "base_commit": "dd305fe8f347c49fcd3bd63d5e56c912e4c428f2",
+   "docker_image": "swerebench/sweb.eval.x86_64.tox-dev_1776_tox-3931:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.tox-dev_1776_tox-3931@sha256:6c44571aa2f3c2e01be2ba54b3330efcb4b5ba0d00983aa4a309d27853804896",
+   "issue_sha256": "87f7f4920a5afb6ad7dfdb5eb309a9dfe87f72c335218612bb94e7853a35ad8f",
+   "gold_patch_sha256": "31b37c6ce552f3676bdb966508b6d413b56930f4414fa5f1fbbf1023d8212969",
+   "test_patch_sha256": "9258012ce1b69bfd277d41c591b27b7bbc7ef0595f59f4b56c8a5d6e6735847c",
+   "FAIL_TO_PASS": [
+    "tests/session/cmd/test_schema.py::test_schema_allows_deps_array"
+   ],
+   "n_effective_p2p": 2,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/session/cmd/test_schema.py",
+   "wrong_patches": {
+    "w1.diff": "56f1aa5ff5ce0d92f13f8deed349b3d26f13e2ffd03dea2167aca1b3ce813855",
+    "w2.diff": "e340c8bc78e24b7d8f554efa6d2593550a546b13728f20ab98298273938b32e9",
+    "w3.diff": "27c6817fad82e6463c010e38e73db914d6530f9e1e862f45ad720ed011127c30"
+   }
+  },
+  {
+   "instance_id": "copier-org__copier-2646",
+   "repo": "copier-org/copier",
+   "created_at": "2026-04-30 11:21:38",
+   "base_commit": "e05ddfec08bc580d3e7b6a2a3e7cb18b6c761ba5",
+   "docker_image": "swerebench/sweb.eval.x86_64.copier-org_1776_copier-2646:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.copier-org_1776_copier-2646@sha256:bb745d823b4f629441f1db4cab88719e352cf430dccabf7e59ad9003b75b6d4c",
+   "issue_sha256": "41d0cde2a478420fe6d6158e5be591ca315cf6c78fd86a1011c30b81ba508711",
+   "gold_patch_sha256": "3d30fdded97be0c03e0dc4de2bdf49dcf533e6a46b2aca3f059491f2fc251362",
+   "test_patch_sha256": "7071cb8412bb0ac962265ca139a32a777821dca5dda08d4ff46d174f66a90dbf",
+   "FAIL_TO_PASS": [
+    "tests/test_cleanup.py::test_cleanup_on_interrupt_during_git_clone"
+   ],
+   "n_effective_p2p": 6,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_cleanup.py",
+   "wrong_patches": {
+    "w1.diff": "d94ad60126408f9f7726dade7ceb104a6743d6fc8afbe8fe25cdbd7ab1ea9204",
+    "w2.diff": "02b5a79b175d3609204f2445ecc6373416ae03de8ef98c94f2777780125b4cce",
+    "w3.diff": "ff8f3ff5917e608f4eb0d5aa47d1cac458fcc85ff16a5da9ebd4c99782e08cee"
+   }
+  },
+  {
+   "instance_id": "hkuds__openharness-217",
+   "repo": "HKUDS/OpenHarness",
+   "created_at": "2026-04-30 00:28:27",
+   "base_commit": "1bcdc62a50db14c2f0bf5dbee05b2bdc369dffb3",
+   "docker_image": "swerebench/sweb.eval.x86_64.hkuds_1776_openharness-217:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.hkuds_1776_openharness-217@sha256:ad0997cf2e90f0a31f3e6f8fd5cba18ced7f364ae3a62bd59f4c9e1d88b7678d",
+   "issue_sha256": "5a1163602919f92cffa9aa885f04b1db190c3071b17eff2cf2fc439225841f5a",
+   "gold_patch_sha256": "ebe564b5cc1065a69c31a08ea3ac2436f489204ff3a01b3b48684890b5d8bb9b",
+   "test_patch_sha256": "235a5ebd1bb70a887a4b8bb790dc637aea7928e0a337b7a33fcd9ba8efc1c8a7",
+   "FAIL_TO_PASS": [
+    "tests/test_auth/test_flows.py::test_open_browser_windows_uses_startfile_not_shell",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[javascript:alert(1)]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[file:///etc/passwd]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[ftp://example.com/payload]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[]",
+    "tests/test_auth/test_flows.py::test_open_browser_rejects_non_http_scheme[calc.exe]"
+   ],
+   "n_effective_p2p": 2,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/test_auth/test_flows.py",
+   "wrong_patches": {
+    "w1.diff": "b3e383835ef9bdc7f761a483795706533ac3cd50739cb4cf917a97ccf6c49649",
+    "w2.diff": "b474c78367380f98660d40356c64ea16c32dfe67b0c225e7b719ed01a14b413f",
+    "w3.diff": "0fba20c92c7dcfdb201f67c6e1c186d84b5dd0de9424c6d8a9788710d535c71b"
+   }
+  },
+  {
+   "instance_id": "astronomy-commons__lsdb-1349",
+   "repo": "astronomy-commons/lsdb",
+   "created_at": "2026-04-29 20:36:11",
+   "base_commit": "ba11985ca7940dabb77d4f7db731d516e6527d47",
+   "docker_image": "swerebench/sweb.eval.x86_64.astronomy-commons_1776_lsdb-1349:latest",
+   "image_repo_digest": "swerebench/sweb.eval.x86_64.astronomy-commons_1776_lsdb-1349@sha256:44300fa3f5ab7ea4c7bb8bb68e60f1faa75f199faf5769d1911d6ee970a71c0c",
+   "issue_sha256": "d9c750832e516dfb9dca02eb6ae7ce730293818b1c9768e8aeee8c15b8eac0ec",
+   "gold_patch_sha256": "a55a1762b34cd55773af8cacc31c8e209af9d22565523516e2ed4a21fdbcc3e7",
+   "test_patch_sha256": "a161a7324f2d5d4e9b55b471922403cbd58285969bb014f2269fea2254500e93",
+   "FAIL_TO_PASS": [
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_with_npix_suffix"
+   ],
+   "n_effective_p2p": 21,
+   "test_cmd": "pytest --no-header -rA --tb=line --color=no -p no:cacheprovider tests/lsdb/io/test_to_hats.py",
+   "wrong_patches": {
+    "w1.diff": "ca711549b74bfdc28fd00192a379119975b5d595b7144515ac1c57a3e7fdeb5f",
+    "w2.diff": "e4632120c0482970f38c68e6f790f79e1d6fa2a28de230a7c8d24435a1698f34",
+    "w3.diff": "fb259954bedbdc09193c1bba8b9b7e9f31d7ab64fb8e206f05960d73cf0f135b"
+   }
+  }
+ ],
+ "vague": [
+  {
+   "instance_id": "VAGUE-nesquena__hermes-webui-2069",
+   "repo": "nesquena/hermes-webui",
+   "github_issue": "https://github.com/nesquena/hermes-webui/issues/2069",
+   "synthetic": false,
+   "state": "closed",
+   "state_reason": "not_planned",
+   "labels": [
+    "bug",
+    "needinfo",
+    "needs-response",
+    "docker"
+   ],
+   "created_at": "2026-05-11T09:22:17Z",
+   "pre_fix_code_from_image_of": "nesquena__hermes-webui-2056",
+   "docker_image": "swerebench/sweb.eval.x86_64.nesquena_1776_hermes-webui-2056:latest",
+   "issue_sha256": "389985fcb5c008ca7286aca603b6d56f3b684c71d6eb0b05a8ac829c0ea62480",
+   "expected": "CLARIFICATION_NEEDED (or decline)"
+  },
+  {
+   "instance_id": "VAGUE-tox-dev__tox-3892",
+   "repo": "tox-dev/tox",
+   "github_issue": "https://github.com/tox-dev/tox/issues/3892",
+   "synthetic": false,
+   "state": "closed",
+   "state_reason": "not_planned",
+   "labels": [],
+   "created_at": "2026-03-20T09:07:17Z",
+   "pre_fix_code_from_image_of": "tox-dev__tox-3931",
+   "docker_image": "swerebench/sweb.eval.x86_64.tox-dev_1776_tox-3931:latest",
+   "issue_sha256": "034b34b5b82f1720f0674183d31d81019b82641f90daf7d256eb6ea53c714389",
+   "expected": "CLARIFICATION_NEEDED (or decline)"
+  },
+  {
+   "instance_id": "VAGUE-copier-org__copier-2540",
+   "repo": "copier-org/copier",
+   "github_issue": "https://github.com/copier-org/copier/issues/2540",
+   "synthetic": false,
+   "state": "closed",
+   "state_reason": "not_planned",
+   "labels": [
+    "enhancement"
+   ],
+   "created_at": "2026-03-10T00:02:32Z",
+   "pre_fix_code_from_image_of": "copier-org__copier-2646",
+   "docker_image": "swerebench/sweb.eval.x86_64.copier-org_1776_copier-2646:latest",
+   "issue_sha256": "36d171c44c2ae0750d1d6086c8278387e2e5944cf7e6a94e561ddc84259a50ff",
+   "expected": "CLARIFICATION_NEEDED (or decline)"
+  }
+ ]
+}

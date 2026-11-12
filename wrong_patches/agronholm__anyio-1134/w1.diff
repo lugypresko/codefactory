@@ -1,0 +1,17 @@
+diff --git a/src/anyio/to_process.py b/src/anyio/to_process.py
+index b289234..c12fbe6 100644
+--- a/src/anyio/to_process.py
++++ b/src/anyio/to_process.py
+@@ -240,6 +240,12 @@ def process_worker() -> None:
+                             main = module_from_spec(spec)
+                             spec.loader.exec_module(main)
+                             sys.modules["__main__"] = main
++                        else:
++                            import types
++
++                            main = types.ModuleType("__mp_main__")
++                            main.__file__ = main_module_path
++                            sys.modules["__main__"] = sys.modules["__mp_main__"] = main
+                     except BaseException as exc:
+                         exception = exc
+         try:
