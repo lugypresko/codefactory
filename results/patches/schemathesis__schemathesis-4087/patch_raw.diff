@@ -1,0 +1,106 @@
+diff --git a/src/schemathesis/config/__init__.py b/src/schemathesis/config/__init__.py
+index 52c826b..6713645 100644
+--- a/src/schemathesis/config/__init__.py
++++ b/src/schemathesis/config/__init__.py
+@@ -97,6 +97,7 @@ class SchemathesisConfig(DiffBase):
+     reports: ReportsConfig
+     output: OutputConfig
+     projects: ProjectsConfig
++    ignore_additional_query_parameters: bool | None
+ 
+     __slots__ = (
+         "color",
+@@ -108,6 +109,7 @@ class SchemathesisConfig(DiffBase):
+         "reports",
+         "output",
+         "projects",
++        "ignore_additional_query_parameters",
+     )
+ 
+     def __init__(
+@@ -121,6 +123,7 @@ class SchemathesisConfig(DiffBase):
+         reports: ReportsConfig | None = None,
+         output: OutputConfig | None = None,
+         projects: ProjectsConfig | None = None,
++        ignore_additional_query_parameters: bool | None = None,
+     ):
+         self.color = color
+         self.suppress_health_check = suppress_health_check or []
+@@ -132,6 +135,7 @@ class SchemathesisConfig(DiffBase):
+         self.output = output or OutputConfig()
+         self.projects = projects or ProjectsConfig()
+         self.projects._set_parent(self)
++        self.ignore_additional_query_parameters = ignore_additional_query_parameters
+ 
+     @property
+     def seed(self) -> int:
+@@ -187,6 +191,7 @@ class SchemathesisConfig(DiffBase):
+         seed: int | None = None,
+         wait_for_schema: float | int | None = None,
+         max_failures: int | None,
++        ignore_additional_query_parameters: bool | None = None,
+     ) -> None:
+         """Set top-level configuration options."""
+         if color is not None:
+@@ -199,6 +204,8 @@ class SchemathesisConfig(DiffBase):
+             self.wait_for_schema = wait_for_schema
+         if max_failures is not None:
+             self.max_failures = max_failures
++        if ignore_additional_query_parameters is not None:
++            self.ignore_additional_query_parameters = ignore_additional_query_parameters
+ 
+     @classmethod
+     def from_path(cls, path: PathLike | str) -> SchemathesisConfig:
+@@ -234,4 +241,5 @@ class SchemathesisConfig(DiffBase):
+             reports=ReportsConfig.from_dict(data.get("reports", {})),
+             output=OutputConfig.from_dict(data.get("output", {})),
+             projects=ProjectsConfig.from_dict(data),
++            ignore_additional_query_parameters=data.get("ignore-additional-query-parameters"),
+         )
+diff --git a/src/schemathesis/config/schema.json b/src/schemathesis/config/schema.json
+index e81c544..a4c1a01 100644
+--- a/src/schemathesis/config/schema.json
++++ b/src/schemathesis/config/schema.json
+@@ -60,6 +60,10 @@
+     "output": {
+       "$ref": "#/$defs/OutputConfig"
+     },
++    "ignore-additional-query-parameters": {
++      "type": "boolean",
++      "description": "Disable checks for additional query parameters that are not explicitly defined in the API schema."
++    },
+     "base-url": {
+       "type": "string"
+     },
+diff --git a/src/schemathesis/specs/openapi/coverage/_schema.py b/src/schemathesis/specs/openapi/coverage/_schema.py
+index 1282e0d..4167c49 100644
+--- a/src/schemathesis/specs/openapi/coverage/_schema.py
++++ b/src/schemathesis/specs/openapi/coverage/_schema.py
+@@ -61,6 +61,8 @@ from schemathesis.generation.meta import CoverageScenario
+ from schemathesis.openapi.generation.filters import is_invalid_path_parameter
+ from schemathesis.transport.serialization import contains_binary
+ 
++from schemathesis.config import SchemathesisConfig
++
+ VALIDATED_FORMATS = frozenset(
+     {
+         "date",
+@@ -258,6 +260,8 @@ class CoverageContext:
+     root_schema: dict[str, Any]
+     generation_modes: list[GenerationMode]
+     location: ParameterLocation
++    config: SchemathesisConfig
++
+     media_type: tuple[str, str] | None
+     is_required: bool
+     path: list[str | int]
+@@ -1309,7 +1313,8 @@ def cover_schema_iter(
+                             ParameterLocation.COOKIE,
+                             ParameterLocation.BODY,
+                         ):
+-                            continue
++                            if ctx.location == ParameterLocation.QUERY and ctx.config.ignore_additional_query_parameters:
++                                continue
+                         template = template or ctx.generate_from_schema(_get_template_schema(schema, "object", ctx))
+                         yield NegativeValue(
+                             {**template, UNKNOWN_PROPERTY_KEY: UNKNOWN_PROPERTY_VALUE},
