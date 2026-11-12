@@ -1,0 +1,47 @@
+{
+  "instance_id": "raullenchai__rapid-mlx-289",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/raullenchai__rapid-mlx-289/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-raullenchai__rapid-mlx-289",
+    "mini_rc": 0,
+    "wall_seconds": 24,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.016751150000000003,
+    "api_calls": 14,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.1123
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "5b5234a98c6e4bc9ffe10fd35876e02306024a58",
+  "original_base_commit": "67c49b5bec9a049e361785090a20a17f6085886d",
+  "task_sha256": "1f89a1985bd4d7623df2cf83e1deddedfbea7d7c737bcb3036c1de1cab3d29e8",
+  "test_files": {
+    "tests/test_gemma4_parser_issue.py": "2eb674155d439634e9d5ac07f7381cb8a9648822b8950b01249cbf43e09fabf4"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/raullenchai__rapid-mlx-289/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.raullenchai_1776_rapid-mlx-289:latest"
+  }
+}

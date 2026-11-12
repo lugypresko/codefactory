@@ -1,0 +1,12 @@
+{
+ "instance_id": "raullenchai__rapid-mlx-289",
+ "frozen_at": "2026-11-12T19:48:33+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/raullenchai__rapid-mlx-289/task.txt": "1f89a1985bd4d7623df2cf83e1deddedfbea7d7c737bcb3036c1de1cab3d29e8",
+  "results/testgen/raullenchai__rapid-mlx-289/record.json": "68e3299d41da3c315fa2f21db25658b24ce232abc7b99e828ff18d25bfa4b29a",
+  "results/testgen/raullenchai__rapid-mlx-289/config.yaml": "648012371dfad900c6f137f95747cb49f1b86839c3518898946de819dec61050",
+  "results/testgen/raullenchai__rapid-mlx-289/pre_eval.json": "359bfab92998c68ad402dce6217a6133ec9b3c1166bf75c886b6bab47cd750c0",
+  "results/testgen/raullenchai__rapid-mlx-289/tests/tests/test_gemma4_parser_issue.py": "2eb674155d439634e9d5ac07f7381cb8a9648822b8950b01249cbf43e09fabf4"
+ }
+}

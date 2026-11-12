@@ -1,0 +1,19 @@
+{
+  "instance_id": "raullenchai__rapid-mlx-289",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content": "FAILED"
+    },
+    {
+      "tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_gemma4_parser_issue.py::test_delta_straddling_channel_close_splits_reasoning_and_content"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}
