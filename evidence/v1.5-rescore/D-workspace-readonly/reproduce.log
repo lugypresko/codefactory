@@ -1,0 +1,5 @@
+[15:01:02] (a) baseline check on base 9f6b7382fdf736da3260b5df56beb3acc96ec40e
+[15:01:04]     evidence manifest verified: {"ok": true, "problems": []}
+[15:01:04] (b) REPORT_ONLY: reusing saved agent run (no LLM calls)
+[15:01:04] (c) skipped: agent produced no final SHA
+[15:01:04] LC0 VERDICT: CONTROLLED_STOP (delivery FAIL, recovery CONTROLLED_STOP) — report: /workspace/lc0-v15-work/tmp/lc0-rescore-vi4k07_j/pkg/work/runs/D-workspace-readonly/report.md

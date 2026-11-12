@@ -1,0 +1,25 @@
+{
+  "run_id": "B-pytest-first-call",
+  "inputs_sealed_at": "2026-11-12T13:48:51+02:00",
+  "outputs_sealed_at": "2026-11-12T13:48:55+02:00",
+  "inputs": {
+    "run/trajectory.json": "41f8489cfb72672c33b9048cddfd2384ee3d98a3ae3b4237eab37d263e38c412",
+    "run/config.yaml": "59bf333b9462971677fc4f43f82ca4283e837d2669a97c303d42517bc1f59eff",
+    "run/agent_result.json": "5081cfa6f6e972fadd75644a2ddcd8f87f7d3090779adcd733f26a11380499ff",
+    "run/final.diff": "2766e559bd6939b6fed603c7dcb99d4f384f90d3e4abfd26d7072b1b5010f657",
+    "run/fault.json": "bc0de108c02cc73c6d3d1adb9c424540507be799bbd10f88999b42fe49429f4d",
+    "run/agent_stdout.log": "f0781d7d64fdf542b7fa9eeef995eed7f5723cb1c14ed7fe8ed1e47efd199069"
+  },
+  "outputs": {
+    "run/report.json": "4eb8e93000d04950a3c2f9aaae23b92d7694ab2d80963f732553247590e80b64",
+    "run/report.md": "2d7ab193d3b9c29200e515ca02c1cd2393f792e5476e9825e18209f456e61ac9",
+    "evals/baseline.json": "a7f3afc51417d1f9172ab4bf43b3db3daf1fbe30457eae5c7334dede9cda8dfb",
+    "evals/eval_1.json": "ac966dcfd586c6c30b6d0e6f8facc5b5b432c51f9062e0448086b2918bb78fad",
+    "evals/eval_2.json": "060eaf8473ec5f0890b2651c3b2fa198d01e977a0268f9f22c5d45ca19680b65"
+  },
+  "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "final_sha": "dc33613749ebf01c58fc706390f168e20b7509d6",
+  "workspace_sha": null,
+  "git_diff_base_final_sha256": "2766e559bd6939b6fed603c7dcb99d4f384f90d3e4abfd26d7072b1b5010f657",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c"
+}

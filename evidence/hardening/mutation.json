@@ -1,0 +1,95 @@
+{
+  "mutants": 65,
+  "killed": 55,
+  "score": 0.846,
+  "survivors": [
+    {
+      "function": "diff_policy",
+      "line": 379,
+      "original": "info[\"note\"] = (\"deleting test code that was not in the base commit (added by the agent, or a harness-injected",
+      "mutant": "info[\"note\"] = (\"deleting test code that was not in the base commit (added by the agent, and a harness-injecte",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "diff_policy",
+      "line": 379,
+      "original": "info[\"note\"] = (\"deleting test code that was not in the base commit (added by the agent, or a harness-injected",
+      "mutant": "info[\"note\"] = (\"deleting test code that was in the base commit (added by the agent, or a harness-injected fau",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 223,
+      "original": "NONE                - fault signature never appeared in an observation (fault not exercised)",
+      "mutant": "NONE                - fault signature never appeared in an observation (fault exercised)",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 225,
+      "original": "WORKAROUND          - observed, the next action differs from the triggering one, and a later command matching",
+      "mutant": "WORKAROUND          - observed, the next action differs from the triggering one, or a later command matching",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 230,
+      "original": "CONTROLLED_STOP     - unrecoverable fault: observed and the agent stopped (limit / no-submit / empty diff /",
+      "mutant": "CONTROLLED_STOP     - unrecoverable fault: observed or the agent stopped (limit / no-submit / empty diff /",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 256,
+      "original": "rv_ok, rv_det = _checks(f.get(\"removed_and_verified\"), acts, hit, sig, repo, final_sha) if f.get(\"removed_and_",
+      "mutant": "rv_ok, rv_det = _checks(f.get(\"removed_and_verified\"), acts, hit, sig, repo, final_sha) if f.get(\"removed_and_",
+      "killed": false,
+      "classification": "equivalent (removed_and_verified is re-checked before use)"
+    },
+    {
+      "function": "recovery",
+      "line": 270,
+      "original": "\"OBSERVED\": \"fault surfaced, but the agent did not demonstrably get past it\",",
+      "mutant": "\"OBSERVED\": \"fault surfaced, but the agent did demonstrably get past it\",",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 272,
+      "original": "\"ROOT_CAUSE_ACTION_OBSERVED\": \"agent acted on the cause, but removal is not proven (\" + f.get(\"root_cause_note",
+      "mutant": "\"ROOT_CAUSE_ACTION_OBSERVED\": \"agent acted on the cause, but removal is proven (\" + f.get(\"root_cause_note\", \"",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 273,
+      "original": "\"FAULT_REMOVED_AND_VERIFIED\": \"persistent fault removed by the agent and verified while the injection stayed e",
+      "mutant": "\"FAULT_REMOVED_AND_VERIFIED\": \"persistent fault removed by the agent or verified while the injection stayed en",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    },
+    {
+      "function": "recovery",
+      "line": 278,
+      "original": "if r[\"level\"] == \"CONTROLLED_STOP\" else f\"unrecoverable fault; level {level}, agent_status={a.get('agent_statu",
+      "mutant": "if r[\"level\"] != \"CONTROLLED_STOP\" else f\"unrecoverable fault; level {level}, agent_status={a.get('agent_statu",
+      "killed": false,
+      "classification": "string-only (docstring / human-readable note text, no verdict effect)"
+    }
+  ],
+  "first_pass": {
+    "mutants": 65,
+    "killed": 40,
+    "score": 0.615,
+    "note": "before adding 12 unit cases; real survivors: protected-path and dependency rules untested in scope, '+'-line filter, git check=True (fail-open on bad SHA), missing-trajectory, last-action index, unrecoverable SUBMITTED+FAIL, success_cmd boolean logic"
+  },
+  "runner_bug_fixed": "first run reused stale .pyc between mutants; fixed with PYTHONDONTWRITEBYTECODE=1",
+  "real_survivors": 0
+}

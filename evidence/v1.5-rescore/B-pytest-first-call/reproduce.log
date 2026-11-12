@@ -1,0 +1,5 @@
+[15:00:51] (a) baseline check on base 9f6b7382fdf736da3260b5df56beb3acc96ec40e
+[15:00:53]     evidence manifest verified: {"ok": true, "problems": []}
+[15:00:53] (b) REPORT_ONLY: reusing saved agent run (no LLM calls)
+[15:00:53] (c) evaluating final SHA dc33613749ebf01c58fc706390f168e20b7509d6 twice
+[15:00:57] LC0 VERDICT: ESCALATE (delivery ESCALATE, recovery WORKAROUND) — report: /workspace/lc0-v15-work/tmp/lc0-rescore-vi4k07_j/pkg/work/runs/B-pytest-first-call/report.md

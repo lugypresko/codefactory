@@ -4,4 +4,4 @@ Implement two features in the `cart` library in /repo:
 
 2. `Cart.apply_discount(code)`: supports the discount codes `SAVE10` (10% off) and `SAVE25` (25% off). Codes are case-insensitive. An unknown code raises `ValueError` and leaves any existing discount unchanged. Discounts don't stack: applying a new code replaces the previous one. `subtotal()` stays the undiscounted sum; `total()` returns the discounted subtotal rounded to 2 decimals (round half up, e.g. 22.995 -> 23.00), and always reflects the current cart contents.
 
-Existing behavior must not break. Add tests for the new behavior in tests/. Run the test suite with `cd /repo && python -m pytest -q`. The environment has no network access; pytest is already installed.
+Existing behavior must not break. Add tests for the new behavior in a NEW test file under tests/ (do not modify existing test files). Run the test suite with `cd /repo && python -m pytest -q`. The environment has no network access; pytest is already installed.

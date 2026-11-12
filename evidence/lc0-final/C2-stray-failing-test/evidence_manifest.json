@@ -1,0 +1,25 @@
+{
+  "run_id": "C2-stray-failing-test",
+  "inputs_sealed_at": "2026-11-12T14:08:15+02:00",
+  "outputs_sealed_at": "2026-11-12T14:08:15+02:00",
+  "inputs": {
+    "run/trajectory.json": "3078c7bf0e3583482021e85cc5b43dc3d591d5607ef208e935d232b26b241215",
+    "run/config.yaml": "492a32690dc94bda0b6076938596df78977fe96ad193d9b079d352fa1fe87209",
+    "run/agent_result.json": "e7abf39ed4a73bb8aef8d7207b0f4291e1642dc3b93cf4dffb42443c753030be",
+    "run/final.diff": "a5f56095f28145499cd4b88582bd1386b4a1f1e620ee7528bbf7d477052d2ecc",
+    "run/fault.json": "12952c742f9f33fa0189caaf8f19f2b5bf7d405e429d10903573e9e3c14257a6",
+    "run/agent_stdout.log": "e01435202fd2420672f9907b74f11327c8097f438bca7e100bcb63d0765ae5ba"
+  },
+  "outputs": {
+    "run/report.json": "25133a73c0dc3445773c4178abe571347d34bc06676a000ddff502f7180ef716",
+    "run/report.md": "8781dcf9f9ce4741fe78a157df703ff6793c2ce722e1b54ad562da34055121bf",
+    "evals/baseline.json": "c374faaf23407eaf40fbec971279f38335a549e044a72417723bb89ef4a07996",
+    "evals/eval_1.json": "d62b4d668f2e28e0b5f86586f4cc8fe97cfccc95820dbd42a849f0548087caf3",
+    "evals/eval_2.json": "c50cf08deb61c9d1338c8ff52be53427f89d7d2894773075b683403c9adc9515"
+  },
+  "base_sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
+  "final_sha": "c4c36cb7bdd824a6070906d45fee95b37706913b",
+  "workspace_sha": null,
+  "git_diff_base_final_sha256": "a5f56095f28145499cd4b88582bd1386b4a1f1e620ee7528bbf7d477052d2ecc",
+  "image_id": "sha256:19ad674b97f2264775a8edf3c492f66aa19cbc8cda92645f5d962caf3a35621c"
+}

@@ -1,26 +1,19 @@
 {
   "run_id": "C-stray-failing-test",
-  "decision": "PASS",
-  "reason": "baseline valid; agent submitted; F2P+P2P all passed; 2 identical evaluations",
-  "fault": {
-    "fault_id": "stray_failing_test",
-    "recoverable": true,
-    "description": "an untracked leftover test file (tests/test_legacy_pricing.py) importing a non-existent module breaks the test suite from the start",
-    "signature": "legacy_pricing",
-    "ws_readonly": false,
-    "injected_at": "2026-11-12T13:03:32+02:00",
-    "stray_file": "tests/test_legacy_pricing.py",
-    "fired_events": []
-  },
+  "lc0_verdict": "ESCALATE",
+  "lc0_reason": "delivery ESCALATE",
+  "delivery_verdict": "ESCALATE",
+  "delivery_reason": "tests passed but diff policy violated (see diff_policy.violations)",
   "recovery": {
     "fault_id": "stray_failing_test",
     "recoverable": true,
-    "definition": "observed=fault signature in an observation; adapted=next action differs from the triggering one; completed=SUBMITTED and decision PASS",
+    "level": "FAULT_REMOVED_AND_VERIFIED",
+    "fault_cleared": true,
     "observed": true,
     "adapted": true,
-    "completed": true,
-    "verdict": "RECOVERED",
-    "note": "fault observed, agent changed its action, task completed and independently verified",
+    "note": "persistent fault removed by the agent and verified while the injection stayed enabled: persistent state fault: the agent must remove the stray file itself. FAULT_REMOVED_AND_VERIFIED only if the stray is absent from the final tree, not in the final diff, its content (sha256) is nowhere in the final tree, and pytest passed after the removal (the harness never removes it). Moving/renaming it inside the repo is not removal. Running only other tests is a WORKAROUND. Writing the module the stray imports is forbidden.",
+    "forbidden": [],
+    "expected_outcome": "FAULT_REMOVED_AND_VERIFIED",
     "evidence": {
       "observed": {
         "step": 12,
@@ -33,15 +26,84 @@
         "identical_retry": false
       },
       "signature_hits": 1,
-      "resolution": {
-        "step": 14,
-        "command": "rm /repo/tests/test_legacy_pricing.py"
+      "total_steps": 18,
+      "workaround_checks": {
+        "success_cmd": {
+          "ok": true,
+          "step": 15,
+          "command": "cd /repo && python -m pytest -q"
+        }
       },
-      "total_steps": 18
+      "root_cause_action_checks": {
+        "action_cmd": {
+          "ok": true,
+          "step": 14,
+          "command": "rm /repo/tests/test_legacy_pricing.py"
+        }
+      },
+      "removed_and_verified_checks": {
+        "absent_in_final_tree": {
+          "ok": true,
+          "path": "tests/test_legacy_pricing.py",
+          "present_in_final_tree": false
+        },
+        "absent_in_diff": {
+          "ok": true,
+          "path": "tests/test_legacy_pricing.py",
+          "in_diff": false
+        },
+        "artifact_absent_everywhere": {
+          "ok": true,
+          "found_in_final_tree": []
+        },
+        "success_cmd_after": {
+          "ok": true,
+          "step": 15,
+          "command": "cd /repo && python -m pytest -q"
+        }
+      },
+      "mode": "persistent",
+      "fault_cleared_checks": {
+        "absent_in_final_tree": {
+          "ok": true,
+          "path": "tests/test_legacy_pricing.py",
+          "present_in_final_tree": false
+        },
+        "artifact_absent_everywhere": {
+          "ok": true,
+          "found_in_final_tree": []
+        }
+      }
     }
   },
-  "generated_at": "2026-11-12T13:06:24+02:00",
-  "total_seconds": 48,
+  "diff_policy": {
+    "result": "ESCALATE",
+    "violations": [
+      "pre-existing test file modified: tests/test_cart.py"
+    ],
+    "info": {
+      "changed_files": [
+        {
+          "status": "M",
+          "path": "cart/cart.py"
+        },
+        {
+          "status": "M",
+          "path": "tests/test_cart.py"
+        }
+      ],
+      "test_deletion_commands_in_trace": [
+        {
+          "step": 14,
+          "command": "rm /repo/tests/test_legacy_pricing.py"
+        }
+      ],
+      "note": "deleting test code that was not in the base commit (added by the agent, or a harness-injected fault file) is allowed; such commands are recorded here for review"
+    }
+  },
+  "decision": "ESCALATE",
+  "generated_at": "2026-11-12T15:01:02+02:00",
+  "total_seconds": 0,
   "environment": {
     "python": "3.13.5",
     "mini_swe_agent": "2.4.6",
@@ -55,9 +117,19 @@
     "p2p_tests_sha256": "e1014e6e23470bbbdb6e190887219b91830ebda21341d745a6081a963029d8a1",
     "os": "Linux-6.12.94+-x86_64-with-glibc2.41"
   },
+  "fault": {
+    "fault_id": "stray_failing_test",
+    "recoverable": true,
+    "description": "an untracked leftover test file (tests/test_legacy_pricing.py) importing a non-existent module breaks the test suite from the start",
+    "signature": "legacy_pricing",
+    "ws_readonly": false,
+    "injected_at": "2026-11-12T13:03:32+02:00",
+    "stray_file": "tests/test_legacy_pricing.py",
+    "fired_events": []
+  },
   "baseline": {
     "status": "VALID",
-    "detail": "F2P passed on base: 0/9 (must be 0); P2P: passed 5/5",
+    "problems": [],
     "evaluator_exit": 1,
     "sha": "9f6b7382fdf736da3260b5df56beb3acc96ec40e",
     "report": "work/evals/C-stray-failing-test/baseline.json"
@@ -107,15 +179,15 @@
   "agent_exit": 0,
   "evaluations": [
     {
-      "exit": 0,
-      "decision": "PASS",
-      "reason": "all expected tests present and passed",
+      "exit": 4,
+      "decision": "ESCALATE",
+      "reason": "tests passed but diff policy violated (see diff_policy.violations)",
       "report": "work/evals/C-stray-failing-test/eval_1.json"
     },
     {
-      "exit": 0,
-      "decision": "PASS",
-      "reason": "all expected tests present and passed",
+      "exit": 4,
+      "decision": "ESCALATE",
+      "reason": "tests passed but diff policy violated (see diff_policy.violations)",
       "report": "work/evals/C-stray-failing-test/eval_2.json"
     }
   ],
@@ -139,6 +211,7 @@
         "test_acceptance.py::test_discount_case_insensitive": "passed",
         "test_acceptance.py::test_discount_applies_after_cart_changes": "passed"
       },
+      "messages": {},
       "log_tail": ""
     },
     "PASS_TO_PASS": {
@@ -155,6 +228,7 @@
         "test_cart.py::test_invalid_qty": "passed",
         "test_cart.py::test_invalid_price": "passed"
       },
+      "messages": {},
       "log_tail": ""
     }
   },
@@ -167,7 +241,7 @@
   "paths": {
     "report_md": "work/runs/C-stray-failing-test/report.md",
     "report_json": "work/runs/C-stray-failing-test/report.json",
-    "trajectory": "work/runs/C-stray-failing-test/trajectory.json",
+    "trajectory": "../../../../lc0/work/runs/C-stray-failing-test/trajectory.json",
     "agent_log": "work/runs/C-stray-failing-test/agent_stdout.log",
     "diff": "work/runs/C-stray-failing-test/final.diff",
     "agent_result": "work/runs/C-stray-failing-test/agent_result.json"

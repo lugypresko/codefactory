@@ -1,0 +1,5 @@
+[15:00:57] (a) baseline check on base 9f6b7382fdf736da3260b5df56beb3acc96ec40e
+[15:00:58]     evidence manifest verified: {"ok": true, "problems": []}
+[15:00:58] (b) REPORT_ONLY: reusing saved agent run (no LLM calls)
+[15:00:58] (c) evaluating final SHA f4419e8930591cc7542f799eb1de0a52d14004eb twice
+[15:01:02] LC0 VERDICT: ESCALATE (delivery ESCALATE, recovery FAULT_REMOVED_AND_VERIFIED) — report: /workspace/lc0-v15-work/tmp/lc0-rescore-vi4k07_j/pkg/work/runs/C-stray-failing-test/report.md

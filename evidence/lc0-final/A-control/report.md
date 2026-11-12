@@ -1,13 +1,13 @@
-# LC-0 run `A-control` — LC-0 verdict **PASS**
+# LC-0 run `A-control` — LC-0 verdict **ESCALATE**
 
 | verdict | value | why |
 |---|---|---|
-| delivery | **PASS** | baseline valid; agent submitted; F2P+P2P all passed; diff policy OK; 2 identical evaluations |
+| delivery | **ESCALATE** | tests passed but diff policy violated (see diff_policy.violations) |
 | recovery | **N/A** (fault_cleared=None) | control run (no fault injected) |
-| diff policy | **OK** | no violations |
-| **LC-0** | **PASS** | control run: lc0_verdict = delivery_verdict |
+| diff policy | **ESCALATE** | pre-existing test file modified: tests/test_cart.py |
+| **LC-0** | **ESCALATE** | control run: lc0_verdict = delivery_verdict |
 
-Generated 2026-11-12T13:22:33+02:00 · total 77s
+Generated 2026-11-12T13:48:51+02:00 · total 77s
 
 ## Fault injection and recovery evidence
 - fault: `none` — control run, no fault
@@ -16,8 +16,8 @@ Generated 2026-11-12T13:22:33+02:00 · total 77s
 - evidence: `{}`
 
 ## Diff policy
-- result: OK
-- violations: []
+- result: ESCALATE
+- violations: ['pre-existing test file modified: tests/test_cart.py']
 - info: `{"changed_files": [{"status": "M", "path": "cart/cart.py"}, {"status": "M", "path": "tests/test_cart.py"}], "test_deletion_commands_in_trace": [], "note": ""}`
 
 ## Steps
@@ -25,8 +25,8 @@ Generated 2026-11-12T13:22:33+02:00 · total 77s
 |---|---|---|
 | (a) baseline on `9f6b7382fdf7` | VALID | every F2P test fails with its declared failure; P2P passes |
 | (b) agent | SUBMITTED (exit 0) | mini exit_status=`Submitted`, model requested `gemini/gemini-2.5-flash`, returned ['gemini-2.5-flash'], cost $0.0209 / $0.5, steps 20 / 30, wall 73s, diff 2 files |
-| (c) evaluation 1 on `9e2500f90a1c` | PASS (exit 0) | all expected tests present and passed |
-| (c) evaluation 2 on `9e2500f90a1c` | PASS (exit 0) | all expected tests present and passed |
+| (c) evaluation 1 on `9e2500f90a1c` | ESCALATE (exit 4) | tests passed but diff policy violated (see diff_policy.violations) |
+| (c) evaluation 2 on `9e2500f90a1c` | ESCALATE (exit 4) | tests passed but diff policy violated (see diff_policy.violations) |
 
 Evaluations identical: **True**
 

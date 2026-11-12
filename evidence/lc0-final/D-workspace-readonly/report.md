@@ -7,7 +7,7 @@
 | diff policy | **n/a** | no violations |
 | **LC-0** | **CONTROLLED_STOP** | unrecoverable fault: agent stopped without delivery, no false PASS |
 
-Generated 2026-11-12T13:22:42+02:00 · total 86s
+Generated 2026-11-12T13:49:01+02:00 · total 86s
 
 ## Fault injection and recovery evidence
 - fault: `workspace_readonly` — the repository is mounted read-only: no change can be made; permanent

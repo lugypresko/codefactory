@@ -1,0 +1,200 @@
+diff --git a/cart/cart.py b/cart/cart.py
+index 5e0bd9d..9eb4b46 100644
+--- a/cart/cart.py
++++ b/cart/cart.py
+@@ -1,9 +1,10 @@
+ """A tiny shopping cart."""
+-
++import math
+ 
+ class Cart:
+     def __init__(self):
+         self._items = {}  # sku -> {"price": float, "qty": int}
++        self._discount = 0.0 # Stores the discount percentage
+ 
+     def add_item(self, sku: str, price: float, qty: int = 1) -> None:
+         if qty <= 0:
+@@ -15,6 +16,29 @@ class Cart:
+         else:
+             self._items[sku] = {"price": price, "qty": qty}
+ 
++    def remove_item(self, sku: str, qty: int = 1) -> None:
++        if qty <= 0:
++            raise ValueError("qty must be positive")
++        if sku not in self._items:
++            raise KeyError(f"SKU '{sku}' not found in cart")
++
++        current_qty = self._items[sku]["qty"]
++        if qty > current_qty:
++            raise ValueError(f"Cannot remove {qty} of {sku}, only {current_qty} in cart")
++
++        self._items[sku]["qty"] -= qty
++        if self._items[sku]["qty"] <= 0:
++            del self._items[sku]
++
++    def apply_discount(self, code: str) -> None:
++        code = code.upper()
++        if code == "SAVE10":
++            self._discount = 0.10
++        elif code == "SAVE25":
++            self._discount = 0.25
++        else:
++            raise ValueError(f"Unknown discount code: {code}")
++
+     def item_count(self) -> int:
+         return sum(i["qty"] for i in self._items.values())
+ 
+@@ -22,4 +46,7 @@ class Cart:
+         return round(sum(i["price"] * i["qty"] for i in self._items.values()), 2)
+ 
+     def total(self) -> float:
+-        return self.subtotal()
++        undiscounted_total = self.subtotal()
++        discounted_total = undiscounted_total * (1 - self._discount)
++        # Round half up to 2 decimal places
++        return round(discounted_total * 100) / 100.0
+diff --git a/cart/legacy_pricing.py b/cart/legacy_pricing.py
+new file mode 100644
+index 0000000..b828b9c
+--- /dev/null
++++ b/cart/legacy_pricing.py
+@@ -0,0 +1,2 @@
++def price_with_tax(price: float) -> float:
++    return round(price * 1.17, 2)
+diff --git a/tests/test_legacy_pricing.py b/tests/test_legacy_pricing.py
+new file mode 100644
+index 0000000..251aa5c
+--- /dev/null
++++ b/tests/test_legacy_pricing.py
+@@ -0,0 +1,5 @@
++from cart.legacy_pricing import price_with_tax
++
++
++def test_price_with_tax():
++    assert price_with_tax(10.0) == 11.7
+diff --git a/tests/test_new_features.py b/tests/test_new_features.py
+new file mode 100644
+index 0000000..f8ed2da
+--- /dev/null
++++ b/tests/test_new_features.py
+@@ -0,0 +1,120 @@
++import pytest
++from cart.cart import Cart
++
++# Test cases for remove_item
++def test_remove_item_decreases_quantity():
++    cart = Cart()
++    cart.add_item("apple", 1.00, 5)
++    cart.remove_item("apple", 2)
++    assert cart.item_count() == 3
++    assert cart._items["apple"]["qty"] == 3
++
++def test_remove_item_removes_entirely_if_qty_reaches_zero():
++    cart = Cart()
++    cart.add_item("apple", 1.00, 2)
++    cart.remove_item("apple", 2)
++    assert cart.item_count() == 0
++    assert "apple" not in cart._items
++
++def test_remove_item_raises_keyerror_for_unknown_sku():
++    cart = Cart()
++    with pytest.raises(KeyError):
++        cart.remove_item("unknown_sku")
++
++def test_remove_item_raises_valueerror_for_qty_zero():
++    cart = Cart()
++    cart.add_item("apple", 1.00, 5)
++    with pytest.raises(ValueError, match="qty must be positive"):
++        cart.remove_item("apple", 0)
++
++def test_remove_item_raises_valueerror_for_negative_qty():
++    cart = Cart()
++    cart.add_item("apple", 1.00, 5)
++    with pytest.raises(ValueError, match="qty must be positive"):
++        cart.remove_item("apple", -1)
++
++def test_remove_item_raises_valueerror_if_removing_more_than_available():
++    cart = Cart()
++    cart.add_item("apple", 1.00, 3)
++    with pytest.raises(ValueError, match="Cannot remove 5 of apple, only 3 in cart"):
++        cart.remove_item("apple", 5)
++    # Ensure cart is unchanged
++    assert cart.item_count() == 3
++    assert cart._items["apple"]["qty"] == 3
++
++# Test cases for apply_discount
++def test_apply_discount_save10():
++    cart = Cart()
++    cart.add_item("item1", 10.00, 2) # Subtotal 20.00
++    cart.apply_discount("SAVE10")
++    assert cart.subtotal() == 20.00
++    assert cart.total() == 18.00 # 20.00 * 0.90
++
++def test_apply_discount_save25():
++    cart = Cart()
++    cart.add_item("item1", 10.00, 2) # Subtotal 20.00
++    cart.apply_discount("SAVE25")
++    assert cart.subtotal() == 20.00
++    assert cart.total() == 15.00 # 20.00 * 0.75
++
++def test_apply_discount_is_case_insensitive():
++    cart = Cart()
++    cart.add_item("item1", 10.00, 2)
++    cart.apply_discount("save10")
++    assert cart.total() == 18.00
++
++def test_apply_discount_replaces_previous_discount():
++    cart = Cart()
++    cart.add_item("item1", 10.00, 2) # Subtotal 20.00
++    cart.apply_discount("SAVE10")
++    assert cart.total() == 18.00
++    cart.apply_discount("SAVE25")
++    assert cart.total() == 15.00 # New discount applied
++
++def test_apply_discount_raises_valueerror_for_unknown_code():
++    cart = Cart()
++    cart.add_item("item1", 10.00, 2) # Subtotal 20.00
++    cart.apply_discount("SAVE10") # Apply an initial discount
++    assert cart.total() == 18.00
++    with pytest.raises(ValueError, match="Unknown discount code: UNKNOWN"):
++        cart.apply_discount("UNKNOWN")
++    # Ensure existing discount is unchanged
++    assert cart.total() == 18.00
++
++def test_total_reflects_current_cart_contents_with_discount():
++    cart = Cart()
++    cart.add_item("item1", 10.00, 2) # Subtotal 20.00
++    cart.apply_discount("SAVE10") # Total 18.00
++    cart.add_item("item2", 5.00, 1)  # Subtotal becomes 25.00
++    assert cart.subtotal() == 25.00
++    assert cart.total() == 22.50 # 25.00 * 0.90
++
++def test_total_rounding_half_up():
++    cart = Cart()
++    cart.add_item("item_a", 22.99, 1) # Subtotal 22.99
++    cart.apply_discount("SAVE10") # 22.99 * 0.90 = 20.691 -> 20.69
++    assert cart.total() == 20.69
++
++    cart2 = Cart()
++    cart2.add_item("item_b", 22.99, 1) # Subtotal 22.99
++    cart2._discount = 0.05 # Custom discount for exact rounding test: 22.99 * 0.95 = 21.8405 -> 21.84
++    assert cart2.total() == 21.84
++
++    cart3 = Cart()
++    cart3.add_item("item_c", 22.995, 1) # Subtotal 22.995 (will be rounded to 23.00 by subtotal)
++    cart3.add_item("item_d", 1.00, 1) # Just making sure subtotal is not messed up
++    assert cart3.subtotal() == 24.00 # 22.995 + 1.00 = 23.995 -> 24.00 (from round in subtotal)
++    cart3.apply_discount("SAVE10")
++    assert cart3.total() == 21.60 # 24.00 * 0.90 = 21.60
++
++    cart4 = Cart()
++    cart4.add_item("item_e", 0.01, 1)
++    cart4.apply_discount("SAVE25") # 0.01 * 0.75 = 0.0075 -> 0.01
++    assert cart4.total() == 0.01
++
++    cart5 = Cart()
++    cart5.add_item("item_f", 0.02, 1)
++    cart5.apply_discount("SAVE25") # 0.02 * 0.75 = 0.015 -> 0.02
++    assert cart5.total() == 0.02
++
++
