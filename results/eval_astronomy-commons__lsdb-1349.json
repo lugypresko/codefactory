@@ -1,0 +1,62 @@
+{
+  "instance_id": "astronomy-commons__lsdb-1349",
+  "evaluated_patch_sha256": "9c641b9ef7a4bbeaed60cb02a216c3fa58141db48fe6882baf2cbc973ae21c51",
+  "evaluated_patch_bytes": 4504,
+  "producer_run_id": "pa-astronomy-commons__lsdb-1349-20261112T205729-dfec7f11",
+  "gt_apply_fail": false,
+  "gt_timeout": false,
+  "gt_f2p_failed": "1/1",
+  "gt_p2p_failed": "20/21",
+  "gt_correct": false,
+  "gate_units_passed": [
+    0,
+    0
+  ],
+  "gate_units": 2,
+  "gate_deterministic": true,
+  "gate_p2p_files": [
+    "tests/lsdb/catalog/test_association_catalog.py",
+    "tests/lsdb/catalog/test_concatenation.py",
+    "tests/lsdb/catalog/test_est_size.py",
+    "tests/lsdb/catalog/test_index_search.py",
+    "tests/lsdb/catalog/test_margin_catalog.py",
+    "tests/lsdb/io/test_to_association.py",
+    "tests/lsdb/io/test_to_collection.py",
+    "tests/lsdb/io/test_to_hats.py",
+    "tests/lsdb/loaders/dataframe/test_from_dataframe.py",
+    "tests/lsdb/loaders/hats/test_read_hats.py"
+  ],
+  "gate_p2p_stems": [
+    "catalog",
+    "to_collection",
+    "to_hats"
+  ],
+  "gate_p2p_broken": [
+    "tests/lsdb/catalog/test_margin_catalog.py::test_save_margin_catalog",
+    "tests/lsdb/io/test_to_collection.py::test_save_collection",
+    "tests/lsdb/io/test_to_collection.py::test_save_collection_from_dataframe",
+    "tests/lsdb/io/test_to_collection.py::test_save_collection_with_empty_margin",
+    "tests/lsdb/io/test_to_hats.py::test_resume_catalog_collection_write",
+    "tests/lsdb/io/test_to_hats.py::test_resume_catalog_write",
+    "tests/lsdb/io/test_to_hats.py::test_resume_catalog_write_all_files_written",
+    "tests/lsdb/io/test_to_hats.py::test_resume_catalog_write_with_all_metadata_files_written",
+    "tests/lsdb/io/test_to_hats.py::test_resume_catalog_write_with_corrupted_metadata_files_written",
+    "tests/lsdb/io/test_to_hats.py::test_resume_catalog_write_with_parquet_metadata_files_written",
+    "tests/lsdb/io/test_to_hats.py::test_resume_errors_with_different_catalog",
+    "tests/lsdb/io/test_to_hats.py::test_resume_errors_with_different_hists_and_done",
+    "tests/lsdb/io/test_to_hats.py::test_resume_errors_with_invalid_parquet",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_default_columns",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_default_nested_columns",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_empty_default_columns",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_invalid_default_columns",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_invalid_default_nested_columns",
+    "tests/lsdb/io/test_to_hats.py::test_save_catalog_overwrite"
+  ],
+  "gate_p2p_ok": false,
+  "gate_p2p_detail": "25/167 stable pre-fix passing tests broken",
+  "B_decision": "REJECT",
+  "B_reason": "REJECT_INVALID_PATCH",
+  "B_detail": "discriminating tests fail on patch; P2P broken: 25/167 stable pre-fix passing tests broken",
+  "A_decision": "APPROVE"
+}
