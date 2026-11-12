@@ -1,0 +1,12 @@
+{
+ "instance_id": "zarr-developers__virtualizarr-979",
+ "frozen_at": "2026-11-12T21:35:17+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/zarr-developers__virtualizarr-979/task.txt": "d83209b58b6fd1ec0e70364056c88ecbc33093fbb9426821e64f3969aab57ead",
+  "results/testgen/zarr-developers__virtualizarr-979/record.json": "1cda5b6f8335ed69a91577c1e16ea3e092a51dbf063058ab52c80a8ec46a3e79",
+  "results/testgen/zarr-developers__virtualizarr-979/config.yaml": "5e38a8e55c74d48521116caa0ba37e0dbfccfacee362eca49251a8e74aeb63a2",
+  "results/testgen/zarr-developers__virtualizarr-979/pre_eval.json": "0198b38afc93a30128483fa2cae96dc56929c087acb45d19679b080b717c66a8",
+  "results/testgen/zarr-developers__virtualizarr-979/tests/virtualizarr/tests/test_parsers/test_issue_inline_data.py": "7d6f4439d7e89790f3a25e36fcadebfd48ec66e4c23227de1010858d335f428c"
+ }
+}

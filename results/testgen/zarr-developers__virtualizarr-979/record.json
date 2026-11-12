@@ -1,0 +1,47 @@
+{
+  "instance_id": "zarr-developers__virtualizarr-979",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/zarr-developers__virtualizarr-979/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-zarr-developers__virtualizarr-979",
+    "mini_rc": 0,
+    "wall_seconds": 96,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "LimitsExceeded",
+    "cost_usd": 0.058083299999999984,
+    "api_calls": 40,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "LIMIT_EXCEEDED",
+    "spent_total_after": 2.1787
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "7ba0ebcae5271841ac30e6ee5666fa7d5c34d7d2",
+  "original_base_commit": "3194b095ede4abaa9d9d0daaa91a6f0424cc4a93",
+  "task_sha256": "d83209b58b6fd1ec0e70364056c88ecbc33093fbb9426821e64f3969aab57ead",
+  "test_files": {
+    "virtualizarr/tests/test_parsers/test_issue_inline_data.py": "7d6f4439d7e89790f3a25e36fcadebfd48ec66e4c23227de1010858d335f428c"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/zarr-developers__virtualizarr-979/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.zarr-developers_1776_virtualizarr-979:latest"
+  }
+}
