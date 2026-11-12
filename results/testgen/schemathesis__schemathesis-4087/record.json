@@ -1,0 +1,47 @@
+{
+  "instance_id": "schemathesis__schemathesis-4087",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/schemathesis__schemathesis-4087/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-schemathesis__schemathesis-4087",
+    "mini_rc": 0,
+    "wall_seconds": 64,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.0256975,
+    "api_calls": 16,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 0.2232
+  },
+  "validity": "INVALID",
+  "violations": [
+    "new non-test file: test/specs/openapi/schema_issue_1303.yaml"
+  ],
+  "benign": [],
+  "sanitized_base_sha": "9ed8b8b5946ae814f9894fd13526bf03e1c03dba",
+  "original_base_commit": "e5fcd1c8ab5772dbcc3dd92059fe3b0acd88eb3c",
+  "task_sha256": "ccef87d0d73039703061dc7f5ecf8d7f55474017c36cadeb2e15192665c9b19f",
+  "test_files": {},
+  "clarification": true,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/schemathesis__schemathesis-4087/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.schemathesis_1776_schemathesis-4087:latest"
+  }
+}

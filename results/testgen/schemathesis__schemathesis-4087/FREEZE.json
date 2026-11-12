@@ -1,0 +1,12 @@
+{
+ "instance_id": "schemathesis__schemathesis-4087",
+ "frozen_at": "2026-11-12T17:29:38+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/schemathesis__schemathesis-4087/task.txt": "ccef87d0d73039703061dc7f5ecf8d7f55474017c36cadeb2e15192665c9b19f",
+  "results/testgen/schemathesis__schemathesis-4087/CLARIFICATION_NEEDED.md": "3e571dd3d7dd7ac43235a863d6a0fe841649899ddecc773d3c2ff6fe08c4d913",
+  "results/testgen/schemathesis__schemathesis-4087/record.json": "a0e7670c7f9450a9a3cce5c7c7085c3015d7059327a9c8cfcd2e46ae00825a4f",
+  "results/testgen/schemathesis__schemathesis-4087/config.yaml": "8a7311413fe6a1451cd8aebf42f0b0ef0d7f6aaa8e024b688536d3bed9032399",
+  "results/testgen/schemathesis__schemathesis-4087/pre_eval.json": "551a67008fa2279a0ff3a32f29f2b27bef7f80569b84de314809130daa85eba9"
+ }
+}
