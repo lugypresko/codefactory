@@ -1,0 +1,12 @@
+{
+ "instance_id": "hkuds__openharness-217",
+ "frozen_at": "2026-11-12T20:55:41+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/hkuds__openharness-217/task.txt": "6dc17722337c6b6ac5c42f5c5c65616a946d727788469b6e9980457eaf4770b1",
+  "results/testgen/hkuds__openharness-217/record.json": "28de261526a59a099ff5826285a9b9eb2278a62b24dceb8bdf2fbe343513da78",
+  "results/testgen/hkuds__openharness-217/config.yaml": "e7a867ea5d6afdadb3a10c65c6592dafbc9ea9f2d71687f1953e94101ab57a2f",
+  "results/testgen/hkuds__openharness-217/pre_eval.json": "3d9b2d2f053d705a4e15e4c07af446b38c6538e1fcaee25e09b11417cc406c91",
+  "results/testgen/hkuds__openharness-217/tests/tests/test_auth/test_flows.py": "c0c4e236d14a848b6f08ba1b3f36859f2efde0fec9dbe2b724be4410dc2d5696"
+ }
+}

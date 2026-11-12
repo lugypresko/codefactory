@@ -1,0 +1,47 @@
+{
+  "instance_id": "hkuds__openharness-217",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/hkuds__openharness-217/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-hkuds__openharness-217",
+    "mini_rc": 0,
+    "wall_seconds": 78,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.03858035,
+    "api_calls": 13,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.7863
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "d8787e3fa6b59d5da35a593484bbb1ab40f1c3bd",
+  "original_base_commit": "1bcdc62a50db14c2f0bf5dbee05b2bdc369dffb3",
+  "task_sha256": "6dc17722337c6b6ac5c42f5c5c65616a946d727788469b6e9980457eaf4770b1",
+  "test_files": {
+    "tests/test_auth/test_flows.py": "c0c4e236d14a848b6f08ba1b3f36859f2efde0fec9dbe2b724be4410dc2d5696"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/hkuds__openharness-217/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.hkuds_1776_openharness-217:latest"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "instance_id": "hkuds__openharness-217",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_shell_injection": "PASSED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_non_windows_safe": "PASSED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_file_scheme_rejected": "FAILED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_javascript_scheme_rejected": "FAILED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_http_scheme_safe_after_fix": "FAILED"
+    },
+    {
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_shell_injection": "PASSED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_non_windows_safe": "PASSED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_file_scheme_rejected": "FAILED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_javascript_scheme_rejected": "FAILED",
+      "tests/test_auth/test_flows.py::test_try_open_browser_windows_http_scheme_safe_after_fix": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_auth/test_flows.py::test_try_open_browser_windows_file_scheme_rejected",
+    "tests/test_auth/test_flows.py::test_try_open_browser_windows_http_scheme_safe_after_fix",
+    "tests/test_auth/test_flows.py::test_try_open_browser_windows_javascript_scheme_rejected"
+  ],
+  "non_discriminating_discarded": [
+    "tests/test_auth/test_flows.py::test_try_open_browser_non_windows_safe",
+    "tests/test_auth/test_flows.py::test_try_open_browser_windows_shell_injection"
+  ],
+  "no_outcomes": false
+}
