@@ -1,0 +1,13 @@
+{
+ "instance_id": "pyinfra-dev__pyinfra-1665",
+ "frozen_at": "2026-11-12T21:46:05+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/pyinfra-dev__pyinfra-1665/task.txt": "6c762665c9b9cc5318e7e03263a04635445ba99823e3651c2be1460b633aa7f4",
+  "results/testgen/pyinfra-dev__pyinfra-1665/CLARIFICATION_NEEDED.md": "b034abe4f5af0f5aef04296adba717be04b541411aa1d9cd7923524963667a79",
+  "results/testgen/pyinfra-dev__pyinfra-1665/record.json": "26e0e34d1524e84a376b8ecabe21d3d73998ba9aea77ad0df798191f7284bc4f",
+  "results/testgen/pyinfra-dev__pyinfra-1665/config.yaml": "459e307cda32a52ff7069194f9373f8fa6e13bbd5ca83609b878c3e277fe6e99",
+  "results/testgen/pyinfra-dev__pyinfra-1665/pre_eval.json": "8f1baec55401b982d56349bcbefae07fbcf9a8589d3ba3ca528be5417f88b35b",
+  "results/testgen/pyinfra-dev__pyinfra-1665/tests/tests/test_server_reboot_sudo_password.py": "053e1a146ca3c0cf71b4e10a57ccc3ee08241c1eb1e91986dc906388108c7198"
+ }
+}

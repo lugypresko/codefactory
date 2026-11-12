@@ -1,0 +1,19 @@
+{
+  "instance_id": "pyinfra-dev__pyinfra-1665",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_server_reboot_sudo_password.py::test_remove_sudo_askpass_file_crashes_after_reboot_with_sudo_password": "PASSED"
+    },
+    {
+      "tests/test_server_reboot_sudo_password.py::test_remove_sudo_askpass_file_crashes_after_reboot_with_sudo_password": "PASSED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [],
+  "non_discriminating_discarded": [
+    "tests/test_server_reboot_sudo_password.py::test_remove_sudo_askpass_file_crashes_after_reboot_with_sudo_password"
+  ],
+  "no_outcomes": false
+}

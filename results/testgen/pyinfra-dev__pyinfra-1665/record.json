@@ -1,0 +1,47 @@
+{
+  "instance_id": "pyinfra-dev__pyinfra-1665",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/pyinfra-dev__pyinfra-1665/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-pyinfra-dev__pyinfra-1665",
+    "mini_rc": 0,
+    "wall_seconds": 180,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.13779185000000002,
+    "api_calls": 38,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 2.4719
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "08e34f4690185038e06df2fb3e96fe83a8511940",
+  "original_base_commit": "185f7dbec96f8e1d5f7cfefe0f325f99ab73927a",
+  "task_sha256": "6c762665c9b9cc5318e7e03263a04635445ba99823e3651c2be1460b633aa7f4",
+  "test_files": {
+    "tests/test_server_reboot_sudo_password.py": "053e1a146ca3c0cf71b4e10a57ccc3ee08241c1eb1e91986dc906388108c7198"
+  },
+  "clarification": true,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/pyinfra-dev__pyinfra-1665/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.pyinfra-dev_1776_pyinfra-1665:latest"
+  }
+}
