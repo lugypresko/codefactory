@@ -1,0 +1,28 @@
+{
+  "instance_id": "nesquena__hermes-webui-2056",
+  "n_files": 1,
+  "pre_outcomes": [
+    {
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_parentheses_and_port": "FAILED",
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_parentheses_and_port_no_model_suffix": "FAILED",
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_brackets_and_port": "FAILED",
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_multiple_colons_not_host_port": "FAILED"
+    },
+    {
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_parentheses_and_port": "FAILED",
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_parentheses_and_port_no_model_suffix": "FAILED",
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_brackets_and_port": "FAILED",
+      "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_multiple_colons_not_host_port": "FAILED"
+    }
+  ],
+  "pre_deterministic": true,
+  "pre_timeout": false,
+  "discriminating_units": [
+    "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_brackets_and_port",
+    "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_multiple_colons_not_host_port",
+    "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_parentheses_and_port",
+    "tests/test_custom_provider_name_parsing.py::test_custom_provider_name_with_parentheses_and_port_no_model_suffix"
+  ],
+  "non_discriminating_discarded": [],
+  "no_outcomes": false
+}

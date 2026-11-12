@@ -1,0 +1,47 @@
+{
+  "instance_id": "nesquena__hermes-webui-2056",
+  "agent": {
+    "base_config": "/workspace/lc1a0/mini_base.yaml",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/nesquena__hermes-webui-2056/ws:/testbed"
+    ],
+    "network": "none (container); LLM calls from host process only",
+    "role": "testgen",
+    "run_id": "tg-nesquena__hermes-webui-2056",
+    "mini_rc": 0,
+    "wall_seconds": 33,
+    "caps": {
+      "cost": 0.25,
+      "steps": 40,
+      "wall": 900
+    },
+    "model_requested": "gemini/gemini-2.5-flash",
+    "exit_status": "Submitted",
+    "cost_usd": 0.020574010000000004,
+    "api_calls": 7,
+    "models_returned": [
+      "gemini-2.5-flash"
+    ],
+    "status": "SUBMITTED",
+    "spent_total_after": 1.0254
+  },
+  "validity": "VALID",
+  "violations": [],
+  "benign": [],
+  "sanitized_base_sha": "026363d69bfcafba2855bdc73034d591f3ae25fa",
+  "original_base_commit": "b766b7f7596e931f141d3ad26a507807baa69774",
+  "task_sha256": "0ed7ee2320f6b9b42140137e8d3e6816fe80a81034ff7821cff26b20508ca6b4",
+  "test_files": {
+    "tests/test_custom_provider_name_parsing.py": "9715472f826eae9d53e474df78dc5e6497224fcfb7c653b11e8ab42acc70ef81"
+  },
+  "clarification": false,
+  "input_manifest": {
+    "prompt": "prompts/testgen.txt with issue text substituted (task.txt saved)",
+    "mounts": [
+      "/workspace/lc1a0/work/runs/testgen/nesquena__hermes-webui-2056/ws:/testbed (sanitized pre-fix copy of image /testbed, fresh 1-commit git)"
+    ],
+    "network": "container --network none; LLM API called by host-side mini process",
+    "env_forwarded": [],
+    "image": "swerebench/sweb.eval.x86_64.nesquena_1776_hermes-webui-2056:latest"
+  }
+}

@@ -1,0 +1,12 @@
+{
+ "instance_id": "nesquena__hermes-webui-2056",
+ "frozen_at": "2026-11-12T19:27:55+0200",
+ "patch_exists": false,
+ "files": {
+  "results/testgen/nesquena__hermes-webui-2056/task.txt": "0ed7ee2320f6b9b42140137e8d3e6816fe80a81034ff7821cff26b20508ca6b4",
+  "results/testgen/nesquena__hermes-webui-2056/record.json": "fcc89d983c9141705260333557bcdace6c748a6f4b22b7e8d6c7340e44753240",
+  "results/testgen/nesquena__hermes-webui-2056/config.yaml": "e31125977ae6aa30c5d926d51f1c8c34b9ac4af4dcb018d1386fa3729a725b50",
+  "results/testgen/nesquena__hermes-webui-2056/pre_eval.json": "ee037520c332d8814eb7b07cada6ed166a23ed67a00892d62141497f4755cf35",
+  "results/testgen/nesquena__hermes-webui-2056/tests/tests/test_custom_provider_name_parsing.py": "9715472f826eae9d53e474df78dc5e6497224fcfb7c653b11e8ab42acc70ef81"
+ }
+}
